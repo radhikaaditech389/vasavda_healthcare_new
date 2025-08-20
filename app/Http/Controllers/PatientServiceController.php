@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Services;
 use App\Models\PatientServices;
+use App\Models\Submenu;
 
 class PatientServiceController extends Controller
 {
@@ -26,20 +27,20 @@ class PatientServiceController extends Controller
                 'service_image' => 'required|image',
             ]);
 
+            // Generate slug
             $slug = strtolower(trim($request->service_name));
             $slug = preg_replace('/[^a-z0-9 ]/', '', $slug);
             $slug = preg_replace('/\s+/', '_', $slug);
             $slug = preg_replace('/_+/', '_', $slug);
 
-            $baseUrl = "https://vasavadahospitals.org";
-            $serviceLink = rtrim($baseUrl, '/') . '/' . $slug;
+            $serviceLink = '/' . $slug;
 
+            // Upload image
             $uploadPath = 'uploads/services/';
             $fullPath = public_path($uploadPath);
             if (!file_exists($fullPath)) {
                 mkdir($fullPath, 0777, true);
             }
-
             $fileName = time() . '_' . uniqid() . '.' . $request->service_image->getClientOriginalExtension();
 
             $service = Services::create([
@@ -52,43 +53,29 @@ class PatientServiceController extends Controller
                 throw new \Exception('Failed to upload image');
             }
 
-            // if ($request->has('patient_services')) {
-            //     foreach ($request->patient_services as $patientService) {
-            //         if (!empty($patientService)) {
-            //             PatientServices::create([
-            //                 'service_id' => $service->id,
-            //                 'patient_service_name' => $patientService
-            //             ]);
-            //         }
-            //     }
-            // }
+            // Create submenu automatically
+            $nextSequence = (Submenu::max('submenu_sequence') ?? 0) + 1;
+
+            Submenu::create([
+                'submenu_name'     => $service->service_name,
+                'submenu_sequence' => $nextSequence,
+                'submenu_link'     => $service->service_link,
+                'menu_id'          => 4,
+                'is_displayed'     => 1,
+            ]);
 
             DB::commit();
 
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Service added successfully',
-                    'service' => [
-                        'id' => $service->id,
-                        'service_name' => $service->service_name,
-                        'service_image' => asset($service->service_image),
-                        'service_link' => $service->service_link,
-                        'created_at' => $service->created_at->format('Y-m-d H:i:s')
-                    ]
-                ]);
-            }
-
             return response()->json([
-                'status' => 200,
-                'success' => true,
-                'message' => 'Service created successfully'
+                'status' => 'success',
+                'message' => 'Service created successfully',
+                'service' => $service
             ]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
                 'success' => false,
-                'message' => 'Error occurred while saving the service: ' . $e->getMessage()
+                'message' => 'Error occurred: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -102,15 +89,32 @@ class PatientServiceController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            DB::beginTransaction();
+
             $service = Services::findOrFail($id);
 
-            // Update basic service information
+            // 🔹 Store old link before updating
+            $oldLink = $service->service_link;
+
+            $request->validate([
+                'service_name' => 'required|string|max:255',
+                'service_image' => 'nullable|image',
+            ]);
+
+            // Generate new slug
+            $slug = strtolower(trim($request->service_name));
+            $slug = preg_replace('/[^a-z0-9 ]/', '', $slug);
+            $slug = preg_replace('/\s+/', '_', $slug);
+            $slug = preg_replace('/_+/', '_', $slug);
+
+            $newLink = '/' . $slug;
+
+            // Update service details
             $service->service_name = $request->service_name;
-            $service->service_link = $request->service_link;
+            $service->service_link = $newLink;
 
             // Handle image update
             if ($request->hasFile('service_image')) {
-                // Delete old image if exists
                 if ($service->service_image) {
                     $oldImagePath = public_path($service->service_image);
                     if (file_exists($oldImagePath)) {
@@ -118,24 +122,20 @@ class PatientServiceController extends Controller
                     }
                 }
 
-                // Store new image
                 $uploadPath = 'uploads/services/';
                 $fullPath = public_path($uploadPath);
                 if (!file_exists($fullPath)) {
                     mkdir($fullPath, 0777, true);
                 }
 
-                // Generate unique filename
                 $fileName = time() . '_' . uniqid() . '.' . $request->service_image->getClientOriginalExtension();
 
-                // Move the image
                 if (!$request->service_image->move($fullPath, $fileName)) {
                     throw new \Exception('Failed to upload image');
                 }
 
                 $service->service_image = $uploadPath . $fileName;
             } elseif (!$request->has('keep_existing_image')) {
-                // Only remove image if explicitly requested
                 if ($service->service_image) {
                     $oldImagePath = public_path($service->service_image);
                     if (file_exists($oldImagePath)) {
@@ -147,24 +147,42 @@ class PatientServiceController extends Controller
 
             $service->save();
 
-            // Handle patient services
+            $submenu = Submenu::where('submenu_link', $oldLink)
+                ->orWhere('submenu_link', $service->service_link) // in case oldLink wasn't found
+                ->first();
+
+            if ($submenu) {
+                $submenu->update([
+                    'submenu_name' => $service->service_name,
+                    'submenu_link' => $service->service_link,
+                    'is_displayed' => 1,
+                ]);
+            } else {
+                $nextSequence = (Submenu::max('submenu_sequence') ?? 0) + 1;
+
+                Submenu::create([
+                    'submenu_name'     => $service->service_name,
+                    'submenu_sequence' => $nextSequence,
+                    'submenu_link'     => $service->service_link,
+                    'menu_id'          => 4,
+                    'is_displayed'     => 1,
+                ]);
+            }
+
+            // Handle patient_services_data if present
             if ($request->has('patient_services_data')) {
                 $patientServicesData = json_decode($request->patient_services_data, true);
 
-                // Handle deleted services
                 if ($request->has('deleted_services')) {
                     $deletedServices = json_decode($request->deleted_services, true);
                     PatientServices::whereIn('id', $deletedServices)->delete();
                 }
 
-                // Update existing and add new patient services
                 foreach ($patientServicesData as $serviceData) {
                     if (isset($serviceData['id'])) {
-                        // Update existing service
                         PatientServices::where('id', $serviceData['id'])
                             ->update(['patient_service_name' => $serviceData['name']]);
                     } else {
-                        // Add new service
                         PatientServices::create([
                             'service_id' => $service->id,
                             'patient_service_name' => $serviceData['name']
@@ -173,12 +191,22 @@ class PatientServiceController extends Controller
                 }
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => 200,
                 'success' => true,
-                'message' => 'Service updated successfully'
+                'message' => 'Service updated successfully',
+                'service' => [
+                    'id' => $service->id,
+                    'service_name' => $service->service_name,
+                    'service_image' => $service->service_image ? asset($service->service_image) : null,
+                    'service_link' => $service->service_link,
+                    'updated_at' => $service->updated_at->format('Y-m-d H:i:s')
+                ]
             ]);
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json([
                 'status' => 500,
                 'success' => false,
@@ -202,7 +230,6 @@ class PatientServiceController extends Controller
                 'message' => 'Patient service deleted successfully'
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error deleting patient service: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete patient service: ' . $e->getMessage() // Added error message for debugging
@@ -229,6 +256,9 @@ class PatientServiceController extends Controller
             // Delete all related patient services
             PatientServices::where('service_id', $id)->delete();
 
+            // Delete the related submenu
+            Submenu::where('submenu_link', $service->service_link)->delete();
+
             // Delete the service itself
             $service->delete();
 
@@ -236,7 +266,7 @@ class PatientServiceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Service and related data deleted successfully'
+                'message' => 'Service, related submenu, and patient services deleted successfully'
             ]);
         } catch (\Exception $e) {
             DB::rollback();

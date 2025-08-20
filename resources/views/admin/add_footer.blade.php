@@ -132,7 +132,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="number" class="form-control" name="phone_no" id="phone_no"
+                                            <input type="text" class="form-control" name="phone_no" id="phone_no"
                                                 placeholder="Enter phone number"
                                                 value="{{ isset($footers[0]) ? $footers[0]->phone_no : '' }}">
                                         </div>

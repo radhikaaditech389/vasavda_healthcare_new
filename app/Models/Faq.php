@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Faq extends Model
 {
-    protected $fillable = ['question', 'answer', 'link', 'menu_id'];
+    protected $fillable = ['question', 'answer', 'link', 'menu_id', 'show_on_home'];
 
     public function menu()
     {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
+use App\Models\Doctor;
+use App\Models\Faq;
 use App\Models\Footer;
 use App\Models\Menu;
 use App\Models\Services;
@@ -24,12 +26,20 @@ class HomeController extends Controller
 
         $aboutSection = AboutSection::first();
         $services = Services::all();
-        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services'));
+        $doctors = Doctor::all();
+        $faqs = Faq::where('show_on_home', 1)->get();
+        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services', 'doctors', 'faqs'));
     }
 
     public function book_appointment()
     {
-        return view('patient.book_appointment');
+        $menus = Menu::where('is_displayed', 1)
+            ->orderBy('sequence')
+            ->with('submenus')
+            ->get();
+
+        $footer = Footer::first();
+        return view('patient.book_appointment', compact('footer', 'menus'));
     }
 
     public function contact()
