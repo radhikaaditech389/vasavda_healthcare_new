@@ -26,6 +26,7 @@ class FooterController extends Controller
             'days' => 'required|string|max:255',
             'hospital_time' => 'required|string|max:255',
             'consulting_time' => 'required|string|max:255',
+            'special_time' => 'required|string|max:255',
             'yt_link' => 'required|string|max:255',
             'insta_link' => 'required|string|max:255',
         ]);
@@ -59,6 +60,7 @@ class FooterController extends Controller
                 'days' => $request->days,
                 'hospital_time' => $request->hospital_time,
                 'consulting_time' => $request->consulting_time,
+                'special_time' => $request->special_time,
                 'yt_link' => $request->yt_link,
                 'insta_link' => $request->insta_link,
             ]);
@@ -82,7 +84,6 @@ class FooterController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validate the request
         $request->validate([
             'description' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -91,6 +92,7 @@ class FooterController extends Controller
             'days' => 'required|string|max:255',
             'hospital_time' => 'required|string|max:255',
             'consulting_time' => 'required|string|max:255',
+            'special_time' => 'required|string|max:255',
             'yt_link' => 'required|string|max:255',
             'insta_link' => 'required|string|max:255',
         ]);
@@ -98,31 +100,25 @@ class FooterController extends Controller
         try {
             DB::beginTransaction();
 
-            // Find the doctor record by ID
             $footer = Footer::findOrFail($id);
 
-            // Create uploads directory if it doesn't exist
             $uploadPath = 'uploads/footer/';
             $fullPath = public_path($uploadPath);
             if (!file_exists($fullPath)) {
                 mkdir($fullPath, 0777, true);
             }
 
-            // Handle image upload if a new image is provided
-            $imagePath = $footer->logo_image;  // Keep the existing image path by default
+            $imagePath = $footer->logo_image;  
             if ($request->hasFile('logo_image')) {
-                // If an image is uploaded, delete the old image and save the new one
                 if ($footer->logo_image && file_exists(public_path($footer->logo_image))) {
-                    unlink(public_path($footer->logo_image)); // Delete old image
+                    unlink(public_path($footer->logo_image)); 
                 }
 
-                // Generate a new filename for the new image and save it
                 $image = $request->file('logo_image');
                 $imagePath = $uploadPath . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move($fullPath, $imagePath);
             }
 
-            // Update the doctor record
             $footer->update([
                 'logo_image' => $imagePath,
                 'description' => $request->description,
@@ -132,6 +128,7 @@ class FooterController extends Controller
                 'days' => $request->days,
                 'hospital_time' => $request->hospital_time,
                 'consulting_time' => $request->consulting_time,
+                'special_time' => $request->special_time,
                 'yt_link' => $request->yt_link,
                 'insta_link' => $request->insta_link,
             ]);
@@ -154,10 +151,8 @@ class FooterController extends Controller
         try {
             DB::beginTransaction();
 
-            // Find the footer
             $footer = Footer::findOrFail($id);
 
-            // Delete the image if it exists
             if ($footer->logo_image) {
                 $imagePath = public_path($footer->logo_image);
                 if (file_exists($imagePath)) {
@@ -165,7 +160,6 @@ class FooterController extends Controller
                 }
             }
 
-            // Delete the footer
             $footer->delete();
 
             DB::commit();

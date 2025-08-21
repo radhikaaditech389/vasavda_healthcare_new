@@ -12,6 +12,8 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\PatientServiceController;
 use App\Http\Controllers\AboutSectionController;
+use App\Http\Controllers\WhyVasavadasController;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -160,3 +162,10 @@ Route::delete('admin/footer/delete/{id}', [FooterController::class, 'destroy'])-
 Route::get('/explore_our_space', [HomeController::class, 'explore_our_space'])->name('360_view');
 
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+// Why Vasavada's section routes
+Route::get('/admin/why_vasavada', [WhyVasavadasController::class, 'index'])->name('admin.why_vasavada');
+Route::get('/admin/why_vasavada/{id}/edit', [WhyVasavadasController::class, 'edit'])->name('admin.why_vasavada.edit');
+Route::post('/admin/why_vasavada', [WhyVasavadasController::class, 'store'])->name('admin.why_vasavada.store');
+Route::put('/admin/why_vasavada/update/{id}', [WhyVasavadasController::class, 'update'])->name('admin.why_vasavada.update');
+Route::delete('admin/why_vasavada/delete/{id}', [WhyVasavadasController::class, 'destroy'])->name('admin.why_vasavada.delete');

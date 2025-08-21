@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Faq;
 use App\Models\Footer;
 use App\Models\Menu;
+use App\Models\Section;
 use App\Models\Services;
 use App\Models\Slider;
 use Illuminate\Http\Request;
@@ -95,7 +96,11 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.why_vasavada', compact('footer', 'menus'));
+
+        $sections = Section::with(['items' => function ($q) {
+            $q->orderBy('order', 'asc');
+        }])->get();
+        return view('patient.why_vasavada', compact('footer', 'menus', 'sections'));
     }
 
     public function testimonials()

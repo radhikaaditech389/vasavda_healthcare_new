@@ -36,12 +36,9 @@
                     <li><a href="{{ route('admin.about_section') }}">About Section</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-face"></i><span>Patient
-                        Services</span>
+            <li><a href="{{ route('admin.add_services') }}" class=""><i
+                        class="zmdi zmdi-shield-check"></i><span>Services</span>
                 </a>
-                <ul class="ml-menu">
-                    <li><a href="{{ route('admin.add_services') }}">Service</a></li>
-                </ul>
             </li>
             {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Section</span>
@@ -53,9 +50,14 @@
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Doctors</span>
                 </a>
                 <ul class="ml-menu">
-                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li> 
+                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li>
                     <li><a href="{{ route('admin.doctor.details') }}">Doctor Details</a></li>
                 </ul>
+            </li>
+
+            <li><a href="{{ route('admin.why_vasavada') }}" class=""><i class="zmdi zmdi-flower"></i><span>Why
+                        Vasavada</span>
+                </a>
             </li>
     </div>
 </aside>
