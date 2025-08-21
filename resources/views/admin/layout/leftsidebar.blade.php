@@ -53,7 +53,8 @@
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Doctors</span>
                 </a>
                 <ul class="ml-menu">
-                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li>
+                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li> 
+                    <li><a href="{{ route('admin.doctor.details') }}">Doctor Details</a></li>
                 </ul>
             </li>
     </div>

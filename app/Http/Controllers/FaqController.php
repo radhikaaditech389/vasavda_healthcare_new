@@ -23,7 +23,7 @@ class FaqController extends Controller
                 'answer'   => 'required|string',
             ]);
 
-            $validatedData['show_on_home'] = $request->has('show_on_home') ? 1 : 0;
+            $validatedData['show_on_home'] = $request->boolean('show_on_home');
 
             $faq = Faq::create($validatedData);
 

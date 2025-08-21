@@ -15,7 +15,7 @@
 <body class="">
     @include('patient.layout.mobile_menu')
     @include('patient.layout.side_menu')
-    @include('patient.layout.header')
+    @include('patient.layout.header', ['footer' => $footer])
     <div class="breadcumb-wrapper " style="margin-top: -30px !important;">
         <div class="parallax" data-parallax-image="{{ asset('patient/img/breadcurmb/doctors.jpg') }}"></div>
         <div class="container z-index-common">

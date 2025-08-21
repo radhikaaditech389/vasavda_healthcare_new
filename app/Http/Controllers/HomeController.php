@@ -83,7 +83,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.doctors', compact('footer', 'menus'));
+        $doctors = Doctor::with('details')->get();
+        return view('patient.doctors', compact('footer', 'menus', 'doctors'));
     }
 
     public function why_vasavada()
@@ -301,7 +302,13 @@ class HomeController extends Controller
     }
     public function setu_newborn()
     {
-        return view('patient.setu_newborn');
+        $menus = Menu::where('is_displayed', 1)
+            ->orderBy('sequence')
+            ->with('submenus')
+            ->get();
+
+        $footer = Footer::first();
+        return view('patient.setu_newborn', compact('footer', 'menus'));
     }
 
     public function faq()
@@ -312,7 +319,9 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.faq', compact('footer', 'menus'));
+
+        $faqs = Faq::where('show_on_home', 0)->get();
+        return view('patient.faq', compact('footer', 'menus', 'faqs'));
     }
 
     public function explore_our_space()
