@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
+use App\Models\AboutUs;
 use App\Models\Footer;
 use App\Models\Menu;
 use App\Models\Services;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use App\Models\Director;
 
 class HomeController extends Controller
 {
@@ -62,7 +64,10 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.about_us', compact('footer', 'menus'));
+        $about_us_detail = AboutUs::first();
+        $director_detail = Director::get();
+        // dd($director_detail);
+        return view('patient.about_us', compact('footer', 'menus','about_us_detail','director_detail'));
     }
 
     public function doctors()

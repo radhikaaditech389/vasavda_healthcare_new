@@ -41,6 +41,25 @@
                     <li><a href="{{ route('admin.add_services') }}">Service</a></li>
                 </ul>
             </li>
+             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
+                        Us</span>
+                </a>
+                <ul class="ml-menu">
+                    <li><a href="{{ route('admin.about_us') }}">About Us</a></li>
+                </ul>
+            </li>
+             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Directors</span>
+                </a>
+                <ul class="ml-menu">
+                    <li><a href="{{ route('admin.add_directors') }}">All Directors</a></li>
+                </ul>
+            </li>
+             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Facilities</span>
+                </a>
+                <ul class="ml-menu">
+                    <li><a href="{{ route('admin.facilities') }}">All Facilities</a></li>
+                </ul>
+            </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Section</span>
                 </a>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FooterController;
@@ -12,6 +13,9 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\PatientServiceController;
 use App\Http\Controllers\AboutSectionController;
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\FacilityController;
+// use App\Http\Controllers\Dire;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -120,11 +124,24 @@ Route::post('/admin/services/update/{id}', [PatientServiceController::class, 'up
 
 Route::delete('/admin/services/{id}', [PatientServiceController::class, 'destroy'])->name('admin.services.destroy');
 
+//director service
+Route::get('/admin/add_directors', [DirectorController::class, 'index'])->name('admin.add_directors');
+Route::post('/admin/add_directors/store', [DirectorController::class, 'store'])->name('admin.add_directors.store');
+Route::post('/admin/add_directors/update/{id}', [DirectorController::class, 'update'])->name('admin.add_directors.update');
+Route::delete('/admin/add_directors/{id}', [DirectorController::class, 'destroy'])->name('admin.add_directors.destroy');
+Route::get('/admin/add_directors/{id}/director-services', [DirectorController::class, 'getDirectorServices']);
+
 // About Section routes
 Route::get('/admin/about_section', [AboutSectionController::class, 'index'])->name('admin.about_section');
 Route::post('/admin/about_section', [AboutSectionController::class, 'store'])->name('admin.about_section.store');
 Route::put('/admin/about_section', [AboutSectionController::class, 'update'])->name('admin.about_section.update');
 Route::delete('/admin/about_section/{id}', [AboutSectionController::class, 'destroy'])->name('admin.about_section.delete');
+
+// About Us routes
+Route::get('/admin/about_us', [AboutUsController::class, 'index'])->name('admin.about_us');
+Route::post('/admin/about_us', [AboutUsController::class, 'store'])->name('admin.about_us.store');
+Route::put('/admin/about_us', [AboutUsController::class, 'update'])->name('admin.about_us.update');
+Route::delete('/admin/about_us/{id}', [AboutUsController::class, 'destroy'])->name('admin.about_us.delete');
 
 Route::get('/admin/about_section/{id}/education', [AboutSectionController::class, 'getEducation']);
 Route::delete('/admin/about_section/image/{imageId}', [AboutSectionController::class, 'deleteImage']);
@@ -134,6 +151,14 @@ Route::get('/admin/doctors', [DoctorsController::class, 'index'])->name('admin.d
 Route::post('/admin/doctors', [DoctorsController::class, 'store'])->name('admin.doctors.store');
 Route::put('/admin/doctors/{id}', [DoctorsController::class, 'update'])->name('admin.doctors.update');
 Route::delete('/admin/doctors/{id}', [DoctorsController::class, 'destroy'])->name('admin.doctors.destroy');
+
+//facilities
+Route::get('/admin/facilities', [FacilityController::class, 'index'])->name('admin.facilities');
+Route::post('/admin/facilities/store', [FacilityController::class, 'store'])->name('admin.facilities.store');
+Route::post('/admin/facilities/update/{id}', [FacilityController::class, 'update'])->name('admin.facilities.update');
+Route::delete('/admin/facilities/{id}', [FacilityController::class, 'destroy'])->name('admin.facilities.destroy');
+Route::get('/admin/facilities/{id}/facility', [FacilityController::class, 'getFacilities']);
+
 
 // FAQ section routes
 Route::get('/admin/faq', [FaqController::class, 'index'])->name('admin.faq');
