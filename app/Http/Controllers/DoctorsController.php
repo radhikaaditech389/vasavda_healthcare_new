@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\DoctorDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,13 @@ class DoctorsController extends Controller
     {
         $doctors = Doctor::all();
         return view("admin.add_doctors", compact("doctors"));
+    }
+
+    public function doctorDetails()
+    {
+        $doctors = Doctor::all();
+        $doctorDetails = DoctorDetail::with('doctor')->get();
+        return view("admin.add_doctor_details", compact("doctorDetails", "doctors"));
     }
 
     public function store(Request $request)
@@ -58,6 +66,41 @@ class DoctorsController extends Controller
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function storeDoctorDetails(Request $request)
+    {
+        $request->validate([
+            'doctor_id'   => 'required|exists:doctors,id',
+            'education'   => 'nullable|string|max:255',
+            'languages'   => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'experience'  => 'nullable|string',
+            'extra_info'  => 'nullable|string',
+        ]);
+
+        // Prevent duplicate doctor details
+        if (DoctorDetail::where('doctor_id', $request->doctor_id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Details for this doctor already exist.'
+            ]);
+        }
+
+        DoctorDetail::create([
+            'doctor_id'   => $request->doctor_id,
+            'education'   => $request->education,
+            'languages'   => $request->languages,
+            'description' => $request->description,
+            'experience'  => $request->experience,
+            'extra_info'  => $request->extra_info,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status'  => 200,
+            'message' => 'Doctor details added successfully.'
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -111,6 +154,54 @@ class DoctorsController extends Controller
         }
     }
 
+    public function updateDoctorDetails(Request $request, $id)
+    {
+        $request->validate([
+            'doctor_id'   => 'required|exists:doctors,id',
+            'education'   => 'nullable|string|max:255',
+            'languages'   => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'experience'  => 'nullable|string',
+            'extra_info'  => 'nullable|string',
+        ]);
+
+        // Find the doctor detail record
+        $doctorDetail = DoctorDetail::find($id);
+
+        if (!$doctorDetail) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Doctor details not found.'
+            ]);
+        }
+
+        // Optional: prevent duplicate doctor_id (if changing doctor)
+        if ($doctorDetail->doctor_id != $request->doctor_id) {
+            if (DoctorDetail::where('doctor_id', $request->doctor_id)->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Details for this doctor already exist.'
+                ]);
+            }
+        }
+
+        // Update the record
+        $doctorDetail->update([
+            'doctor_id'   => $request->doctor_id,
+            'education'   => $request->education,
+            'languages'   => $request->languages,
+            'description' => $request->description,
+            'experience'  => $request->experience,
+            'extra_info'  => $request->extra_info,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status'  => 200,
+            'message' => 'Doctor details updated successfully.'
+        ]);
+    }
+
     public function destroy($id)
     {
         try {
@@ -138,6 +229,24 @@ class DoctorsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting service: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyDoctorDetails($id)
+    {
+        try {
+            $doctorDetail = DoctorDetail::findOrFail($id);
+            $doctorDetail->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Doctor details deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting doctor details: ' . $e->getMessage()
             ], 500);
         }
     }

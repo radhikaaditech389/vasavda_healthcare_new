@@ -224,14 +224,14 @@
                                 <ul class="d-flex m-0">
                                     @foreach ($menus as $menu)
                                         <li class="{{ $menu->submenus->count() ? 'menu-item-has-children' : '' }}">
-                                            <a href="{{ $menu->link }}">{{ $menu->name }}</a>
+                                            <a href="{{ url($menu->link) }}">{{ $menu->name }}</a>
 
                                             @if ($menu->submenus->count())
                                                 <ul class="sub-menu">
                                                     @foreach ($menu->submenus as $submenu)
                                                         <li>
                                                             <a
-                                                                href="{{ $submenu->submenu_link }}">{{ $submenu->submenu_name }}</a>
+                                                                href="{{ url($submenu->submenu_link) }}">{{ $submenu->submenu_name }}</a>
                                                         </li>
                                                     @endforeach
                                                 </ul>

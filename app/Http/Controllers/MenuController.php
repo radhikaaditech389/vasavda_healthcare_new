@@ -29,9 +29,8 @@ class MenuController extends Controller
             // Replace spaces with underscores, keep it lowercase
             $slug = strtolower(str_replace(' ', '_', trim($request->name)));
 
-            // Force base domain for link
-            $baseUrl = "https://vasavadahospitals.org";
-            $link = rtrim($baseUrl, '/') . '/' . $slug;
+            // Store relative path (just /slug)
+            $link = '/' . $slug;
 
             $menu = Menu::create([
                 'name' => $request->name,
@@ -95,8 +94,8 @@ class MenuController extends Controller
             // Remove multiple underscores (if any)
             $slug = preg_replace('/_+/', '_', $slug);
 
-            $baseUrl = "https://vasavadahospitals.org";
-            $link = rtrim($baseUrl, '/') . '/' . $slug;
+            // ✅ Store only relative link like "/cardiology"
+            $link = '/' . $slug;
 
             $submenu = Submenu::create([
                 'submenu_name' => $request->submenu_name,
@@ -121,7 +120,6 @@ class MenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        // ✅ Same validation as store
         $request->validate([
             'name' => [
                 'required',
@@ -138,7 +136,10 @@ class MenuController extends Controller
             $menu = Menu::findOrFail($id);
 
             $sequence = $request->sequence ?? $menu->sequence;
-            $link = url('/' . strtolower(str_replace(' ', '_', $request->name)));
+
+            // ✅ Just slug as relative path
+            $slug = strtolower(str_replace(' ', '_', trim($request->name)));
+            $link = '/' . $slug;
 
             $menu->update([
                 'name' => $request->name,
@@ -163,17 +164,26 @@ class MenuController extends Controller
     public function updateSubmenu(Request $request, $id)
     {
         $request->validate([
-            'submenu_name' => 'required|string|max:10',
+            'submenu_name' => 'required|string|max:50',
         ], [
             'submenu_name.required' => 'Submenu Name is required',
             'submenu_name.string' => 'Submenu Name must be a string',
-            'submenu_name.max' => 'Submenu Name must not exceed 10 characters',
+            'submenu_name.max' => 'Submenu Name must not exceed 50 characters',
         ]);
 
         try {
             $submenu = Submenu::findOrFail($id);
+
             $sequence = $request->sequence ?? $submenu->submenu_sequence;
-            $link = 'http://localhost:8000/' . strtolower(str_replace(' ', '-', $request->submenu_name));
+
+            // ✅ Generate slug same as in store
+            $slug = strtolower(trim($request->submenu_name));
+            $slug = preg_replace('/[^a-z0-9 ]/', '', $slug);   // remove invalid chars
+            $slug = preg_replace('/\s+/', '_', $slug);         // spaces → underscore
+            $slug = preg_replace('/_+/', '_', $slug);          // collapse multiple underscores
+
+            // ✅ Store only relative path like "/cardiology"
+            $link = '/' . $slug;
 
             $submenu->update([
                 'menu_id' => $request->menu_id,

@@ -4,7 +4,8 @@
         <ul class="list">
             <li>
                 <div class="user-info">
-                    <div class="image"><a href="{{ route('home') }}"><img src="{{ asset('admin/images/Logo.png') }}" alt="User"></a>
+                    <div class="image"><a href="{{ route('home') }}"><img src="{{ asset('admin/images/Logo.png') }}"
+                                alt="User"></a>
                     </div>
                     <div class="detail">
                         <h4>Dr. Mitali Vasavada</h4>
@@ -32,6 +33,7 @@
                     <li><a href="{{ route('admin.footer') }}">Header & Footer</a></li>
                     <li><a href="{{ route('admin.slider') }}">Slider</a></li>
                     <li><a href="{{ route('admin.faq') }}">FAQ</a></li>
+                    <li><a href="{{ route('admin.about_section') }}">About Section</a></li>
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-face"></i><span>Patient
@@ -61,16 +63,18 @@
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
+            {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Section</span>
                 </a>
                 <ul class="ml-menu">
                     <li><a href="{{ route('admin.about_section') }}">About Section</a></li>
                 </ul>
-            </li>
+            </li> --}}
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Doctors</span>
                 </a>
                 <ul class="ml-menu">
-                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li>
+                    <li><a href="{{ route('admin.doctors') }}">All Doctor</a></li> 
+                    <li><a href="{{ route('admin.doctor.details') }}">Doctor Details</a></li>
                 </ul>
             </li>
     </div>

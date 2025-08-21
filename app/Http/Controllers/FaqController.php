@@ -20,36 +20,21 @@ class FaqController extends Controller
         try {
             $validatedData = $request->validate([
                 'question' => 'required|string|max:255',
-                'answer' => 'required|string',
-                'link' => 'nullable',
-                'menu_id' => 'required|integer|exists:menus,id',
+                'answer'   => 'required|string',
             ]);
 
-            // Find the menu record by menu_id
-            $menu = Menu::find($validatedData['menu_id']);
-
-            if (!$menu) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Selected menu not found'
-                ], 404);
-            }
-
-            // If link not provided or empty, assign link from menu_link
-            if (empty($validatedData['link'])) {
-                $validatedData['link'] = $menu->link; // use menu's existing link
-            }
+            $validatedData['show_on_home'] = $request->boolean('show_on_home');
 
             $faq = Faq::create($validatedData);
 
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Faq created successfully!',
-                'data' => $faq
+                'data'    => $faq
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -60,47 +45,23 @@ class FaqController extends Controller
         try {
             $validatedData = $request->validate([
                 'question' => 'required|string|max:255',
-                'answer' => 'required|string',
-                'link' => 'nullable',
-                'menu_id' => 'required|integer|exists:menus,id',
+                'answer'   => 'required|string',
             ]);
 
             $faq = Faq::findOrFail($id);
 
-            $oldMenuId = $faq->menu_id;
-            $newMenuId = $validatedData['menu_id'];
-
-            // Find the new menu
-            $menu = Menu::find($newMenuId);
-
-            if (!$menu) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Selected menu not found'
-                ], 404);
-            }
-
-            // If menu_id changed, reset link to new menu's link
-            if ($newMenuId != $oldMenuId) {
-                $validatedData['link'] = $menu->link;
-            } else {
-                // menu_id same, if link empty, reset to menu link
-                if (empty($validatedData['link'])) {
-                    $validatedData['link'] = $menu->link;
-                }
-                // else keep the provided link as is
-            }
+            $validatedData['show_on_home'] = $request->input('show_on_home') == 1 ? 1 : 0;
 
             $faq->update($validatedData);
 
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Faq updated successfully!',
-                'data' => $faq
+                'data'    => $faq
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }

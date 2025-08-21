@@ -159,6 +159,11 @@ Route::post('/admin/facilities/update/{id}', [FacilityController::class, 'update
 Route::delete('/admin/facilities/{id}', [FacilityController::class, 'destroy'])->name('admin.facilities.destroy');
 Route::get('/admin/facilities/{id}/facility', [FacilityController::class, 'getFacilities']);
 
+// Docttor details routes
+Route::get('/admin/doctor/details', [DoctorsController::class, 'doctorDetails'])->name('admin.doctor.details');
+Route::post('/admin/doctor/details', [DoctorsController::class, 'storeDoctorDetails'])->name('admin.doctor.details.store');
+Route::put('/admin/doctor/details/{id}', [DoctorsController::class, 'updateDoctorDetails'])->name('admin.doctor.details.update');
+Route::delete('/admin/doctor/details/{id}', [DoctorsController::class, 'destroyDoctorDetails'])->name('admin.doctor.details.destroy');
 
 // FAQ section routes
 Route::get('/admin/faq', [FaqController::class, 'index'])->name('admin.faq');

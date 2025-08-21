@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
 use App\Models\AboutUs;
+use App\Models\Doctor;
+use App\Models\Faq;
 use App\Models\Footer;
 use App\Models\Menu;
 use App\Models\Services;
@@ -26,12 +28,20 @@ class HomeController extends Controller
 
         $aboutSection = AboutSection::first();
         $services = Services::all();
-        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services'));
+        $doctors = Doctor::all();
+        $faqs = Faq::where('show_on_home', 1)->get();
+        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services', 'doctors', 'faqs'));
     }
 
     public function book_appointment()
     {
-        return view('patient.book_appointment');
+        $menus = Menu::where('is_displayed', 1)
+            ->orderBy('sequence')
+            ->with('submenus')
+            ->get();
+
+        $footer = Footer::first();
+        return view('patient.book_appointment', compact('footer', 'menus'));
     }
 
     public function contact()
@@ -78,7 +88,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.doctors', compact('footer', 'menus'));
+        $doctors = Doctor::with('details')->get();
+        return view('patient.doctors', compact('footer', 'menus', 'doctors'));
     }
 
     public function why_vasavada()
@@ -296,7 +307,13 @@ class HomeController extends Controller
     }
     public function setu_newborn()
     {
-        return view('patient.setu_newborn');
+        $menus = Menu::where('is_displayed', 1)
+            ->orderBy('sequence')
+            ->with('submenus')
+            ->get();
+
+        $footer = Footer::first();
+        return view('patient.setu_newborn', compact('footer', 'menus'));
     }
 
     public function faq()
@@ -307,7 +324,9 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.faq', compact('footer', 'menus'));
+
+        $faqs = Faq::where('show_on_home', 0)->get();
+        return view('patient.faq', compact('footer', 'menus', 'faqs'));
     }
 
     public function explore_our_space()

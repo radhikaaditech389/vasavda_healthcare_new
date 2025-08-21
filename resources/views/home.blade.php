@@ -371,6 +371,22 @@
             font-weight: 700;
             /* Set font weight for h1 */
         }
+
+        .team-img-six {
+            width: 100%;
+            height: 300px;
+            /* same for all */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-img-six img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
     <br>
     <!-- End about-section-seven -->
@@ -392,155 +408,26 @@
             </div>
             <div class="row vs-carousel wow fadeIn" data-wow-delay="0.3s" data-slide-show="4" data-lg-slide-show="3"
                 data-md-slide-show="2" data-sm-slide-show="1">
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/drvasavada_doctor_team.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/dr_mitali">Dr Mitali Vasavada</a></h4>
-                            <span class="designation">Gynaecology Specialist</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="500ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/DrPracheeShah.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/doctors">Dr. Prachee Shah</a></h4>
-                            <span class="designation">M.D. (Pediatrics), IBCLC</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="600ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/drmunshi.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/doctors">Dr. Shyamal Munshi</a></h4>
-                            <span class="designation">M.B. M.S. M.CH.</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="700ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/drbhadresh.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/doctors">Dr. Bhadresh K. Shah</a></h4>
-                            <span class="designation">M.B.B.S, M.D.</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/drgirish.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/doctors">Dr. Girish Patel
-                                </a></h4>
-                            <span class="designation">Obstetrician</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <!-- Team block -->
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/dr_phoram.png') }}" alt=""
-                                style="height: 265px;">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/doctors">Dr. Phoram Trivedi Pathak
-                                </a></h4>
-                            <span class="designation">Psychologist & Counsellor</span>
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
 
-
-                <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="team-card-two">
-                        <div class="team-img-six">
-                            <img src="{{ asset('patient/img/team/setu.png') }}" alt="">
-                        </div>
-                        <div class="info-box">
-                            <h4 class="name"><a href="/setu_newborn">Our Paediatric Team
-                                </a></h4>
-                            {{-- <span class="designation">Psychologist & Counsellor</span> --}}
-                            {{-- <span class="share-icon fa fa-share-alt"></span>
-                            <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-behance"></i></a>
-                            </div> --}}
+                @foreach ($doctors as $key => $doctor)
+                    <div class="col-lg-3 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="{{ 400 + $key * 100 }}ms">
+                        <div class="team-card-two">
+                            <div class="team-img-six">
+                                <img src="{{ asset($doctor->image) }}" alt="{{ $doctor->name }}">
+                            </div>
+                            <div class="info-box">
+                                <h4 class="name">
+                                    <a
+                                        href="{{ $doctor->name === 'Dr. Mitali Vasavada' ? url('/dr_mitali') : url('/doctors') }}">
+                                        {{ $doctor->name }}
+                                    </a>
+                                </h4>
+                                <span class="designation">{{ $doctor->specialization }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-
-
-
+                @endforeach
             </div>
-        </div>
-
-
-
-
-        </div>
         </div>
     </section>
     <!-- End team-section-two -->
@@ -700,108 +587,28 @@
                 </div>
                 <div class="col-xl-7 col-md-12 col-sm-12 wow fadeInUp" data-wow-delay="400ms">
                     <div class="vs-accordion two accordion" id="vsaccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                    How can I contact Vasavada Women's Hospital bopal?
-                                </button>
-                            </h2>
-                            <div id="collapse1" class="accordion-collapse collapse show"
-                                data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>For any of your inquiries, call on - +91 98790 09439 <br>
-                                        For more information, <a href="#">click here.</a>
-                                    </p>
 
+                        @foreach ($faqs as $index => $faq)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button {{ $index !== 0 ? 'collapsed' : '' }}"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ $index }}"
+                                        aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
+                                        aria-controls="collapse{{ $index }}">
+                                        {{ $faq->question }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $index }}"
+                                    class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}"
+                                    data-bs-parent="#vsaccordion">
+                                    <div class="accordion-body">
+                                        {!! $faq->answer !!}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                                    How do I schedule an appointment with a doctor?
-                                </button>
-                            </h2>
-                            <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>you can request for appointment on <a href="#"> Book Appointment </a></p>
-                                    Call at Vasavada Women's Hospital Bopal - +91 98790 09439
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                    What are the hospital's hours of operation?
-                                </button>
-                            </h2>
-                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>24*7 for any emergency. For OPD consultation, 10 am to 6 pm, however, it is
-                                        advisable to seek prior appointment of the concerned doctor at vasavada womens
-                                        hospital bopal.</p>
-                                    For more information, <a href="#">click here.</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                    How do I pay my hospital bills?
-                                </button>
-                            </h2>
-                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>
-                                        We accept various payment methods to suit your convenience: <br>
-
-                                        1. Debit and Credit Cards<br>
-                                        2. Online Payments<br>
-                                        3. Cash Payments<br>
-                                        - As per government regulations, cash payments are accepted up to Rs. 2 lakh.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                    What should I do in case of an emergency?
-                                </button>
-                            </h2>
-                            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>Please call our emergency number as given below:
-                                        <br>
-                                    <h3> +91 98790 09439</h3>
-
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                    Do you assist the international patients?
-                                </button>
-                            </h2>
-                            <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#vsaccordion">
-                                <div class="accordion-body">
-                                    <p>We have a special international patient desk to assist patients from foreign
-                                        Countries. For more information,<a href="#"> click here. </a></p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-xl-5 col-md-12 col-sm-12 wow fadeInUp" data-wow-delay="500ms">

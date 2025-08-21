@@ -15,5 +15,10 @@ class Doctor extends Model
         'image'
     ];
 
+    public function details()
+    {
+        return $this->hasOne(DoctorDetail::class);
+    }
+
     use HasFactory;
 }

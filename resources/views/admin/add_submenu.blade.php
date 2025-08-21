@@ -124,9 +124,9 @@
                                                         data-submenu_name="{{ $submenu->submenu_name }}"
                                                         data-submenu_sequence="{{ $submenu->submenu_sequence }}"
                                                         data-submenu_link="{{ $submenu->submenu_link }}"
-                                                        data-is_displayed="{{ $submenu->is_displayed }}">Edit</button>
+                                                        data-is_displayed="{{ $submenu->is_displayed }}" disabled>Edit</button>
                                                     <a href="#" class="btn btn-danger btn-round delete-submenu"
-                                                        data-id="{{ $submenu->id }}">Delete</a>
+                                                        data-id="{{ $submenu->id }}" disabled>Delete</a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -3,6 +3,9 @@
 
 <head>
     @include('admin.layout.headerlink')
+
+    <!-- Summernote CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 </head>
 
 <body class="theme-cyan">
@@ -38,17 +41,8 @@
                                 data-bg-color="#f3f6f7">
                                 @csrf
                                 <input type="hidden" name="faq_id" id="faq_id">
+
                                 <div class="row clearfix">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <select class="form-control" name="menu_id" id="menu_id"
-                                                style="margin-left: 12px;">
-                                                @foreach ($menus as $menu)
-                                                    <option value="{{ $menu->id }}">{{ $menu->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="question" id="question"
@@ -56,20 +50,26 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="answer" id="answer"
-                                                placeholder="Enter answer">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group m-t-5">
-                                            <input type="text" class="form-control" name="link" id="link"
-                                                placeholder="Enter link" readonly>
+                                            <textarea class="form-control summernote" name="answer" id="answer" placeholder="Enter answer"></textarea>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- New Checkbox -->
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-check" style="margin-left: 12px;">
+                                            <input type="checkbox" class="form-check-input" name="show_on_home"
+                                                id="show_on_home" value="1">
+                                            <label class="form-check-label" for="show_on_home">Show on Homepage</label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-primary btn-round">Submit</button>
@@ -98,8 +98,7 @@
                                             <th>ID</th>
                                             <th>Question</th>
                                             <th>Answer</th>
-                                            <th>Menu</th>
-                                            <th>Link</th>
+                                            <th>Show on Home</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -109,15 +108,20 @@
                                                 <td><span class="list-name">
                                                         {{ str_pad($faq->id, STR_PAD_LEFT) }}</span></td>
                                                 <td>{{ $faq->question }}</td>
-                                                <td>{{ $faq->answer }}</td>
-                                                <td>{{ $faq->menu->name }}</td>
-                                                <td>{{ $faq->link }}</td>
+                                                <td>{!! $faq->answer !!}</td>
+                                                <td>
+                                                    @if ($faq->show_on_home)
+                                                        <span class="badge badge-success">Yes</span>
+                                                    @else
+                                                        <span class="badge badge-danger">No</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-round edit-faq"
-                                                        data-id="{{ $faq->id }}" data-menu_id="{{ $faq->menu_id }}"
+                                                        data-id="{{ $faq->id }}" 
                                                         data-question="{{ $faq->question }}"
                                                         data-answer="{{ $faq->answer }}"
-                                                        data-link="{{ $faq->link }}">Edit</button>
+                                                        data-show_on_home="{{ $faq->show_on_home }}">Edit</button>
                                                     <a href="#" class="btn btn-danger btn-round delete-faq"
                                                         data-id="{{ $faq->id }}">Delete</a>
                                                 </td>
@@ -139,27 +143,33 @@
         $(document).ready(function() {
             $('.edit-faq').on('click', function() {
                 const id = $(this).data('id');
-                const menu_id = $(this).data('menu_id');
                 const question = $(this).data('question');
                 const answer = $(this).data('answer');
-                const link = $(this).data('link');
+                const show_on_home = $(this).data('show_on_home') || 0;
 
                 $('#faq_id').val(id);
-                $('#menu_id').val(menu_id);
                 $('#question').val(question);
-                $('#answer').val(answer);
-                $('#link').val(link);
+                $('#show_on_home').prop('checked', show_on_home == 1);
 
-                // Change form submit button text
+                $('#answer').summernote('code', answer);
+
                 $('button[type="submit"]').text('Update');
             });
 
             $('#faq_form').on('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
+
+                if ($('#show_on_home').is(':checked')) {
+                    formData.set('show_on_home', 1);
+                } else {
+                    formData.set('show_on_home', 0);
+                }
+
                 const faqId = $('#faq_id').val();
-                const url = faqId ? '{{ route('admin.faq.update', ['id' => ':id']) }}'.replace(':id',
-                    faqId) : '{{ route('admin.faq.store') }}';
+                const url = faqId ?
+                    '{{ route('admin.faq.update', ['id' => ':id']) }}'.replace(':id', faqId) :
+                    '{{ route('admin.faq.store') }}';
                 const method = faqId ? 'POST' : 'POST';
 
                 if (faqId) {
@@ -246,7 +256,7 @@
                                         text: response.message ||
                                             'FAQ deleted successfully.',
                                         timer: 2000,
-                                        showConfirmButton: false
+                                        showConfirmButton: true
                                     }).then(() => {
                                         window.location.reload();
                                     });
@@ -277,8 +287,25 @@
                     e.preventDefault();
                     $('#faq_form')[0].reset();
                     $('#faq_id').val('');
+                    $('#answer').summernote('code', '');
                     $('button[type="submit"]').text('Submit');
                 });
+        });
+    </script>
+
+    <!-- Summernote JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['fontsize', 'color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                ]
+            });
         });
     </script>
 </body>
