@@ -171,7 +171,8 @@
                         </div>
                         <div class="team-body">
                             <h3 class="h4 mb-0">
-                                <a  href="/dr_mitali" class="text-reset">
+                                <a @if($director->title == 'Dr. Mitali Vasavada') href="{{ url('/director_detail') }}" @endif
+                                    class="text-reset">
                                     {{ $director->title }}
                                 </a>
                             </h3>
@@ -227,26 +228,26 @@
             <div class="row text-center text-md-start wow fadeInUp" data-wow-delay="0.3s">
                 <div class="col-12 order-2 order-xxl-1">
                     <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-fac1" role="tabpanel"
-                            aria-labelledby="nav-fac1-tab">
+                        @foreach ($facilities as $index => $facility)
+                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}"
+                            id="nav-fac{{ $facility->id }}" role="tabpanel"
+                            aria-labelledby="nav-fac{{ $facility->id }}-tab">
+
                             <div class="row flex-row-reverse gy-4">
                                 <div class="col-md-6 col-xxl text-end">
-                                    <img src="{{ asset('patient/img/service/Water_birth_fac.jpg') }}" alt="tabimage">
+                                    <img src="{{ asset($facility->image) }}" alt="{{ $facility->title }}">
                                 </div>
                                 <div class="col-md-6 col-xxl-4">
                                     <div class="about-box3">
-                                        {{-- <span class="about-number">1.</span> --}}
-                                        <h3 class="about-title">Water Birthing</h3>
-                                        <p class="about-text">A water birth involves laboring and delivering in a
-                                            temperature-regulated pool, which helps the mother relax and reduces the
-                                            need for painkillers. It allows immediate skin-to-skin contact and
-                                            breastfeeding, promoting bonding, better temperature regulation, and
-                                            improved sleep for the baby.</p>
+                                        {{-- <span class="about-number">{{ $index+1 }}.</span> --}}
+                                        <h3 class="about-title">{{ $facility->title }}</h3>
+                                        <p class="about-text">{{ $facility->description }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-fac2" role="tabpanel" aria-labelledby="nav-fac2-tab">
+                        @endforeach
+                        <!-- <div class="tab-pane fade" id="nav-fac2" role="tabpanel" aria-labelledby="nav-fac2-tab">
                             <div class="row flex-row-reverse gy-4">
                                 <div class="col-md-6 col-xxl text-end">
                                     <img src="{{ asset('patient/img/service/modularot_fac.jpg') }}" alt="tabimage">
@@ -358,15 +359,25 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-12 order-1 order-xxl-2">
                     <div class="nav about-tab2" id="nav-tab" role="tablist">
+                        <!-- @foreach ($facilities as $facility)
                         <button class="nav-link active" id="nav-fac1-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-fac1" type="button" role="tab" aria-controls="nav-fac1"
-                            aria-selected="true"><span class="tab-text">Water Birthing</span></button>
-                        <button class="nav-link" id="nav-fac2-tab" data-bs-toggle="tab" data-bs-target="#nav-fac2"
+                            aria-selected="true"><span class="tab-text">{{$facility->title}}</span></button>
+                            @endforeach -->
+                        @foreach ($facilities as $index => $facility)
+                        <button class="nav-link {{ $index == 0 ? 'active' : '' }}" id="nav-fac{{ $facility->id }}-tab"
+                            data-bs-toggle="tab" data-bs-target="#nav-fac{{ $facility->id }}" type="button" role="tab"
+                            aria-controls="nav-fac{{ $facility->id }}"
+                            aria-selected="{{ $index == 0 ? 'true' : 'false' }}">
+                            <span class="tab-text">{{ $facility->title }}</span>
+                        </button>
+                        @endforeach
+                        <!-- <button class="nav-link" id="nav-fac2-tab" data-bs-toggle="tab" data-bs-target="#nav-fac2"
                             type="button" role="tab" aria-controls="nav-fac2" aria-selected="false"><span
                                 class="tab-text">Modular Operation Theatre</span></button>
                         <button class="nav-link" id="nav-fac3-tab" data-bs-toggle="tab" data-bs-target="#nav-fac3"
@@ -386,7 +397,7 @@
                                 class="tab-text">"Hillrom effinity 4.0" Bed </span></button>
                         <button class="nav-link" id="nav-fac8-tab" data-bs-toggle="tab" data-bs-target="#nav-fac8"
                             type="button" role="tab" aria-controls="nav-fac8" aria-selected="false"><span
-                                class="tab-text">OPD</span></button>
+                                class="tab-text">OPD</span></button> -->
 
                     </div>
                 </div>

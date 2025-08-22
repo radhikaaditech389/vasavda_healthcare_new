@@ -204,7 +204,7 @@
 
                         </div>
 
-                        <a href="{{ route('dr_mitali') }}" class="btn-style margin-top">Learn More</a>
+                        <a href="{{ route('director_detail') }}" class="btn-style margin-top">Learn More</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12 wow fadeInUp" data-wow-delay="600ms">
@@ -418,7 +418,7 @@
                             <div class="info-box">
                                 <h4 class="name">
                                     <a
-                                        href="{{ $doctor->name === 'Dr. Mitali Vasavada' ? url('/dr_mitali') : url('/doctors') }}">
+                                        href="{{ $doctor->name === 'Dr. Mitali Vasavada' ? url('/director_detail') : url('/doctors') }}">
                                         {{ $doctor->name }}
                                     </a>
                                 </h4>

@@ -54,6 +54,7 @@
                 </a>
                 <ul class="ml-menu">
                     <li><a href="{{ route('admin.add_directors') }}">All Directors</a></li>
+                       <li><a href="{{ route('admin.director_details') }}">Director Details</a></li>
                 </ul>
             </li>
              <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Facilities</span>

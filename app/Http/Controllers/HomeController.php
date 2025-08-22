@@ -12,6 +12,8 @@ use App\Models\Services;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use App\Models\Director;
+use App\Models\DirectorDetails;
+use App\Models\Facility;
 
 class HomeController extends Controller
 {
@@ -76,8 +78,10 @@ class HomeController extends Controller
         $footer = Footer::first();
         $about_us_detail = AboutUs::first();
         $director_detail = Director::get();
+        $facilities = Facility::get();
+         $director_data = DirectorDetails::get();
         // dd($director_detail);
-        return view('patient.about_us', compact('footer', 'menus','about_us_detail','director_detail'));
+        return view('patient.about_us', compact('footer', 'menus','about_us_detail','director_detail','facilities','director_data'));
     }
 
     public function doctors()
@@ -290,7 +294,7 @@ class HomeController extends Controller
         return view('patient.service.vacination');
     }
 
-    public function dr_mitali()
+    public function director_detail()
     {
         $menus = Menu::where('is_displayed', 1)
             ->orderBy('sequence')
@@ -298,7 +302,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.dr_mitali', compact('footer', 'menus'));
+        $director_data = DirectorDetails::first();       
+        return view('patient.director_detail', compact('footer', 'menus','director_data'));
     }
 
     public function clinic_inner_page()

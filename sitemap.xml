@@ -128,7 +128,7 @@
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.vasavadahospitals.org/dr_mitali</loc>
+  <loc>https://www.vasavadahospitals.org/director_detail</loc>
   <lastmod>2025-02-25T13:29:09+00:00</lastmod>
   <priority>0.80</priority>
 </url>

@@ -171,7 +171,7 @@
                             <div class="doctor-profile-card text-center p-4 featured-doctor">
                                 <img src="{{ asset($doctor->image) }}" alt="{{ $doctor->name }}"
                                     class="doctor-img mb-3">
-                                <a href="{{ route('dr_mitali') }}" class="text-decoration-none">
+                                <a href="{{ route('director_detail') }}" class="text-decoration-none">
                                     <h4>{{ $doctor->name }}</h4>
                                     <p class="fs-5">{{ $doctor->specialization }}</p>
                                 </a>

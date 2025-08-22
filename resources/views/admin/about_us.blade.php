@@ -259,33 +259,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="row clearfix">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="languages"
-                                                id="languages" placeholder="e.g. English, Gujarati, Hindi"
-                                                value="{{ $about->languages ?? '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="experience"
-                                                id="experience" placeholder="Enter experience (years)"
-                                                value="{{ $about->experience ?? '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row clearfix">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="video_url"
-                                                id="video_url" placeholder="Enter video URL"
-                                                value="{{ $about->video_url ?? '' }}">
-                                        </div>
-                                    </div>
-                                </div> -->
-
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-primary btn-round"

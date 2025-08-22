@@ -15,6 +15,7 @@ use App\Http\Controllers\PatientServiceController;
 use App\Http\Controllers\AboutSectionController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\DirectorDetailsController;
 // use App\Http\Controllers\Dire;
 // Route::get('/', function () {
 //     return view('welcome');
@@ -62,7 +63,7 @@ Route::get('/vacination', [HomeController::class, 'vacination'])->name('service.
 
 Route::get('/services', [HomeController::class, 'service'])->name('service');
 
-Route::get('/dr_mitali', [HomeController::class, 'dr_mitali'])->name('dr_mitali');
+Route::get('/director_detail', [HomeController::class, 'director_detail'])->name('director_detail');
 
 Route::get('/clinic_inner_page', [HomeController::class, 'clinic_inner_page'])->name('clinic_inner_page');
 
@@ -151,6 +152,11 @@ Route::get('/admin/doctors', [DoctorsController::class, 'index'])->name('admin.d
 Route::post('/admin/doctors', [DoctorsController::class, 'store'])->name('admin.doctors.store');
 Route::put('/admin/doctors/{id}', [DoctorsController::class, 'update'])->name('admin.doctors.update');
 Route::delete('/admin/doctors/{id}', [DoctorsController::class, 'destroy'])->name('admin.doctors.destroy');
+
+Route::get('/admin/director_details', [DirectorDetailsController::class, 'index'])->name('admin.director_details');
+Route::post('/admin/director_details', [DirectorDetailsController::class, 'store'])->name('admin.director_details.store');
+Route::post('/admin/director_details/{id}', [DirectorDetailsController::class, 'update'])->name('admin.director_details.update');
+Route::delete('/admin/director_details/{id}', [DirectorDetailsController::class, 'destroy'])->name('admin.director_details.delete');
 
 //facilities
 Route::get('/admin/facilities', [FacilityController::class, 'index'])->name('admin.facilities');
