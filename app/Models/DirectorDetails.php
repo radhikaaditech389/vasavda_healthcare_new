@@ -9,7 +9,7 @@ class DirectorDetails extends Model
 {
     protected $table = 'director_details';
     protected $fillable = [
-        'facility_id',
+        'director_id',
         'name',
         'specialization',
         'skills',
