@@ -174,14 +174,22 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="yt_link" id="yt_link"
-                                                placeholder="Enter youtube link"
-                                                value="{{ isset($footers[0]) ? $footers[0]->yt_link : '' }}">
+                                            <input type="text" class="form-control" name="special_time"
+                                                id="special_time" placeholder="Enter special time"
+                                                value="{{ isset($footers[0]) ? $footers[0]->special_time : '' }}">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="yt_link" id="yt_link"
+                                                placeholder="Enter youtube link"
+                                                value="{{ isset($footers[0]) ? $footers[0]->yt_link : '' }}">
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="insta_link"
@@ -296,6 +304,7 @@
                 let days = $(this).data('days');
                 let hospital_time = $(this).data('hospital_time');
                 let consulting_time = $(this).data('consulting_time');
+                let special_time = $(this).data('special_time');
                 let yt_link = $(this).data('yt_link');
                 let insta_link = $(this).data('insta_link');
 
@@ -307,6 +316,7 @@
                 $('#days').val(days);
                 $('#hospital_time').val(hospital_time);
                 $('#consulting_time').val(consulting_time);
+                $('#special_time').val(special_time);
                 $('#yt_link').val(yt_link);
                 $('#insta_link').val(insta_link);
 
@@ -340,6 +350,7 @@
                 $('#days').val(footerData.days);
                 $('#hospital_time').val(footerData.hospital_time);
                 $('#consulting_time').val(footerData.consulting_time);
+                $('#special_time').val(footerData.special_time);
                 $('#yt_link').val(footerData.yt_link);
                 $('#insta_link').val(footerData.insta_link);
 
