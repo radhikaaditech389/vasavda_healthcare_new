@@ -13,10 +13,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\PatientServiceController;
 use App\Http\Controllers\AboutSectionController;
-use App\Http\Controllers\DirectorController;
-use App\Http\Controllers\FacilityController;
-use App\Http\Controllers\DirectorDetailsController;
-// use App\Http\Controllers\Dire;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WhyVasavadasController;
 
 // Route::get('/', function () {
@@ -199,3 +196,9 @@ Route::get('/admin/why_vasavada/{id}/edit', [WhyVasavadasController::class, 'edi
 Route::post('/admin/why_vasavada', [WhyVasavadasController::class, 'store'])->name('admin.why_vasavada.store');
 Route::put('/admin/why_vasavada/update/{id}', [WhyVasavadasController::class, 'update'])->name('admin.why_vasavada.update');
 Route::delete('admin/why_vasavada/delete/{id}', [WhyVasavadasController::class, 'destroy'])->name('admin.why_vasavada.delete');
+
+// Review routes
+Route::get('/admin/reviews', [ReviewController::class, 'index'])->name('admin.reviews');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::post('/reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
+Route::post('/reviews/{review}/reject', [ReviewController::class, 'reject'])->name('reviews.reject');
