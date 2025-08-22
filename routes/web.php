@@ -13,6 +13,9 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\PatientServiceController;
 use App\Http\Controllers\AboutSectionController;
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\DirectorDetailsController;
+use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WhyVasavadasController;
 
