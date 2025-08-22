@@ -132,6 +132,9 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="phone_no" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Phone No.
+                                            </label>
                                             <input type="text" class="form-control" name="phone_no" id="phone_no"
                                                 placeholder="Enter phone number"
                                                 value="{{ isset($footers[0]) ? $footers[0]->phone_no : '' }}">
@@ -140,6 +143,9 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="email" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Email
+                                            </label>
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="Enter email"
                                                 value="{{ isset($footers[0]) ? $footers[0]->email : '' }}">
@@ -149,6 +155,9 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="days" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Days (Hospital Working Days)
+                                            </label>
                                             <input type="text" class="form-control" name="days" id="days"
                                                 placeholder="Enter days"
                                                 value="{{ isset($footers[0]) ? $footers[0]->days : '' }}">
@@ -157,6 +166,9 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="hospital_time" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Hospital Time
+                                            </label>
                                             <input type="text" class="form-control" name="hospital_time"
                                                 id="hospital_time" placeholder="Enter hospital time"
                                                 value="{{ isset($footers[0]) ? $footers[0]->hospital_time : '' }}">
@@ -166,6 +178,9 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="consulting_time" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Consulting Time
+                                            </label>
                                             <input type="text" class="form-control" name="consulting_time"
                                                 id="consulting_time" placeholder="Enter consulting time"
                                                 value="{{ isset($footers[0]) ? $footers[0]->consulting_time : '' }}">
@@ -174,6 +189,9 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="special_time" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Special Consulting Time
+                                            </label>
                                             <input type="text" class="form-control" name="special_time"
                                                 id="special_time" placeholder="Enter special time"
                                                 value="{{ isset($footers[0]) ? $footers[0]->special_time : '' }}">
@@ -184,6 +202,9 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="youtube" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Youtube Link
+                                            </label>
                                             <input type="text" class="form-control" name="yt_link" id="yt_link"
                                                 placeholder="Enter youtube link"
                                                 value="{{ isset($footers[0]) ? $footers[0]->yt_link : '' }}">
@@ -192,9 +213,23 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="instagram" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i> Instagram Link
+                                            </label>
                                             <input type="text" class="form-control" name="insta_link"
                                                 id="insta_link" placeholder="Enter instagram link"
                                                 value="{{ isset($footers[0]) ? $footers[0]->insta_link : '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="description" class="font-weight-bold">
+                                                <i class="fas fa-align-left"></i>Address for Map
+                                            </label>
+                                            <textarea class="form-control summernote" name="map_address" id="map_address" placeholder="Enter address for Map">{{ isset($footers[0]) ? $footers[0]->map_address : '' }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -307,6 +342,7 @@
                 let special_time = $(this).data('special_time');
                 let yt_link = $(this).data('yt_link');
                 let insta_link = $(this).data('insta_link');
+                let map_address = $(this).data('map_address');
 
                 $('#footer_id').val(id);
                 $('#description').val(description);
@@ -319,6 +355,7 @@
                 $('#special_time').val(special_time);
                 $('#yt_link').val(yt_link);
                 $('#insta_link').val(insta_link);
+                $('#map_address').val(map_address);
 
                 if (logo_image) {
                     $('#preview_image').attr('src', '/' + logo_image).show();
@@ -353,6 +390,7 @@
                 $('#special_time').val(footerData.special_time);
                 $('#yt_link').val(footerData.yt_link);
                 $('#insta_link').val(footerData.insta_link);
+                $('#map_address').val(footerData.map_address);
 
                 if (footerData.logo_image) {
                     $('#preview_image').attr('src', '/' + footerData.logo_image).fadeIn();

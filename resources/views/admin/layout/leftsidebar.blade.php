@@ -59,5 +59,10 @@
                         Vasavada</span>
                 </a>
             </li>
+
+            <li><a href="{{ route('admin.reviews') }}" class=""><i
+                        class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
+                </a>
+            </li>
     </div>
 </aside>

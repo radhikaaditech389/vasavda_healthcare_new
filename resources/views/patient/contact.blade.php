@@ -11,6 +11,14 @@
         content="Contact Womens hospital bopal, Women's hospital bopal, gynecologist bopal, lady gynecologist bopal, womens hospital near by, gynecologist near by, lady gynecologist near by">
     <link rel="canonical" href="https://www.vasavadahospitals.org/contact" />
     @include('patient.layout.head')
+
+    <style>
+        .footer-address .addr p,
+        .footer-address .addr div {
+            display: inline;
+            margin: 0;
+        }
+    </style>
 </head>
 
 
@@ -138,23 +146,26 @@
                             </tr>
                         </table>
                         <h5 class="pt-2 mb-10">Address</h5>
-                        <p class="fs-md"><i class="far fa-map-marker-alt me-2"></i>4th / 5th Floor, Sun South Trade
-                            Center,
-                            Opp., Bopal Police Station
-                            South Bopal, Ahmedabad, Gujarat 380058.</p>
+                        <div class="fs-md d-flex align-items-start footer-address">
+                            <i class="far fa-map-marker-alt me-2" style="color:black; margin-top:6px;"></i>
+                            <div class="addr" style="color:black;">{!! $footer->address !!}</div>
+                        </div>
 
                         {{-- <p class="fs-md"><i class="far fa-map-marker-alt me-2"></i>A-308, Maple Trade Centre, Surdhara Cir, nr. Sal Hospital Road, Thaltej, Ahmedabad, Gujarat 380052.</p> --}}
 
-                        <h5 class="pt-2 mb-2">Get In Touch</h5>
-                        <h5 class="h5 font-theme2 mb-0"><a href="tel:880369525423"><i
+                        <h5 class="pt-2 mb-2" style="margin-top:10px;">Get In Touch</h5>
+                        <h5 class="h5 font-theme2 mb-0"><a href="tel:+91 {{ $footer->phone_no }}"><i
                                     class="far fa-phone-alt me-2"></i>+91 {{ $footer->phone_no }}</a></h5>
                     </div>
                 </div>
             </div>
             <div class="ratio ratio-21x9 contact-map mt-70 mb-30">
-                <iframe
+                {{-- <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.997573790188!2d72.46589959678953!3d23.0238613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9ba2222d106b%3A0x3e2bf5885a0a5fe0!2sVasavada%20Womens%20hospital!5e0!3m2!1sen!2sin!4v1733126859163!5m2!1sen!2sin"
-                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe> --}}
+
+                <iframe src="https://www.google.com/maps?q={{ $footer->map_address }}&output=embed" width="600"
+                    height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </section>
@@ -182,7 +193,6 @@
     <script src="{{ asset('patient/js/vendor/jquery-3.6.0.min.js') }}"></script>
     <!-- Slick Slider -->
     <script src="{{ asset('patient/js/slick.min.js') }}"></script>
-    <!-- <script src="{{ asset('patient/js/app.min.js') }}"></script> -->
     <!-- Layerslider -->
     <script src="{{ asset('patient/js/layerslider.utils.js') }}"></script>
     <script src="{{ asset('patient/js/layerslider.transitions.js') }}"></script>

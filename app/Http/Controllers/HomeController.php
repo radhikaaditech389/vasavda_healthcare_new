@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Faq;
 use App\Models\Footer;
 use App\Models\Menu;
+use App\Models\Review;
 use App\Models\Section;
 use App\Models\Services;
 use App\Models\Slider;
@@ -62,7 +63,7 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.homecareservice', compact('footer', 'menus'));
+        return view('patient.service.home_care', compact('footer', 'menus'));
     }
 
     public function about_us()
@@ -111,7 +112,12 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.testimonials', compact('footer', 'menus'));
+
+        $reviews = Review::where('status', 'approved')
+            ->latest()
+            ->get();
+
+        return view('patient.testimonials', compact('footer', 'menus', 'reviews'));
     }
 
     public function service()
