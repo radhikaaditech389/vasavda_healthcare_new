@@ -444,82 +444,24 @@
                             <h2>Patient Reviews</h2>
                         </div>
                         <div class="testi-slider-eight">
-                            <div class="testi-info-eight">
-                                <p>Dr.Mitali is such a brilliant gynecologist bopal. Had a great online consultation
-                                    experience. There we replying my messages so soon when needed. The staff and doctor
-                                    both were great! Thank you for your service.
-
-                                </p>
-                                <div class="testi-auther-eight">
-                                    <h4 class="title">Aaryana, Mozambique - East Africa</h4>
-                                    {{-- <span class="designation">Heart Patient</span> --}}
+                            @foreach ($reviews as $review)
+                                <div class="testi-info-eight">
+                                    <p>{{ $review->message }}</p>
+                                    <div class="testi-auther-eight">
+                                        <h4 class="title">
+                                            {{ $review->name }}
+                                            @if ($review->location)
+                                                , {{ $review->location }}
+                                            @endif
+                                        </h4>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="testi-info-eight">
-                                <p>I have been consulting Dr. Mitali Vasavda at vasavada womens hospital bopal since a
-                                    long time . She has always been very cooperative and friendly with patient. She
-                                    guided me very well in my health related issues and my surgery too. She is best
-                                    gynaecologist in the town.
-
-
-                                </p>
-                                <div class="testi-auther-eight">
-                                    <h4 class="title">Komal Bhatt, Bodakdev</h4>
-                                    {{-- <span class="designation">Heart Patient</span> --}}
-                                </div>
-                            </div>
-
-
-
-                            <div class="testi-info-eight">
-                                <p>Dr.Mitali is best in town, she gives ample of time to patients and answers all the
-                                    questions very nicely and to the satisfaction of the patients... Very very happy to
-                                    have her as my gynaecologist
-                                    throughout the journey of my pregnancy at vasavada womens hospital bopal
-
-
-                                </p>
-                                <div class="testi-auther-eight">
-                                    <h4 class="title">
-                                        Riddhi Goel, South Bopal</h4>
-                                    {{-- <span class="designation">Heart Patient</span> --}}
-                                </div>
-                            </div>
-
-
-                            <div class="testi-info-eight">
-                                <p>I am very happy to counsult dr Mitali Vasavada at womens hospital bopal. She is very
-                                    god and intelligent doctor. Understand tthe problem of patients and gives good
-                                    treatment. Must visit consultant for gynec problem.
-
-
-                                </p>
-                                <div class="testi-auther-eight">
-                                    <h4 class="title">
-                                        Bindi Shukla</h4>
-                                    {{-- <span class="designation">Heart Patient</span> --}}
-                                </div>
-                            </div>
-
-
-
-
-
-                            <div class="testi-info-eight">
-                                <p>Its really a pleasure and safer feeling with dr mitali at womens hospital bopal
-                                    through out my pregnancy journey , thank you is a too little in front of your
-                                    dedication and help through . Always being greatful to you ma'am!
-
-                                </p>
-                                <div class="testi-auther-eight">
-                                    <h4 class="title">Dr. Khushbu Thaker</h4>
-                                    {{-- <span class="designation">Heart Patient</span> --}}
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                         <div id="slidenav4" class="custom-arrows-eight"></div>
                     </div>
                 </div>
+
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <form action="#" class="form-wrap4">
                         <div class="testi-form-title">

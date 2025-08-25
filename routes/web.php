@@ -173,6 +173,12 @@ Route::delete('admin/why_vasavada/delete/{id}', [WhyVasavadasController::class, 
 
 // Review routes
 Route::get('/admin/reviews', [ReviewController::class, 'index'])->name('admin.reviews');
+Route::get('/admin/all/reviews', [ReviewController::class, 'allReviews'])->name('admin.all.reviews');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::post('/reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
 Route::post('/reviews/{review}/reject', [ReviewController::class, 'reject'])->name('reviews.reject');
+Route::delete('/admin/reviews/{id}', [ReviewController::class, 'destroy'])->name('admin.reviews.delete');
+Route::put('/admin/reviews/update-show-on-home', [ReviewController::class, 'updateShowOnHome'])->name('reviews.updateShowOnHome');
+
+// Search functionality for admin reviews
+Route::get('/reviews/search', [ReviewController::class, 'search'])->name('reviews.search');
