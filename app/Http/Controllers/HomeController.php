@@ -131,7 +131,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.service', compact('footer', 'menus'));
+         $services = Services::get();
+        return view('patient.service.service', compact('footer', 'menus','services'));
     }
 
 

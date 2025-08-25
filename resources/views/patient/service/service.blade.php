@@ -51,22 +51,23 @@
                 </div>
             </div>
             <div class="row wow fadeIn">
+             @foreach($services as $service)
                 <div class="col-xl-4 mb-25">
-                    <div class="service-box ">
+                    <div class="service-box">
                         <div class="sr-img">
-                            <img src="{{ asset('patient/img/service/pragnancy_care_370x190.jpg') }}" alt="Service Image" class="w-100">
+                            <img src="{{ asset($service->image) }}" alt="{{ $service->title }}" class="w-100">
                         </div>
-                        <div class="sr-icon">
-                            <i class="flaticon-computer-mouse"></i>
-                        </div>
+                    <div class="sr-icon">
+                                        <i class="flaticon-blood-pressure"></i>
+                                    </div>
                         <div class="sr-content">
-                            <h3 class="h4"><a class="text-reset" href="/pragnancy_care">Pregnancy Care & Delivery</a></h3>
-
+                        <h3 class="h4"><a class="text-reset" href="/laproscopy">Laparoscopy and Hysteroscopy</a></h3>
                         </div>
-                        <a href="/pragnancy_care" class="icon-btn style4"><i class="far fa-long-arrow-alt-right"></i></a>
+                        <a href="/laproscopy" class="icon-btn style4"><i class="far fa-long-arrow-alt-right"></i></a>
                     </div>
                 </div>
-                <div class="col-xl-4 mb-25">
+            @endforeach
+                <!-- <div class="col-xl-4 mb-25">
                     <div class="service-box ">
                         <div class="sr-img">
                             <img src="{{ asset('patient/img/service/laproscopy-consultation-illustration_307X190.jpg') }}" alt="Service Image" class="w-100">
@@ -276,7 +277,7 @@
                         </div>
                         <a href="/clinic" class="icon-btn style4"><i class="far fa-long-arrow-alt-right"></i></a>
                     </div>
-                </div>
+                </div> -->
               
 
             </div>
