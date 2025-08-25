@@ -262,7 +262,7 @@
                                     </div>
                                     <!-- Footer -->
                                     <div class="modal-footer">
-                                        <a href="{{ route('appointments.store') }}" class="btn btn-primary">Book
+                                        <a href="{{ route('appointment') }}" class="btn btn-primary">Book
                                             Appointment</a>
                                         <a href="{{ route('contact') }}" class="btn btn-outline-secondary">Contact
                                             Now</a>

@@ -29,6 +29,7 @@ class FooterController extends Controller
             'special_time' => 'required|string|max:255',
             'yt_link' => 'required|string|max:255',
             'insta_link' => 'required|string|max:255',
+            'map_address' => 'required|string|max:255',
         ]);
 
         try {
@@ -63,6 +64,7 @@ class FooterController extends Controller
                 'special_time' => $request->special_time,
                 'yt_link' => $request->yt_link,
                 'insta_link' => $request->insta_link,
+                'map_address' => $request->map_address,
             ]);
 
             DB::commit();
@@ -95,6 +97,7 @@ class FooterController extends Controller
             'special_time' => 'required|string|max:255',
             'yt_link' => 'required|string|max:255',
             'insta_link' => 'required|string|max:255',
+            'map_address' => 'required|string|max:255',
         ]);
 
         try {
@@ -131,6 +134,7 @@ class FooterController extends Controller
                 'special_time' => $request->special_time,
                 'yt_link' => $request->yt_link,
                 'insta_link' => $request->insta_link,
+                'map_address' => $request->map_address,
             ]);
 
             DB::commit();
