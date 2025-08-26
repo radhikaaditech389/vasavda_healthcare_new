@@ -342,12 +342,10 @@
                                                 @endforeach
                                                 @endif
                                             </td>
-
+<?php dd( $service_detail);?>
                                             {{-- ✅ Display Benefits --}}
                                             <td>
-                                                @if (is_array($service_detail->benifits))
-                                                {{ implode(', ', $service_detail->benifits) }}
-                                                @endif
+                                               {{ $service_detail->benifits}}
                                             </td>
 
                                             <td>
@@ -572,7 +570,12 @@
             <td>${service.title || ''}</td>
             <td>${service.full_desc || ''}</td>
             <td>${service.book_contact_no || ''}</td>
-            <td>${faqs}</td>
+              <td>${faqs || ''}</td>
+    <td>
+        @if (is_array($service->benifits))
+            {{ implode(', ', $service->benifits) }}
+        @endif
+    </td>
             <td>
                 <button type="button" class="btn btn-primary btn-round edit-service"
                     data-id="${service?.id}" data-title="${service.title}">Edit</button>
