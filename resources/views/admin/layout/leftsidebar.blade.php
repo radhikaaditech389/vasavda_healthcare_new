@@ -60,7 +60,7 @@
                     <li><a href="{{ route('admin.facilities') }}">All Facilities</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
+            {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
             {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Section</span>
                 </a>

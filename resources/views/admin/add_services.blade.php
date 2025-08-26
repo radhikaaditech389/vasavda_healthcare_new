@@ -3,6 +3,10 @@
 
 <head>
     @include('admin.layout.headerlink')
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
         /* Modern file upload styling */
         .modern-upload-wrapper {
@@ -206,10 +210,10 @@
                                             <input type="text" class="form-control" name="service_name"
                                                 id="service_name" placeholder="Service Name">
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <input type="text" class="form-control" name="service_link"
                                                 id="service_link" placeholder="Service Link" readonly>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
 
@@ -250,7 +254,7 @@
                     <div class="card patients-list">
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table m-b-0 table-hover">
+                                <table id="servicesTable" class="table m-b-0 table-hover">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -304,7 +308,23 @@
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('#servicesTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [1, 4]
+                }]
+            });
+        });
+
         $(document).ready(function() {
             let deletedServices = [];
 
@@ -377,11 +397,11 @@
                                             <div class="input-group-append">
                                                 ${index === 0
                                         ? `<button type="button" class="btn btn-success add-service">
-                                                                                                <i class="zmdi zmdi-plus"></i>
-                                                                                               </button>`
+                                                                                                                        <i class="zmdi zmdi-plus"></i>
+                                                                                                                       </button>`
                                         : `<button type="button" class="btn btn-danger remove-service">
-                                                                                                <i class="zmdi zmdi-minus"></i>
-                                                                                               </button>`
+                                                                                                                        <i class="zmdi zmdi-minus"></i>
+                                                                                                                       </button>`
                                     }
                                             </div>
                                         </div>
