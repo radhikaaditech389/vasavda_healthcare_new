@@ -3,6 +3,67 @@
 
 <head>
     @include('admin.layout.headerlink')
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .dashboard-card {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-card {
+            background-color: transparent !important;
+            border: none;
+            box-shadow: none;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+
+        .dashboard-bg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-bg::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1000px;
+            height: 1000px;
+            margin-top: 300px;
+            background: url("{{ asset($logo->logo_image) }}") no-repeat center/contain;
+            opacity: 0.15;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+    </style>
 </head>
 
 <body class="theme-cyan">
@@ -13,180 +74,85 @@
     @include('admin.layout.leftsidebar')
 
     <!-- Main Content -->
-    <section class="content home">
-        <div class="block-header">
+    <section class="content home dashboard-bg">
+        <div class="block-header mb-4">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Dashboard
-                        <small class="text-muted">Welcome to Vasavada Hospital Admin</small>
-                    </h2>
+                    <h2 class="fw-bold">Dashboard</h2>
+                    <small class="text-muted">Welcome to Vasavada Hospital Admin</small>
                 </div>
             </div>
         </div>
+
         <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                                <div class="body">
-                                    {{-- data-to="{{ $appointmentCount }}" --}}
-                                    <h2 class="number count-to m-t-0" data-from="0"  data-speed="1000"
-                                        data-fresh-interval="700">2
-                                        {{-- {{ $appointmentCount }} --}}
-                                    </h2>
-                                    <p class="text-muted">New Appointments</p>
+            <!-- Dashboard Row -->
+            <div class="row g-4">
+                <!-- Appointments -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <a href="{{ route('admin.patients.list') }}" class="text-decoration-none">
+                        <div class="card shadow-lg border-0 rounded-4 dashboard-card h-100">
+                            <div class="card-body d-flex align-items-center p-4">
+                                <!-- Icon -->
+                                <div class="icon-circle bg-gradient-primary">
+                                    <i class="fas fa-calendar-check"></i>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                                <div class="body">
-                                    {{-- data-to="{{ $contactCount }}"  --}}
-                                    <h2 class="number count-to m-t-0" data-from="0" data-speed="2000"
-                                        data-fresh-interval="700">4
-                                        {{-- {{ $contactCount }} --}}
-                                    </h2>
-                                    <p class="text-muted">Contacts</p>
+                                <!-- Text -->
+                                <div class="ms-4 ml-4">
+                                    <h2 class="fw-bold mb-0 text-dark">{{ $appointmentCount }}</h2>
+                                    <p class="text-muted mb-0">New Appointments</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+
+                <!-- Contacts -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <a href="{{ route('admin.contact.list') }}" class="text-decoration-none">
+                        <div class="card shadow-lg border-0 rounded-4 dashboard-card h-100">
+                            <div class="card-body d-flex align-items-center p-4">
+                                <!-- Icon -->
+                                <div class="icon-circle bg-gradient-success">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <!-- Text -->
+                                <div class="ms-4 ml-4">
+                                    <h2 class="fw-bold mb-0 text-dark">{{ $contactCount }}</h2>
+                                    <p class="text-muted mb-0">Contacts</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-
-            {{-- <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2><strong>Appointments</strong></h2>
-                        </div>
-                        <div class="body">
-                            <p class="float-md-right">
-                                <span class="badge badge-success">3 Admit</span>
-                                <span class="badge badge-default">2 Discharge</span>
-                            </p>
-                            <div class="table-responsive table_middel">
-                                <table class="table m-b-0">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Patients</th>
-                                            <th>Adress</th>
-                                            <th>START Date</th>
-                                            <th>END Date</th>
-                                            <th>Priority</th>
-                                            <th>Progress</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><img src="assets/images/xs/avatar3.jpg"
-                                                    class="rounded-circle width30 m-r-15"
-                                                    alt="profile-image"><span>John</span></td>
-                                            <td><span class="text-info">70 Bowman St. South Windsor, CT 06074</span>
-                                            </td>
-                                            <td>Sept 13, 2017</td>
-                                            <td>Sept 16, 2017</td>
-                                            <td><span class="badge badge-warning">MEDIUM</span></td>
-                                            <td>
-                                                <div class="progress m-b-0 m-t-10">
-                                                    <div class="progress-bar progress-bar-warning" role="progressbar"
-                                                        aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 40%;"> <span class="sr-only">40% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge badge-success">Admit</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td><img src="assets/images/xs/avatar1.jpg"
-                                                    class="rounded-circle width30 m-r-15" alt="profile-image"><span>Jack
-                                                    Bird</span></td>
-                                            <td><span class="text-info">123 6th St. Melbourne, FL 32904</span></td>
-                                            <td>Sept 13, 2017</td>
-                                            <td>Sept 22, 2017</td>
-                                            <td><span class="badge badge-warning">MEDIUM</span></td>
-                                            <td>
-                                                <div class="progress m-b-0 m-t-10">
-                                                    <div class="progress-bar" role="progressbar" aria-valuenow="100"
-                                                        aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                                        <span class="sr-only">100% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge badge-default">Discharge</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td><img src="assets/images/xs/avatar4.jpg"
-                                                    class="rounded-circle width30 m-r-15" alt="profile-image"><span>Dean
-                                                    Otto</span></td>
-                                            <td><span class="text-info">123 6th St. Melbourne, FL 32904</span></td>
-                                            <td>Sept 13, 2017</td>
-                                            <td>Sept 23, 2017</td>
-                                            <td><span class="badge badge-warning">MEDIUM</span></td>
-                                            <td>
-                                                <div class="progress m-b-0 m-t-10">
-                                                    <div class="progress-bar progress-bar-success" role="progressbar"
-                                                        aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 15%;"> <span class="sr-only">15% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge badge-success">Admit</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td><img src="assets/images/xs/avatar2.jpg"
-                                                    class="rounded-circle width30 m-r-15" alt="profile-image"><span>Jack
-                                                    Bird</span></td>
-                                            <td><span class="text-info">4 Shirley Ave. West Chicago, IL 60185</span>
-                                            </td>
-                                            <td>Sept 17, 2017</td>
-                                            <td>Sept 16, 2017</td>
-                                            <td><span class="badge badge-success">LOW</span></td>
-                                            <td>
-                                                <div class="progress m-b-0 m-t-10">
-                                                    <div class="progress-bar" role="progressbar" aria-valuenow="100"
-                                                        aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                                        <span class="sr-only">100% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge badge-default">Discharge</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td><img src="assets/images/xs/avatar5.jpg"
-                                                    class="rounded-circle width30 m-r-15"
-                                                    alt="profile-image"><span>Hughe L.</span></td>
-                                            <td><span class="text-info">4 Shirley Ave. West Chicago, IL 60185</span>
-                                            </td>
-                                            <td>Sept 18, 2017</td>
-                                            <td>Sept 18, 2017</td>
-                                            <td><span class="badge badge-danger">HIGH</span></td>
-                                            <td>
-                                                <div class="progress m-b-0 m-t-10">
-                                                    <div class="progress-bar progress-bar-danger" role="progressbar"
-                                                        aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 85%;"> <span class="sr-only">85% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge badge-success">Admit</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </section>
+
     @include('admin.layout.footerlink')
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function() {
+        $('.counter').each(function() {
+            var $this = $(this),
+                countTo = $this.attr('data-count');
+
+            $({
+                countNum: $this.text()
+            }).animate({
+                countNum: countTo
+            }, {
+                duration: 1500,
+                easing: 'swing',
+                step: function() {
+                    $this.text(Math.floor(this.countNum));
+                },
+                complete: function() {
+                    $this.text(this.countNum);
+                }
+            });
+        });
+    });
+</script>

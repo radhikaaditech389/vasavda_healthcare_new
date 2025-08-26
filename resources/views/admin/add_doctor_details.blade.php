@@ -6,6 +6,9 @@
     <!-- Summernote CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
         /* Modern file upload styling */
         .modern-upload-wrapper {
@@ -203,7 +206,7 @@
                     <div class="card patients-list">
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table m-b-0 table-hover">
+                                <table id="doctorDetailTable" class="table m-b-0 table-hover">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -257,7 +260,23 @@
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('#doctorDetailTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [5, 6, 7]
+                }]
+            });
+        });
+
         $(document).ready(function() {
             // AJAX Form submit (create/update)
             $('#doctorForm').on('submit', function(e) {

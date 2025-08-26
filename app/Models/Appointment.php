@@ -19,4 +19,8 @@ class Appointment extends Model
         'appointment_date',
         'message'
     ];
+
+    protected $casts = [
+        'appointment_date' => 'datetime',
+    ];
 }

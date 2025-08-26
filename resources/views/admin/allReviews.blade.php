@@ -166,7 +166,7 @@
             "lengthChange": true,
             "columnDefs": [{
                 "orderable": false,
-                "targets": [1, 4]
+                "targets": [2, 4, 6]
             }]
         });
     });

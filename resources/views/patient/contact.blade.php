@@ -112,7 +112,6 @@
                         <div class="form-btn pt-15">
                             <button class="vs-btn style2">Send Message<i class="fas fa-chevron-right"></i></button>
                         </div>
-                        <p class="form-messages mb-0 mt-3"></p>
                     </form>
                 </div>
                 <div class="col-lg-6">

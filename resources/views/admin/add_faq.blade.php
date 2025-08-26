@@ -6,6 +6,9 @@
 
     <!-- Summernote CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
 <body class="theme-cyan">
@@ -92,7 +95,7 @@
                     <div class="card patients-list">
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table m-b-0 table-hover">
+                                <table id="faqsTable" class="table m-b-0 table-hover">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -118,7 +121,7 @@
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-round edit-faq"
-                                                        data-id="{{ $faq->id }}" 
+                                                        data-id="{{ $faq->id }}"
                                                         data-question="{{ $faq->question }}"
                                                         data-answer="{{ $faq->answer }}"
                                                         data-show_on_home="{{ $faq->show_on_home }}">Edit</button>
@@ -139,7 +142,23 @@
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('#faqsTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [4]
+                }]
+            });
+        });
+
         $(document).ready(function() {
             $('.edit-faq').on('click', function() {
                 const id = $(this).data('id');

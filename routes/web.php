@@ -74,13 +74,13 @@ Route::get('/setu_newborn', [HomeController::class, 'setu_newborn'])->name('setu
 
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 
-Route::get('/admin/index', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-Route::get('/admin/patients', [AppointmentController::class, 'index'])->name('admin.patients.list');
+Route::get('/admin/appointments', [AppointmentController::class, 'index'])->name('admin.patients.list');
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
