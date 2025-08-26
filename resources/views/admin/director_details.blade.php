@@ -858,6 +858,14 @@
     $(document).on('click', '.remove-publications_talk', function() {
         $(this).closest('.publications_talk-item').remove();
     });
+     $('.summernote').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['fontsize', 'color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                ]
+            });
     </script>
 </body>
 

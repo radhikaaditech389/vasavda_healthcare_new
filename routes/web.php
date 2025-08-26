@@ -18,6 +18,7 @@ use App\Http\Controllers\DirectorDetailsController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WhyVasavadasController;
+use App\Http\Controllers\ServiceDetailsController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -126,6 +127,11 @@ Route::post('/admin/services/store', [PatientServiceController::class, 'store'])
 Route::post('/admin/services/update/{id}', [PatientServiceController::class, 'update'])->name('admin.services.update');
 
 Route::delete('/admin/services/{id}', [PatientServiceController::class, 'destroy'])->name('admin.services.destroy');
+Route::get('/admin/service_details', [ServiceDetailsController::class, 'index'])->name('admin.service_details.index');
+Route::post('/admin/service_details/store', [ServiceDetailsController::class, 'store'])->name('admin.service_details.store');
+Route::post('/admin/service_details/update/{id}', [ServiceDetailsController::class, 'update'])->name('admin.service_details.update');
+
+Route::delete('/admin/service_details/{id}', [ServiceDetailsController::class, 'destroy'])->name('admin.service_details.destroy');
 
 //director service
 Route::get('/admin/add_directors', [DirectorController::class, 'index'])->name('admin.add_directors');

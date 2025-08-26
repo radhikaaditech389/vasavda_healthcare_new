@@ -39,6 +39,9 @@
             <li><a href="{{ route('admin.add_services') }}" class=""><i
                         class="zmdi zmdi-shield-check"></i><span>Services</span>
                 </a>
+                <ul class="ml-menu">                   
+                       <li><a href="{{ route('admin.service_details.index') }}">Service Details</a></li>
+                </ul>
             </li>
              <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Us</span>
