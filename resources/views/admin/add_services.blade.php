@@ -377,11 +377,11 @@
                                             <div class="input-group-append">
                                                 ${index === 0
                                         ? `<button type="button" class="btn btn-success add-service">
-                                                                                            <i class="zmdi zmdi-plus"></i>
-                                                                                           </button>`
+                                                                                                <i class="zmdi zmdi-plus"></i>
+                                                                                               </button>`
                                         : `<button type="button" class="btn btn-danger remove-service">
-                                                                                            <i class="zmdi zmdi-minus"></i>
-                                                                                           </button>`
+                                                                                                <i class="zmdi zmdi-minus"></i>
+                                                                                               </button>`
                                     }
                                             </div>
                                         </div>
@@ -556,7 +556,8 @@
                                         icon: 'success',
                                         confirmButtonText: 'OK'
                                     }).then(() => {
-                                        window.location.reload();
+                                        window.location.href =
+                                            "{{ route('admin.add_services') }}";
                                     });
                                 } else {
                                     Swal.fire({

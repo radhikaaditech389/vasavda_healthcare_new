@@ -81,9 +81,17 @@
                 </a>
             </li>
 
-            <li><a href="{{ route('admin.reviews') }}" class=""><i
+            {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
                         class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
                 </a>
+            </li> --}}
+
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
+                </a>
+                <ul class="ml-menu">
+                    <li><a href="{{ route('admin.reviews') }}">Review Requests</a></li>
+                    <li><a href="{{ route('admin.all.reviews') }}">All Reviews</a></li>
+                </ul>
             </li>
     </div>
 </aside>

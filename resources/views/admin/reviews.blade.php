@@ -23,6 +23,10 @@
                         <div class="card patients-list">
                             <div class="body">
                                 <div class="table-responsive">
+                                    <div class="header d-flex justify-content-between align-items-center">
+                                        <h2><strong>Pending</strong> Reviews</h2>
+                                    </div>
+
                                     <table class="table m-b-0 table-hover">
                                         <thead>
                                             <tr>
@@ -87,6 +91,37 @@
 </body>
 
 </html>
+
+<script>
+    window.swal = undefined;
+
+    window.Swal = window.Swal.mixin({
+        input: null
+    });
+
+    const _origFire = Swal.fire.bind(Swal);
+    Swal.fire = (opts = {}) => {
+        opts.input = null;
+
+        const merged = Object.assign({
+            didOpen: (el) => {
+                el.querySelectorAll('select').forEach(s => s.remove());
+                el.querySelectorAll('.bootstrap-select, .dropdown.bootstrap-select').forEach(w => w
+                    .remove());
+            }
+        }, opts);
+
+        if (opts.didOpen) {
+            const ours = merged.didOpen;
+            merged.didOpen = (el) => {
+                ours(el);
+                opts.didOpen(el);
+            };
+        }
+
+        return _origFire(merged);
+    };
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
