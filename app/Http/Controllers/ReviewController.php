@@ -13,6 +13,25 @@ class ReviewController extends Controller
         return view('admin.reviews', compact('pendingReviews'));
     }
 
+    public function allReviews(Request $request)
+    {
+        $query = Review::query();
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
+        // $reviews = $query->orderBy('created_at', 'desc')->get();
+        $reviews = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.allReviews', compact('reviews'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -63,5 +82,43 @@ class ReviewController extends Controller
         $review->save();
 
         return back()->with('success', 'Review has been rejected.');
+    }
+
+    public function updateShowOnHome(Request $request)
+    {
+        Review::query()->update(['show_on_home' => 0]);
+
+        if ($request->has('show_on_home')) {
+            $selectedIds = array_keys($request->show_on_home);
+            Review::whereIn('id', $selectedIds)->update(['show_on_home' => 1]);
+        }
+
+        return back()->with('success', 'Reviews updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $review = Review::findOrFail($id);
+
+        if ($review->image_path && file_exists(public_path($review->image_path))) {
+            unlink(public_path($review->image_path));
+        }
+
+        $review->delete();
+
+        return back()->with('success', 'Review deleted successfully!');
+    }
+
+    public function search(Request $request)
+    {
+        $q = $request->get('q');
+
+        $reviews = Review::when($q, function ($query) use ($q) {
+            $query->where('name', 'like', "%$q%")
+                ->orWhere('location', 'like', "%$q%")
+                ->orWhere('message', 'like', "%$q%");
+        })->get();
+
+        return response()->json($reviews);
     }
 }

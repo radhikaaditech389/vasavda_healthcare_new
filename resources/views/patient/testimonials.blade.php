@@ -14,140 +14,222 @@
 </head>
 
 <body class="">
-    @include('patient.layout.mobile_menu')
-    @include('patient.layout.side_menu')
-    @include('patient.layout.header', ['footer' => $footer])
-    <div class="breadcumb-wrapper " style="margin-top: -30px !important;">
-        <div class="parallax" data-parallax-image="{{ asset('patient/img/breadcurmb/testimonial.jpg') }}"></div>
-        <div class="container z-index-common">
-            <div class="breadcumb-content">
-                <h1 class="breadcumb-title"
-                    style="-webkit-text-stroke: 2px black;
+    <div id="page-root">
+        @include('patient.layout.mobile_menu')
+        @include('patient.layout.side_menu')
+        @include('patient.layout.header', ['footer' => $footer])
+        <div class="breadcumb-wrapper " style="margin-top: -30px !important;">
+            <div class="parallax" data-parallax-image="{{ asset('patient/img/breadcurmb/testimonial.jpg') }}"></div>
+            <div class="container z-index-common">
+                <div class="breadcumb-content">
+                    <h1 class="breadcumb-title"
+                        style="-webkit-text-stroke: 2px black;
     -webkit-text-fill-color: #702840; ">Testimonials</h1>
-                <div class="breadcumb-menu-wrap">
-                    <i class="far fa-home-lg"></i>
-                    <ul class="breadcumb-menu">
-                        <li><a href="/">Home</a></li>
-                        <li class="active">Testimonials</li>
-                    </ul>
+                    <div class="breadcumb-menu-wrap">
+                        <i class="far fa-home-lg"></i>
+                        <ul class="breadcumb-menu">
+                            <li><a href="/">Home</a></li>
+                            <li class="active">Testimonials</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <section class="vs-shop-details space-top space-md-bottom">
-        <div class="container">
-            <ul class="nav product-tab mb-30 justify-content-center mb-4" id="productTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab"
-                        aria-controls="reviews" aria-selected="true">
-                        Review ({{ $reviews->count() }})
-                    </a>
-                </li>
+        <section class="vs-shop-details space-top space-md-bottom">
+            <div class="container">
+                <ul class="nav product-tab mb-30 justify-content-center mb-4" id="productTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab"
+                            aria-controls="reviews" aria-selected="true">
+                            Review ({{ $reviews->count() }})
+                        </a>
+                    </li>
 
-                <!-- Button inside nav -->
-                {{-- <li class="nav-item" role="presentation">
+                    <!-- Button inside nav -->
+                    {{-- <li class="nav-item" role="presentation">
                     <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal"
                         data-bs-target="#reviewModal">
                         ✍️ Give Your Review
                     </button>
                 </li> --}}
-            </ul>
+                </ul>
 
-            <div id="floating-review-button">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                    ✍️ Give Your Review
-                </button>
-            </div>
+                <div id="floating-review-button">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                        ✍️ Give Your Review
+                    </button>
+                </div>
 
-            <div class="row justify-content-center">
-                <div class="col-xl-9 col-xxl-8">
-                    <div class="tab-content mb-25" id="productTabContent">
-                        <div class="tab-pane fade show active" id="reviews" role="tabpanel"
-                            aria-labelledby="reviews-tab">
-                            <div class="vs-comment-area list-style-none vs-comments-layout1 pt-3">
-                                <ul class="comment-list">
-                                    @forelse($reviews as $review)
-                                        <li class="review vs-comment mb-4">
-                                            <div class="vs-post-comment d-flex p-3 rounded shadow-sm bg-white">
+                {{-- <div class="row justify-content-center">
+                    <div class="col-xl-9 col-xxl-8">
+                        <div class="tab-content mb-25" id="productTabContent">
+                            <div class="tab-pane fade show active" id="reviews" role="tabpanel"
+                                aria-labelledby="reviews-tab">
+                                <div class="vs-comment-area list-style-none vs-comments-layout1 pt-3">
+                                    <ul class="comment-list">
+                                        @forelse($reviews as $review)
+                                            <li class="review vs-comment mb-4">
+                                                <div class="vs-post-comment d-flex p-3 rounded shadow-sm bg-white">
 
-                                                <!-- Avatar -->
-                                                <div class="author-img me-3">
-                                                    @if ($review->image_path)
-                                                        <img src="{{ asset($review->image_path) }}"
-                                                            alt="{{ $review->name }}"
-                                                            class="rounded-circle border border-2 border-primary shadow-sm"
-                                                            style="width:60px; height:60px; object-fit:cover;">
-                                                    @else
-                                                        @php
-                                                            $colors = [
-                                                                '#1abc9c',
-                                                                '#3498db',
-                                                                '#9b59b6',
-                                                                '#e67e22',
-                                                                '#e74c3c',
-                                                                '#2ecc71',
-                                                                '#f39c12',
-                                                                '#8e44ad',
-                                                                '#16a085',
-                                                            ];
-                                                            $colorIndex = crc32($review->name) % count($colors);
-                                                            $bgColor = $colors[$colorIndex];
-                                                            $initials = collect(explode(' ', $review->name))
-                                                                ->map(fn($w) => strtoupper(substr($w, 0, 1)))
-                                                                ->join('');
-                                                        @endphp
-                                                        <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                                            style="width:60px; height:60px; background:{{ $bgColor }}; color:white; font-weight:bold; font-size:18px;">
-                                                            {{ $initials }}
-                                                        </div>
-                                                    @endif
-                                                </div>
-
-                                                <!-- Content -->
-                                                <div class="comment-content flex-grow-1">
-                                                    <!-- Name + Stars -->
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <h4 class="name h6 mb-0">{{ $review->name }}</h4>
-                                                        <div class="star-rating text-warning">
-                                                            @for ($i = 1; $i <= 5; $i++)
-                                                                @if ($i <= $review->rating)
-                                                                    <i class="fas fa-star"></i>
-                                                                @elseif ($i - $review->rating < 1)
-                                                                    <i class="fas fa-star-half-alt"></i>
-                                                                @else
-                                                                    <i class="far fa-star"></i>
-                                                                @endif
-                                                            @endfor
-                                                        </div>
+                                                    <!-- Avatar -->
+                                                    <div class="author-img me-3">
+                                                        @if ($review->image_path)
+                                                            <img src="{{ asset($review->image_path) }}"
+                                                                alt="{{ $review->name }}"
+                                                                class="rounded-circle border border-2 border-primary shadow-sm"
+                                                                style="width:60px; height:60px; object-fit:cover;">
+                                                        @else
+                                                            @php
+                                                                $colors = [
+                                                                    '#1abc9c',
+                                                                    '#3498db',
+                                                                    '#9b59b6',
+                                                                    '#e67e22',
+                                                                    '#e74c3c',
+                                                                    '#2ecc71',
+                                                                    '#f39c12',
+                                                                    '#8e44ad',
+                                                                    '#16a085',
+                                                                ];
+                                                                $colorIndex = crc32($review->name) % count($colors);
+                                                                $bgColor = $colors[$colorIndex];
+                                                                $initials = collect(explode(' ', $review->name))
+                                                                    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+                                                                    ->join('');
+                                                            @endphp
+                                                            <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                                                style="width:60px; height:60px; background:{{ $bgColor }}; color:white; font-weight:bold; font-size:18px;">
+                                                                {{ $initials }}
+                                                            </div>
+                                                        @endif
                                                     </div>
 
-                                                    <!-- Time + Location -->
-                                                    <small class="text-muted d-block mb-2">
-                                                        {{ $review->created_at->diffForHumans() }}
-                                                        @if ($review->location)
-                                                            &nbsp; | &nbsp;
-                                                            <i class="fas fa-map-marker-alt"></i>
-                                                            {{ $review->location }}
-                                                        @endif
-                                                    </small>
+                                                    <!-- Content -->
+                                                    <div class="comment-content flex-grow-1">
+                                                        <!-- Name + Stars -->
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <h4 class="name h6 mb-0">{{ $review->name }}</h4>
+                                                            <div class="star-rating text-warning">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    @if ($i <= $review->rating)
+                                                                        <i class="fas fa-star"></i>
+                                                                    @elseif ($i - $review->rating < 1)
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                    @else
+                                                                        <i class="far fa-star"></i>
+                                                                    @endif
+                                                                @endfor
+                                                            </div>
+                                                        </div>
 
-                                                    <!-- Message -->
-                                                    <p class="mb-0">{{ $review->message }}</p>
+                                                        <!-- Time + Location -->
+                                                        <small class="text-muted d-block mb-2">
+                                                            {{ $review->created_at->diffForHumans() }}
+                                                            @if ($review->location)
+                                                                &nbsp; | &nbsp;
+                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                {{ $review->location }}
+                                                            @endif
+                                                        </small>
+
+                                                        <!-- Message -->
+                                                        <p class="mb-0">{{ $review->message }}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    @empty
-                                        <p class="text-center text-muted">No reviews available yet.</p>
-                                    @endforelse
-                                </ul>
+                                            </li>
+                                        @empty
+                                            <p class="text-center text-muted">No reviews available yet.</p>
+                                        @endforelse
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div> --}}
+
+                <div class="row g-4">
+                    @forelse($reviews as $review)
+                        <div class="col-md-6 col-lg-4">
+                            <div class="review-card p-4 rounded-4 shadow-sm bg-white h-100 d-flex flex-column">
+
+                                <p class="mb-4 text-dark" style="flex-grow:1; font-size:1rem; line-height:1.6;">
+                                    {{ Str::limit($review->message, 300) }}
+                                </p>
+
+                                <div
+                                    class="mt-auto pt-3 border-top d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                    <div class="d-flex align-items-center mb-3 mb-md-0">
+                                        @if ($review->image_path)
+                                            <img src="{{ asset($review->image_path) }}" alt="{{ $review->name }}"
+                                                class="rounded-circle border border-2 border-primary"
+                                                style="width:55px; height:55px; object-fit:cover;">
+                                        @else
+                                            @php
+                                                $colors = [
+                                                    '#1abc9c',
+                                                    '#3498db',
+                                                    '#9b59b6',
+                                                    '#e67e22',
+                                                    '#e74c3c',
+                                                    '#2ecc71',
+                                                    '#f39c12',
+                                                    '#8e44ad',
+                                                    '#16a085',
+                                                ];
+                                                $colorIndex = crc32($review->name) % count($colors);
+                                                $bgColor = $colors[$colorIndex];
+                                                $initials = collect(explode(' ', $review->name))
+                                                    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+                                                    ->join('');
+                                            @endphp
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width:55px; height:55px; background:{{ $bgColor }}; color:white; font-weight:bold; font-size: 1.25rem;">
+                                                {{ $initials }}
+                                            </div>
+                                        @endif
+
+                                        <div class="ms-3">
+                                            <div class="fw-bold fs-5 text-dark">{{ $review->name }}</div>
+                                            <div class="text-muted small d-flex align-items-center">
+                                                @if ($review->location)
+                                                    <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                                                    <span>{{ $review->location }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-column align-items-md-end mt-2 mt-md-0">
+                                        <div class="text-warning d-flex align-items-center mb-1">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= floor($review->rating))
+                                                    <i class="fas fa-star me-1"></i>
+                                                @elseif ($i - $review->rating < 1)
+                                                    <i class="fas fa-star-half-alt me-1"></i>
+                                                @else
+                                                    <i class="far fa-star me-1"></i>
+                                                @endif
+                                            @endfor
+                                            <span class="text-dark ms-1"
+                                                style="font-size:0.9rem;">{{ number_format($review->rating, 1) }}</span>
+                                        </div>
+
+                                        <div class="text-muted small d-flex align-items-center">
+                                            <i class="far fa-calendar-alt me-1 text-primary"></i>
+                                            <span>{{ $review->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-center text-muted col-12">No reviews available yet.</p>
+                    @endforelse
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- Review Modal -->
     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
@@ -286,6 +368,24 @@
             border: none;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             background-color: #f8f9fa;
+            margin-top: 0 !important;
+            z-index: 1060;
+        }
+
+        .modal-backdrop {
+            z-index: 9998 !important;
+        }
+
+        .modal {
+            z-index: 9999 !important;
+        }
+
+        body.modal-open #page-root {
+            filter: blur(2px);
+            transition: filter .2s ease;
+            pointer-events: none;
+            user-select: none;
+            will-change: filter;
         }
 
         /* Modal Header */
@@ -462,6 +562,15 @@
         .author-img:hover div {
             transform: scale(1.05);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .review-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
     </style>
 

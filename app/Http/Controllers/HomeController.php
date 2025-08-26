@@ -34,7 +34,14 @@ class HomeController extends Controller
         $services = Services::all();
         $doctors = Doctor::all();
         $faqs = Faq::where('show_on_home', 1)->get();
-        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services', 'doctors', 'faqs'));
+
+        // $reviews = Review::where('show_on_home', 1 && 'status', 'approved')
+        //     ->latest()
+        //     ->get();
+
+        $reviews = Review::latest()->take(5)->get();
+
+        return view('home', compact('footer', 'menus', 'sliders', 'aboutSection', 'services', 'doctors', 'faqs', 'reviews'));
     }
 
     public function book_appointment()

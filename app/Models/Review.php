@@ -15,6 +15,7 @@ class Review extends Model
         'rating',
         'message',
         'image_path',
-        'status'
+        'status',
+        'show_on_home'
     ];
 }
