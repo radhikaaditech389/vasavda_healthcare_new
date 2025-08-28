@@ -206,10 +206,10 @@
                                             <input type="text" class="form-control" name="service_name"
                                                 id="service_name" placeholder="Service Name">
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <input type="text" class="form-control" name="service_link"
                                                 id="service_link" placeholder="Service Link" readonly>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 

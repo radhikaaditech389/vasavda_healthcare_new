@@ -4,6 +4,8 @@
 <head>
     @include('admin.layout.headerlink')
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
     /* Modern file upload styling */
     .modern-upload-wrapper {
@@ -172,7 +174,7 @@
                                 enctype="multipart/form-data" id="add-service-details-form" class="form-wrap3 mb-30"
                                 data-bg-color="#f3f6f7">
                                 @csrf
-                                <input type="hidden" name="service_details_id" id="service_details_id">
+                                <input type="hidden" name="service_details_id" id="service_details_id" value="">
 
                                 <div class="row clearfix">
                                     <!-- Left side: Image Upload -->
@@ -300,7 +302,7 @@
                     <div class="card patients-list">
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table m-b-0 table-hover">
+                                <table class="table m-b-0 table-hover patientServiceTable" id="serviceTable">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -316,7 +318,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($service_details as $service_detail)
-                                        <tr>
+                                        <tr id="raw_{{ str_pad($service_detail->id, 2, '0', STR_PAD_LEFT) }}">
                                             <td><span class="list-name">
                                                     {{ str_pad($service_detail->id, 2, '0', STR_PAD_LEFT) }}
                                                 </span></td>
@@ -342,19 +344,37 @@
                                                 @endforeach
                                                 @endif
                                             </td>
-<?php dd( $service_detail);?>
                                             {{-- ✅ Display Benefits --}}
                                             <td>
-                                               {{ $service_detail->benifits}}
+                                                @php
+                                                $benefits = is_string($service_detail->benifits)
+                                                ? json_decode($service_detail->benifits, true)
+                                                : $service_detail->benifits;
+                                                @endphp
+
+                                                @if (is_array($benefits))
+                                                {{ implode(', ', $benefits) }}
+                                                @else
+                                                {{ $benefits ?? '' }}
+                                                @endif
                                             </td>
 
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-round edit-service"
                                                     data-id="{{ $service_detail->id }}"
-                                                    data-title="{{ $service_detail->title }}">Edit</button>
+                                                    data-service_id="{{ $service_detail->service_id }}"
+                                                    data-title="{{ e($service_detail->title) }}"
+                                                    data-short_desc="{{ e($service_detail->short_desc) }}"
+                                                    data-full_desc="{{ htmlentities($service_detail->full_desc) }}"
+                                                    data-image="{{ asset($service_detail->image) }}"
+                                                    data-book_contact_no="{{ e($service_detail->book_contact_no) }}"
+                                                    data-faq='@json($service_detail->faq)'
+                                                    data-benifits='@json($benefits)'>
+                                                    Edit
+                                                </button>
 
-                                                <a href="#" class="btn btn-danger btn-round delete-service_detail"
-                                                    data-id="{{ $service_detail->id }}">Delete</a>
+                                                <button type="button" class="btn btn-danger btn-round remove-service"
+                                                    data-id="{{ $service_detail->id }}">Delete</button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -381,7 +401,27 @@
 
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+    function previewImage(input) {
+        const preview = document.getElementById('preview_image');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    }
+
     function reinitSummernote() {
         $('.summernote').summernote({
             height: 200,
@@ -396,16 +436,29 @@
     reinitSummernote()
 
     $(document).ready(function() {
+        $('#serviceTable').DataTable({
+            order: [
+                [0, 'desc']
+            ],
+            responsive: true,
+            pageLength: 10,
+            ordering: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search services..."
+            }
+        });
         let deletedServices = [];
 
         // Add new service input field
         $(document).on('click', '.add-service', function() {
+            const serviceDetailId = $('#service_details_id').val();
             const newRow = `
                     <div class="form-group service-row">
                         <div class="input-group service-input-group mb-3">
                             <input type="text" class="form-control" name="patient_services[]" placeholder="Patient Service Name">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-danger remove-service">
+                                <button type="button" class="btn btn-danger remove-service"  data-id="${serviceDetailId}">
                                     <i class="zmdi zmdi-minus"></i>
                                 </button>
                             </div>
@@ -415,86 +468,111 @@
             $(this).closest('.service-row').after(newRow);
         });
 
+        function decodeHtmlEntities(str) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = str;
+            return txt.value;
+        }
         // Edit service handler
         $(document).on('click', '.edit-service', function() {
             console.log('Edit button clicked');
-            deletedServices = [];
 
-            let id = $(this).data('id');
-            let name = $(this).data('name');
-            let link = $(this).data('link');
-            let image = $(this).data('image');
+            const id = $(this).data('id');
 
-            console.log('Edit data:', {
-                id,
-                name,
-                link,
-                image
-            }); // Debug
+            alert("dfd12")
+            console.log("dfd", id)
+            const service_id = $(this).data('service_id');
+            const title = $(this).data('title');
 
-            // Set form values
-            $('#service_id').val(id);
-            $('#service_name').val(name);
-            $('#service_link').val(link);
+            const shortDesc = $(this).data('short_desc');
+            const fullDesc = $(this).data('full_desc');
+            const bookContactNo = $(this).data('book_contact_no');
+            const image = $(this).data('image');
+            const faq = $(this).data('faq') || [];
+            let benifits = $(this).data('benifits') || [];
 
-            // Show current image if exists
+            $('#service_details_id').val(id);
+            $('#service_id').val(service_id);
+            $('#title').val(title);
+            $('#short_desc').val(shortDesc);
+            const fullDescDecoded = decodeHtmlEntities(fullDesc);
+
+            $('#full_desc').summernote('code', fullDescDecoded);
+
+            // Set the HTML content
+
+            // $('#full_desc').summernote({
+            //     height: 200, // or whatever you prefer
+            //     placeholder: 'Enter full description...',
+            //     toolbar: [
+            //         // customize toolbar as needed
+            //         ['style', ['bold', 'italic', 'underline', 'clear']],
+            //         ['para', ['ul', 'ol', 'paragraph']],
+            //         ['insert', ['link', 'picture']],
+            //         ['view', ['codeview']]
+            //     ]
+            // });
+            $('#book_contact_no').val(bookContactNo);
+
             if (image) {
-                $('#preview_image').attr('src', '/' + image).show();
+                $('#preview_image').attr('src', image).show();
             } else {
                 $('#preview_image').hide();
             }
 
-            // Change button text
-            $('button[type="submit"]').text('Update');
+            $('#faqs-wrapper').empty();
+            if (Array.isArray(faq)) {
+                faq.forEach(f => {
+                    $('#faqs-wrapper').append(`
+                <div class="faq-group mb-3">
+                    <div class="input-group mb-2">
+                        <input type="text" name="faq_title[]" class="form-control" placeholder="FAQ Title" value="${f.title || ''}">
+                    </div>
+                    <div class="input-group">
+                        <textarea name="faq_desc[]" class="form-control summernote" placeholder="FAQ Description">${f.desc || f.description || ''}</textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-faq">Remove</button>
+                </div>
+            `);
+                });
+            }
 
-            // Fetch patient services
-            $.ajax({
-                url: `/admin/services/${id}/patient-services`,
-                type: 'GET',
-                success: function(response) {
-                    console.log('Patient services:', response); // Debug
-                    $('#patient_services_container').empty();
-
-                    if (response.length === 0) {
-                        addEmptyServiceRow();
-                    } else {
-                        response.forEach((service, index) => {
-                            const row = `
-                                    <div class="form-group service-row" data-patient-service-id="${service.id}">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" name="patient_services[]" 
-                                                value="${service.patient_service_name}" placeholder="Patient Service Name">
-                                            <div class="input-group-append">
-                                                ${index === 0
-                                        ? `<button type="button" class="btn btn-success add-service">
-                                                                                            <i class="zmdi zmdi-plus"></i>
-                                                                                           </button>`
-                                        : `<button type="button" class="btn btn-danger remove-service">
-                                                                                            <i class="zmdi zmdi-minus"></i>
-                                                                                           </button>`
-                                    }
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            $('#patient_services_container').append(row);
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching patient services:', error);
-                    addEmptyServiceRow();
+            $('#benifits-wrapper').empty();
+            if (typeof benifits === 'string') {
+                try {
+                    benifits = JSON.parse(benifits);
+                } catch (e) {
+                    benifits = [];
                 }
-            });
+            }
+
+            if (Array.isArray(benifits) && benifits.length > 0) {
+                benifits.forEach((benefit, index) => {
+                    $('#benifits-wrapper').append(`
+                <div class="input-group mb-2 benefit-group">
+                    <input type="text" name="benifits[]" class="form-control" placeholder="Benefit ${index + 1}" value="${benefit}">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger remove-benefit">Remove</button>
+                    </div>
+                </div>
+            `);
+                });
+            }
+
+            reinitSummernote();
+            $('button[type="submit"]').text('Update');
         });
 
-        // Form submission handler
+        const table = $('#serviceTable').DataTable();
+
         $('#add-service-details-form').on('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
 
-            // Optional: Validate service selection
+            // Validate required service ID
+            const serviceDetailId = $('#service_details_id').val();
+            alert(serviceDetailId);
             const serviceId = $('#service_id').val();
             if (!serviceId) {
                 Swal.fire({
@@ -505,8 +583,7 @@
                 return;
             }
 
-
-            // Append structured FAQ data (title + description)
+            // Append structured FAQs
             const faqTitles = $('input[name="faq_title[]"]').map(function() {
                 return $(this).val();
             }).get();
@@ -526,15 +603,21 @@
             }
             formData.append('faq', JSON.stringify(faqs));
 
-            // Append benifits[]
+            // Append Benefits
             const benifits = $('input[name="benifits[]"]').map(function() {
                 return $(this).val().trim();
             }).get().filter(b => b !== '');
             formData.append('benifits', JSON.stringify(benifits));
-
-            // Define URL
-            const url = "{{ route('admin.service_details.store') }}";
-
+            console.log({
+                serviceDetailId
+            });
+            let url = serviceDetailId ?
+                `/admin/service_details/update/${serviceDetailId}` :
+                `/admin/service_details/store`;
+            console.log({
+                url
+            })
+            // AJAX submit
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -546,55 +629,155 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    // Swal.fire({
-                    //     title: 'Success!',
-                    //     text: response.message ||
-                    //         'Service detail saved successfully.',
-                    //     icon: 'success',
-                    //     confirmButtonText: 'OK'
-                    // });
+
 
                     const service = response.data;
-                    // Example data structure for FAQ and Benefits (rendering as plain text or comma-separated)
-                    const faqs = service?.faq.map(f =>
-                        `<strong>${f.title}</strong>: ${f.desc}`).join('<br>');
-                    // const benifits = service?.benifits ? service.benifits.join(', ') : '';
+                    console.log({
+                        service
+                    })
 
-                    const newRow = `
-        <tr>
-            <td>${service?.id}</td>
-            <td>
-                ${service.image ? `<img src="${window.location.origin}/${service.image}" width="100" />` : ''}
-            </td>
-             <td>${service.service_id || ''}</td>
-            <td>${service.title || ''}</td>
-            <td>${service.full_desc || ''}</td>
-            <td>${service.book_contact_no || ''}</td>
-              <td>${faqs || ''}</td>
-    <td>
-        @if (is_array($service->benifits))
-            {{ implode(', ', $service->benifits) }}
-        @endif
-    </td>
-            <td>
-                <button type="button" class="btn btn-primary btn-round edit-service"
-                    data-id="${service?.id}" data-title="${service.title}">Edit</button>
-                <a href="#" class="btn btn-danger btn-round delete-service_detail"
-                    data-id="${service?.id}">Delete</a>
-            </td>
-        </tr>
-    `;
+                    const imagePath = window.location.origin + '/' + service.image;
+                    // Render FAQ
+                    const faqsHtml = Array.isArray(service.faq) ?
+                        service.faq.map(f =>
+                            `<strong>${f.title}</strong>: ${f.desc || f.description || ''}`
+                        )
+                        .join('<br>') :
+                        '';
 
-                    $('table tbody').append(newRow);
+                    // Parse Benefits
+                    const getBenefits = (benifitsStr) => {
+                        try {
+                            const benefits = JSON.parse(benifitsStr);
+                            return Array.isArray(benefits) ? benefits.join(',') :
+                                '';
+                        } catch {
+                            return '';
+                        }
+                    };
+                    const benefitsText = getBenefits(service?.benifits);
 
-                    // Optional: reset form
+                    const encodedService = encodeURIComponent(JSON.stringify(service));
+
+                    function escapeHtml(text) {
+                        if (!text) return '';
+                        return text
+                            .replace(/&/g, "&amp;")
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#39;")
+                            .replace(/</g, "&lt;")
+                            .replace(/>/g, "&gt;");
+                    }
+
+
+                    // const imagePath = window.location.origin + '/' + service.image;
+                    const serviceDetailId = $('#service_details_id').val();
+                    alert(serviceDetailId);
+                    const actionHtml = `
+                    <button type="button" class="btn btn-primary btn-round edit-service"
+                            data-id="${service.id}"
+                            data-service_id="${escapeHtml(service.service_id)}"
+                            data-title="${escapeHtml(service.title)}"
+                            data-short_desc="${escapeHtml(service.short_desc)}"
+                            data-full_desc="${escapeHtml(service.full_desc)}"
+                            data-image="${imagePath}"
+                            data-book_contact_no="${escapeHtml(service.book_contact_no)}"
+                            data-faq='${JSON.stringify(service.faq || [])}'
+                            data-benefits='${JSON.stringify(service.benifits || [])}'>
+                            Edit
+                    </button>
+                    <button type="button" class="btn btn-danger btn-round remove-service"
+                            data-id="${service.id}">
+                            Delete
+                    </button>
+                    `;
+
+                    if (serviceDetailId) {
+                        console.log("Sds", serviceDetailId)
+                        console.log("upadra", service)
+                        const serviceDetailId12 = String(service.id).padStart(2, '0');
+                        console.log({
+                            serviceDetailId12
+                        });
+                        const existingRow = $(`#raw_${serviceDetailId12}`);
+                        console.log("dfkld", existingRow.length)
+                        // Update row cells
+                        existingRow.find('td:eq(0)').text(String(service.id).padStart(2,
+                            '0'));
+                        existingRow.find('td:eq(1)').html(service.image ?
+                            `<img src="${imagePath}" width="100" />` : '');
+                        existingRow.find('td:eq(2)').text(service.service_id || '');
+                        existingRow.find('td:eq(3)').text(service.title || '');
+                        existingRow.find('td:eq(4)').html(service.full_desc || '');
+                        existingRow.find('td:eq(5)').text(service.book_contact_no ||
+                            '');
+                        existingRow.find('td:eq(6)').html(faqsHtml);
+                        existingRow.find('td:eq(7)').text(benefitsText);
+                    } else {
+                      
+                        const rowData = [
+                            service.id,
+                            service.image ? `<img src="${imagePath}" width="100" />` :
+                            '',
+                            service.service_id || '',
+                            service.title || '',
+                            service.full_desc || '',
+                            service.book_contact_no || '',
+                            faqsHtml,
+                            benefitsText,
+                            actionHtml
+                        ];
+
+                        const rowIndex = table.rows().eq(0).filter(function(index) {
+                            return table.cell(index, 0).data() == String(service
+                            .id);
+                        });
+
+                        if (rowIndex.length > 0) {
+                            // Update existing row
+                            const rowNode = table.row(rowIndex[0]).node();
+                            rowNode.id = `raw_${service.id}`; // Set row ID
+                            table.row(rowIndex[0]).data(rowData).draw(false);
+                        } else {
+                            // Add new row
+                            const newRowNode = table.row.add(rowData).node();
+                            newRowNode.id = `raw_${service.id}`; // Set row ID
+                            table.draw(false);
+                        }
+
+                    }
+                    // Reset form
+                    $('#full_desc').summernote('code', '');
+
+
+                    // Reset Benefits
+                    $('#benifits-wrapper').html(`
+                            <input type="text" name="benifits[]" class="form-control mb-1" placeholder="Benefit">
+                        `);
+
+                    // Reset FAQs
+                    $('#faqs-wrapper').html(`
+                            <div class="faq-group mb-2">
+                                <input type="text" name="faq_title[]" class="form-control mb-1" placeholder="FAQ Title">
+                                <textarea name="faq_desc[]" class="form-control summernote" placeholder="FAQ Description"></textarea>
+                            </div>
+                        `);
                     $('#add-service-details-form')[0].reset();
                     $('.summernote').summernote('reset');
+                    $('#preview_image').hide().attr('src', '#');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message || 'Service saved successfully.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+
                 },
 
                 error: function(xhr) {
                     let msg = 'An error occurred.';
-
                     try {
                         const res = JSON.parse(xhr.responseText);
                         if (res.message) msg = res.message;
@@ -602,69 +785,24 @@
                         console.error('Response parse error', e);
                     }
 
-                    // Swal.fire({
-                    //     title: 'Error!',
-                    //     text: msg,
-                    //     icon: 'error',
-                    //     confirmButtonText: 'OK'
-                    // });
+                    Swal.fire({
+                        title: 'Error!',
+                        text: msg,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             });
         });
 
 
+
         // Remove service handler
-        $(document).on('click', '.remove-service', function() {
-            const serviceRow = $(this).closest('.service-row');
-            const patientServiceId = serviceRow.data('patient-service-id');
-
-            if (patientServiceId) {
-                // Only add to deletedServices if it's an existing service (has an ID)
-                deletedServices.push(patientServiceId);
-                console.log('Service marked for deletion:', patientServiceId);
-                console.log('Current deletedServices:', deletedServices);
-            }
-            serviceRow.remove();
-        });
-
-        // Cancel button handler
-        $('#cancel-btn').on('click', function() {
-            resetForm();
-        });
-
-        function resetForm() {
-            $('#add-service-details-form')[0].reset();
-            $('#service_id').val('');
-            $('#preview_image').attr('src', '#').hide();
-            deletedServices = [];
-            addEmptyServiceRow();
-            $('button[type="submit"]').text('Submit');
-
-            // Clear any error states or messages
-            $('.is-invalid').removeClass('is-invalid');
-            $('.invalid-feedback').remove();
-        }
-
-        function addEmptyServiceRow() {
-            const row = `
-                    <div class="form-group service-row">
-                        <div class="input-group service-input-group mb-3">
-                            <input type="text" class="form-control" name="patient_services[]" 
-                                placeholder="Patient Service Name">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-success add-service">
-                                    <i class="zmdi zmdi-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            $('#patient_services_container').html(row);
-        }
-
-        $(document).on('click', '.delete-service', function(e) {
+        $(document).on('click', '.remove-service', function(e) {
             e.preventDefault();
             const serviceId = $(this).data('id');
+            alert(serviceId);
+            const row = $(this).closest('tr');
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -678,21 +816,25 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/admin/services/${serviceId}`,
+                        url: `/admin/service_details/${serviceId}`,
                         type: 'DELETE',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content')
                         },
                         success: function(response) {
                             if (response.success) {
                                 Swal.fire({
                                     title: 'Deleted!',
                                     text: response.message ||
-                                        'The service has been deleted.',
+                                        'The service detail has been deleted.',
                                     icon: 'success',
                                     confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.reload();
+                                });
+
+                                // Optionally remove the row from the table
+                                row.fadeOut(300, function() {
+                                    $(this).remove();
                                 });
                             } else {
                                 Swal.fire({
@@ -705,72 +847,55 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error('Error:', error);
                             Swal.fire({
                                 title: 'Error!',
                                 text: 'Failed to delete service.',
                                 icon: 'error',
                                 confirmButtonText: 'OK'
                             });
+                            console.error('Delete failed:', error);
                         }
                     });
                 }
             });
         });
-    });
 
-    function previewImage(input) {
-        const preview = document.getElementById('preview_image');
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
+        //benifit add and remove
+        let benefitCount = 1;
 
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
+        document.getElementById('add-benefit').addEventListener('click', function() {
+            benefitCount++;
+            const wrapper = document.getElementById('benifits-wrapper');
 
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = '#';
-            preview.style.display = 'none';
-        }
-    }
-    //benifit add and remove
-    let benefitCount = 1;
-
-    document.getElementById('add-benefit').addEventListener('click', function() {
-        benefitCount++;
-        const wrapper = document.getElementById('benifits-wrapper');
-
-        const newBenefit = document.createElement('div');
-        newBenefit.classList.add('input-group', 'mb-2', 'benefit-group');
-        newBenefit.innerHTML = `
+            const newBenefit = document.createElement('div');
+            newBenefit.classList.add('input-group', 'mb-2', 'benefit-group');
+            newBenefit.innerHTML = `
             <input type="text" name="benifits[]" class="form-control" placeholder="Benefit ${benefitCount}">
             <div class="input-group-append">
                 <button type="button" class="btn btn-danger remove-benefit">Remove</button>
             </div>
         `;
 
-        wrapper.appendChild(newBenefit);
-    });
+            wrapper.appendChild(newBenefit);
+        });
 
-    // Remove benefit input on click
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-benefit')) {
-            e.target.closest('.benefit-group').remove();
-        }
-    });
+        // Remove benefit input on click
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-benefit')) {
+                e.target.closest('.benefit-group').remove();
+            }
+        });
 
-    //faq add and remove
+        //faq add and remove
 
-    document.getElementById('add-faq').addEventListener('click', function() {
-        const wrapper = document.getElementById('faqs-wrapper');
+        document.getElementById('add-faq').addEventListener('click', function() {
+            const wrapper = document.getElementById('faqs-wrapper');
 
-        const faqGroup = document.createElement('div');
-        faqGroup.classList.add('faq-group', 'mb-3');
+            const faqGroup = document.createElement('div');
+            faqGroup.classList.add('faq-group', 'mb-3');
 
-        faqGroup.innerHTML = `
+            faqGroup.innerHTML = `
             <div class="input-group mb-2">
                 <input type="text" name="faq_title[]" class="form-control" placeholder="FAQ Title">
             </div>
@@ -782,16 +907,17 @@
             <button type="button" class="btn btn-danger btn-sm mt-2 remove-faq">Remove</button>
         `;
 
-        wrapper.appendChild(faqGroup);
-        reinitSummernote()
-    });
+            wrapper.appendChild(faqGroup);
+            reinitSummernote()
+        });
 
-    // Remove FAQ
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('remove-faq')) {
-            e.target.closest('.faq-group').remove();
-        }
-    });
+        // Remove FAQ
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-faq')) {
+                e.target.closest('.faq-group').remove();
+            }
+        });
+    })
     </script>
 
     </script>

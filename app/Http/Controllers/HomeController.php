@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\Director;
 use App\Models\DirectorDetails;
 use App\Models\Facility;
+use App\Models\ServiceDetails;
 
 class HomeController extends Controller
 {
@@ -234,7 +235,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.laproscopy', compact('footer', 'menus'));
+          $service_detail = ServiceDetails::where('service_id', 2)->get();  
+        return view('patient.service.laproscopy', compact('footer', 'menus','service_detail'));
     }
 
     public function mental_health()
@@ -272,8 +274,10 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.pragnancy_care', compact('footer', 'menus'));
+         $service_detail = ServiceDetails::where('service_id', 1)->get();        
+        return view('patient.service.pragnancy_care', compact('footer', 'menus','service_detail'));
     }
+   
 
     public function preventive_oncocgynocology()
     {
@@ -305,7 +309,9 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.urogynocology', compact('footer', 'menus'));
+        $service_detail = ServiceDetails::where('service_id', 4)->get();  
+        // dd($service_detail);
+        return view('patient.service.urogynocology', compact('footer', 'menus','service_detail'));
     }
 
     public function vacination()

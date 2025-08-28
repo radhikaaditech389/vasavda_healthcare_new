@@ -346,46 +346,6 @@
 
             // Change button text
             $('button[type="submit"]').text('Update');
-
-            // Fetch director services
-            $.ajax({
-                url: `/admin/add_directors/${id}/director-services`,
-                type: 'GET',
-                success: function(response) {
-                    console.log('director services:', response); // Debug
-                    $('#director_services_container').empty();
-
-                    if (response.length === 0) {
-                        addEmptyServiceRow();
-                    } else {
-                        response.forEach((service, index) => {
-                            const row = `
-                                    <div class="form-group director-row" data-director-service-id="${service.id}">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" name="director_services[]" 
-                                                value="${service.director_service_name}" placeholder="director Service Name">
-                                            <div class="input-group-append">
-                                                ${index === 0
-                                        ? `<button type="button" class="btn btn-success add-service">
-                                                                                            <i class="zmdi zmdi-plus"></i>
-                                                                                           </button>`
-                                        : `<button type="button" class="btn btn-danger remove-service">
-                                                                                            <i class="zmdi zmdi-minus"></i>
-                                                                                           </button>`
-                                    }
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            $('#director_services_container').append(row);
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching director services:', error);
-                    addEmptyServiceRow();
-                }
-            });
         });
 
         // Form submission handler
@@ -556,62 +516,64 @@
         }
 
         $(document).on('click', '.delete-director', function(e) {
-    e.preventDefault();
-    const directorId = $(this).data('id');
-    const row = $(this).closest('tr'); // get the row of the clicked button
+            e.preventDefault();
+            const directorId = $(this).data('id');
+            const row = $(this).closest('tr'); // get the row of the clicked button
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be undone!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: `/admin/add_directors/${directorId}`,
-                type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            title: 'Deleted!',
-                            text: response.message || 'The director has been deleted.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
-                        
-                        // ✅ Remove row without reloading
-                        row.fadeOut(300, function() {
-                            $(this).remove();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: response.message || 'Something went wrong.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to delete director.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/add_directors/${directorId}`,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: response.message ||
+                                        'The director has been deleted.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+
+                                // ✅ Remove row without reloading
+                                row.fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.message ||
+                                        'Something went wrong.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Failed to delete director.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
                     });
                 }
             });
-        }
-    });
-});
+        });
 
     });
 
