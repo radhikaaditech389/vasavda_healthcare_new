@@ -327,13 +327,13 @@
 
                                 <!-- Section Fields -->
                                 <div class="row clearfix">
-                                    <div class="col-md-4 col-sm-6">
+                                    {{-- <div class="col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Section Name</label>
                                             <input type="text" name="name" class="form-control"
                                                 value="{{ old('name', $section->name ?? '') }}" readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label class="form-label">Title</label>

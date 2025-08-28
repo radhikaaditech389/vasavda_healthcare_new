@@ -66,10 +66,18 @@ class PatientServiceController extends Controller
 
             DB::commit();
 
+            $service = Services::find($service->id);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Service created successfully',
-                'service' => $service
+                'service' => [
+                    'id' => $service->id,
+                    'service_name' => $service->service_name,
+                    'service_image' => asset($service->service_image),
+                    'service_link' => $service->service_link,
+                    'created_at' => $service->created_at->format('Y-m-d H:i:s')
+                ]
             ]);
         } catch (\Exception $e) {
             DB::rollback();
@@ -93,7 +101,7 @@ class PatientServiceController extends Controller
 
             $service = Services::findOrFail($id);
 
-            // 🔹 Store old link before updating
+            // Store old link before updating
             $oldLink = $service->service_link;
 
             $request->validate([
@@ -148,7 +156,7 @@ class PatientServiceController extends Controller
             $service->save();
 
             $submenu = Submenu::where('submenu_link', $oldLink)
-                ->orWhere('submenu_link', $service->service_link) // in case oldLink wasn't found
+                ->orWhere('submenu_link', $service->service_link) 
                 ->first();
 
             if ($submenu) {
@@ -218,7 +226,6 @@ class PatientServiceController extends Controller
     public function deletePatientService($serviceId, $patientServiceId)
     {
         try {
-            // Changed PatientService to PatientServices to match your model name
             $patientService = PatientServices::where('service_id', $serviceId)
                 ->where('id', $patientServiceId)
                 ->firstOrFail();
@@ -232,7 +239,7 @@ class PatientServiceController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete patient service: ' . $e->getMessage() // Added error message for debugging
+                'message' => 'Failed to delete patient service: ' . $e->getMessage() 
             ], 500);
         }
     }
@@ -242,10 +249,8 @@ class PatientServiceController extends Controller
         try {
             DB::beginTransaction();
 
-            // Find the service
             $service = Services::findOrFail($id);
 
-            // Delete the image if it exists
             if ($service->service_image) {
                 $imagePath = public_path($service->service_image);
                 if (file_exists($imagePath)) {
@@ -253,20 +258,16 @@ class PatientServiceController extends Controller
                 }
             }
 
-            // Delete all related patient services
             PatientServices::where('service_id', $id)->delete();
-
-            // Delete the related submenu
             Submenu::where('submenu_link', $service->service_link)->delete();
 
-            // Delete the service itself
             $service->delete();
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Service, related submenu, and patient services deleted successfully'
+                'message' => 'Service and related submenu deleted successfully'
             ]);
         } catch (\Exception $e) {
             DB::rollback();
