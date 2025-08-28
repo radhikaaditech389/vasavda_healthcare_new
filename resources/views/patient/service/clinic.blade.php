@@ -7,9 +7,39 @@
     <title>Clinic - Vasavada womens hospital Bopal</title>
     <meta name="author" content="Vasavada Women's Hospital">
     <meta name="description" content="Womens clinic at top womens hospital bopal and lady gynecologist bopal">
-    <meta name="keywords" content="Womens clinic bopal, Womens hospital bopal, Women's hospital bopal, gynecologist bopal, lady gynecologist bopal, womens hospital near by, gynecologist near by, lady gynecologist near by">
+    <meta name="keywords"
+        content="Womens clinic bopal, Womens hospital bopal, Women's hospital bopal, gynecologist bopal, lady gynecologist bopal, womens hospital near by, gynecologist near by, lady gynecologist near by">
     <link rel="canonical" href="https://www.vasavadahospitals.org/clinic" />
     @include('patient.layout.head')
+
+    <style>
+        .feature-style1 {
+            display: flex;
+            flex-direction: column;
+            height: 350px;
+            margin-bottom: 20px;
+        }
+
+        .feature-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .clinic-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .clinic-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="">
@@ -17,11 +47,15 @@
     @include('patient.layout.side_menu')
     @include('patient.layout.header', ['footer' => $footer])
     <div class="breadcumb-wrapper " style="margin-top: -30px !important;">
-        <div class="parallax" data-parallax-image="{{ asset('patient/img/breadcurmb/special_clinic_breadcrumb.jpg') }}"></div>
+        <div class="parallax" data-parallax-image="{{ asset('patient/img/breadcurmb/special_clinic_breadcrumb.jpg') }}">
+        </div>
         <div class="container z-index-common">
             <div class="breadcumb-content">
-                <h1 class="breadcumb-title" style="-webkit-text-stroke: 2px black;
-    -webkit-text-fill-color: #702840; ">Our Special Clinics</h1>
+                <h1 class="breadcumb-title"
+                    style="-webkit-text-stroke: 2px black;
+                            -webkit-text-fill-color: #702840; ">
+                    Our Special Clinics
+                </h1>
                 <div class="breadcumb-menu-wrap">
                     <i class="far fa-home-lg"></i>
                     <ul class="breadcumb-menu">
@@ -33,191 +67,32 @@
         </div>
     </div>
 
-
-    <section class=" space-top space-md-bottom">
+    <section class="space-top space-md-bottom">
         <div class="container">
             <div class="section-title text-center wow fadeInUp" data-wow-delay="0.3s">
                 <h2 class="sec-title h1"> <span class="inner-text">Our Special Clinics</span></h2>
-                {{-- <p class="sec-text">Search or browse by hospital, treatment or consultant to see what can do for you</p> --}}
-                <div class="sec-icon2"><img src="{{ asset('patient/img/icon/sec-icon-754.png')}} " alt="icon"></div>
+                <div class="sec-icon2"><img src="{{ asset('patient/img/icon/sec-icon-754.png') }} " alt="icon">
+                </div>
             </div>
-            <div class="row wow fadeInUp" data-wow-delay="0.4s"  data-center-mode="true">
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Paediatric Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/paediatric_clinic 410X190.jpg')}}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
+            <div class="row wow fadeInUp" data-wow-delay="0.4s" data-center-mode="true">
+                @foreach ($clinics as $clinic)
+                    <div class="col-xl-4 feature-style1">
+                        <div class="feature-body">
+                            <div class="feature-content">
+                                <h3 class="feature-title">
+                                    <a href="#" class="text-inherit">{{ $clinic->title }}</a>
+                                </h3>
+                            </div>
+                            <div class="clinic-image">
+                                <img src="{{ asset($clinic->image) }}" alt="{{ $clinic->title }}">
+                                <div class="overlay">
+                                    <a href="{{ $clinic->appointment_link }}" class="appointment-button">Appointment
+                                        Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Menopause Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/menopause_clinic 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Adolescent Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/our_special_clinic_breadcrumb 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Pregnancy Termination Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/pregnancy_termination_clinic 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Family Planning & Contraception</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/family_planning_contraception 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Heavy Bleeding Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/heavy_bleeding_clinic 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Sexual Health <br>Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/landing_page_world_sexual_health_day_illustration-01  410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Twins/Triplets <br>Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/twins_triplets 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">High-risk Pregnancy Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/432med 410X190.jpg')}}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">PCOS Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/4333739 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a href="#" class="text-inherit">Infertility clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/18043470 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-4 feature-style1">
-                    <div class="feature-body">
-                        <div class="feature-content">
-                            <h3 class="feature-title"><a class="text-inherit">Physician Clinic</a></h3>
-                            {{-- <p class="feature-text">Sample text is here..!</p> --}}
-                        </div>
-                        <div class="clinic-image">
-                            <img src="{{ asset('patient/img/service/4990224 410X190.jpg') }}" alt="icon">
-                            <div class="overlay">
-                                <a href="/appointment" class="appointment-button">Appointment Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -233,7 +108,6 @@
     <!-- Slick Slider -->
     <script src="{{ asset('patient/js/slick.min.js') }}"></script>
     <script src="{{ asset('patient/js/slick-animation.min.js') }}"></script>
-    <!-- <script src="{{ asset('patient/js/app.min.js') }}"></script> -->
     <!-- Layerslider -->
     <script src="{{ asset('patient/js/layerslider.utils.js') }}"></script>
     <script src="{{ asset('patient/js/layerslider.transitions.js') }}"></script>
@@ -263,42 +137,50 @@
 </html>
 <style>
     .clinic-image {
-    position: relative;
-}
+        position: relative;
+    }
 
-.clinic-image img {
-    width: 100%; /* Ensure the image is responsive */
-}
+    .clinic-image img {
+        width: 100%;
+        /* Ensure the image is responsive */
+    }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Semi-transparent black */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 
-.clinic-image:hover .overlay {
-    opacity: 1; /* Show overlay on hover */
-}
+    .clinic-image:hover .overlay {
+        opacity: 1;
+        /* Show overlay on hover */
+    }
 
-.appointment-button {
-    color: white; /* Text color */
-    text-decoration: none;
-    padding: 10px 20px;
-    background-color: #E11F5E; /* Button color */
-    border-radius: 5px;
-    transition: all 0.3s ease; /* Smooth transition */
-}
+    .appointment-button {
+        color: white;
+        /* Text color */
+        text-decoration: none;
+        padding: 10px 20px;
+        background-color: #E11F5E;
+        /* Button color */
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        /* Smooth transition */
+    }
 
-.appointment-button:hover {
-    color: #E11F5E; /* Change text color to button color on hover */
-    background-color: white; /* Change background to white on hover */
-}
+    .appointment-button:hover {
+        color: #E11F5E;
+        /* Change text color to button color on hover */
+        background-color: white;
+        /* Change background to white on hover */
+    }
 </style>

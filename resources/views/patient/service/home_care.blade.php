@@ -654,7 +654,6 @@
     <!-- Slick Slider -->
     <script src="{{ asset('patient/js/slick.min.js') }}"></script>
     <script src="{{ asset('patient/js/slick-animation.min.js') }}"></script>
-    <!-- <script src="{{ asset('patient/js/app.min.js') }}"></script> -->
     <!-- Layerslider -->
     <script src="{{ asset('patient/js/layerslider.utils.js') }}"></script>
     <script src="{{ asset('patient/js/layerslider.transitions.js') }}"></script>
