@@ -6,8 +6,35 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+
     <style>
+    .service-form-control {
+        gap:5px;
+        display: flex;
+        width: 100%;       
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    }
+
     /* Modern file upload styling */
+    select#service_id {
+        background: white !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
     .modern-upload-wrapper {
         display: flex;
         flex-direction: column;
@@ -243,8 +270,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="service_id">Select Service</label>
-                                            <select name="service_id" id="service_id" class="form-control"
-                                                style="height: 45px">
+                                            <select name="service_id" id="service_id" class="service-form-control"
+                                               style="height: 50px;margin-top: 4px;border-radius: 15px;">
                                                 <option value="">-- Choose Service --</option>
 
                                                 @foreach($services as $service)
@@ -252,6 +279,7 @@
 
                                                 @endforeach
                                             </select>
+
                                         </div>
 
                                         <div class="form-group">
@@ -393,7 +421,13 @@
     @include('admin.layout.footerlink')
 
     <!-- jQuery (required) -->
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script> -->
+    <!-- <script src="{{ asset('patient/js/vendor/jquery-3.6.0.min.js') }}"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap (required by Summernote) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -714,7 +748,7 @@
                         existingRow.find('td:eq(6)').html(faqsHtml);
                         existingRow.find('td:eq(7)').text(benefitsText);
                     } else {
-                      
+
                         const rowData = [
                             service.id,
                             service.image ? `<img src="${imagePath}" width="100" />` :
@@ -730,7 +764,7 @@
 
                         const rowIndex = table.rows().eq(0).filter(function(index) {
                             return table.cell(index, 0).data() == String(service
-                            .id);
+                                .id);
                         });
 
                         if (rowIndex.length > 0) {

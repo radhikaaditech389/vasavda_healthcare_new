@@ -19,6 +19,7 @@ use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WhyVasavadasController;
 use App\Http\Controllers\ServiceDetailsController;
+use App\Http\Controllers\SonographyController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -132,6 +133,12 @@ Route::post('/admin/service_details/store', [ServiceDetailsController::class, 's
 Route::post('/admin/service_details/update/{id}', [ServiceDetailsController::class, 'update'])->name('admin.service_details.update');
 
 Route::delete('/admin/service_details/{id}', [ServiceDetailsController::class, 'destroy'])->name('admin.service_details.destroy');
+
+Route::get('/admin/sonography_details', [SonographyController::class, 'index'])->name('admin.sonography_details');
+Route::post('/admin/sonography_details', [SonographyController::class, 'store'])->name('admin.sonography_details.store');
+Route::post('/admin/sonography_details/{id}', [SonographyController::class, 'update'])->name('admin.sonography_details.update');
+Route::delete('/admin/sonography_details/{id}', [SonographyController::class, 'destroy'])->name('admin.sonography_details.delete');
+
 
 //director service
 Route::get('/admin/add_directors', [DirectorController::class, 'index'])->name('admin.add_directors');
