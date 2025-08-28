@@ -3,6 +3,10 @@
 
 <head>
     @include('admin.layout.headerlink')
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
         /* Modern file upload styling */
         .modern-upload-wrapper {
@@ -201,7 +205,7 @@
                     <div class="card patients-list">
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table id="slidersTable" class="table">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -227,7 +231,23 @@
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('#slidersTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [1, 6]
+                }]
+            });
+        });
+
         $(document).ready(function() {
             // Form submission handler
             $('#sliderForm').on('submit', function(e) {

@@ -362,24 +362,17 @@
         .text-theme,
         .ls-l h1 {
             color: white;
-            /* Change text color to white */
         }
 
         .ls-l h1 {
             font-size: 72px;
-            /* Set font size for h1 */
             font-weight: 700;
-            /* Set font weight for h1 */
         }
 
         .team-img-six {
-            width: 100%;
-            height: 300px;
-            /* same for all */
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 280px;
+            height: 400px;
+            object-fit: cover;
         }
 
         .team-img-six img {

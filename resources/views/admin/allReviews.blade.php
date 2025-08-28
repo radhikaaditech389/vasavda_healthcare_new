@@ -6,6 +6,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
         .rating-widget {
             background: linear-gradient(135deg, #ffe082, #ffd54f);
@@ -84,15 +87,9 @@
                                                 <span class="ms-3 text-muted">({{ $totalReviews }} Reviews)</span>
                                             </div>
                                         </div>
-
-                                        <!-- Search bar -->
-                                        <div class="w-50">
-                                            <input type="text" id="search" name="search" class="form-control"
-                                                placeholder="Search reviews..." value="{{ request('search') }}">
-                                        </div>
                                     </div>
 
-                                    <table class="table m-b-0 table-hover">
+                                    <table id="reviewsTable" class="table m-b-0 table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
@@ -141,11 +138,6 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-
-                                    <div class="d-flex justify-content-center mt-4">
-                                        {{ $reviews->links() }}
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -162,7 +154,23 @@
 
 </html>
 
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 <script>
+    $(document).ready(function() {
+        $('#reviewsTable').DataTable({
+            "pageLength": 10,
+            "ordering": true,
+            "searching": true,
+            "lengthChange": true,
+            "columnDefs": [{
+                "orderable": false,
+                "targets": [2, 4, 6]
+            }]
+        });
+    });
+
     window.swal = undefined;
 
     window.Swal = window.Swal.mixin({
@@ -225,54 +233,4 @@
             }
         });
     }
-
-    let searchInput = document.getElementById("search");
-    let timer;
-
-    searchInput.addEventListener("keyup", function() {
-        clearTimeout(timer);
-        let query = this.value;
-
-        timer = setTimeout(() => {
-            fetch("{{ route('reviews.search') }}?q=" + encodeURIComponent(query))
-                .then(response => response.json())
-                .then(data => {
-                    let tbody = document.getElementById("reviewTableBody");
-                    tbody.innerHTML = "";
-
-                    if (data.length === 0) {
-                        tbody.innerHTML =
-                            `<tr><td colspan="8" class="text-center">No reviews found</td></tr>`;
-                    } else {
-                        data.forEach(review => {
-                            let stars = '';
-                            for (let i = 1; i <= 5; i++) {
-                                if (i <= review.rating) {
-                                    stars +=
-                                        '<i class="fa-solid fa-star text-warning"></i>';
-                                } else {
-                                    stars +=
-                                        '<i class="fa-regular fa-star text-muted"></i>';
-                                }
-                            }
-
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td>${review.name}</td>
-                                    <td>${review.location ?? "-"}</td>
-                                    <td class="text-nowrap">${stars}</td>
-                                    <td>${review.message}</td>
-                                    <td>${review.image_path ? `<img src="/${review.image_path}" width="100">` : ''}</td>
-                                    <td>${new Date(review.created_at).toLocaleDateString()}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm"
-                                            onclick="handleDelete(${review.id})">Delete</button>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                    }
-                });
-        }, 400);
-    });
 </script>

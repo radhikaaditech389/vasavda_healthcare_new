@@ -3,6 +3,12 @@
 
 <head>
     @include('admin.layout.headerlink')
+
+    <style>
+        .block-header {
+            margin-bottom: -50px;
+        }
+    </style>
 </head>
 
 <body class="theme-cyan">
@@ -23,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
+        {{-- <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -78,7 +84,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </section>
 
     <section class="content">
@@ -97,7 +103,7 @@
                                             <th>Sequence</th>
                                             <th>Link</th>
                                             <th>Is Displayed</th>
-                                            <th>Action</th>
+                                            {{-- <th>Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,7 +122,7 @@
                                                         <span style="color: red;">&#10008;</span>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                {{-- <td>
                                                     <button type="button"
                                                         class="btn btn-primary btn-round edit-submenu"
                                                         data-id="{{ $submenu->id }}"
@@ -127,7 +133,7 @@
                                                         data-is_displayed="{{ $submenu->is_displayed }}" disabled>Edit</button>
                                                     <a href="#" class="btn btn-danger btn-round delete-submenu"
                                                         data-id="{{ $submenu->id }}" disabled>Delete</a>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>

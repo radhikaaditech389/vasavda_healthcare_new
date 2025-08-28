@@ -8,6 +8,8 @@ use App\Models\AdminLogin;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Appointment;
 use App\Models\ContactMessage;
+use App\Models\Footer;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -36,12 +38,19 @@ class AdminController extends Controller
 
     public function index()
     {
-        // Check if the user is logged in
+        $logo = Footer::first();
+
+        $start = Carbon::today()->startOfDay(); // 2025-08-26 00:00:00
+        $end   = Carbon::today()->endOfDay();   // 2025-08-26 23:59:59
+        $appointmentCount = Appointment::whereBetween('appointment_date', [$start, $end])->count();
+
+        $contactCount = ContactMessage::count();
+
         if (session()->has('admin')) {
-            return view('admin.index');
+            return view('admin.index', compact('appointmentCount', 'contactCount', 'logo'));
         }
 
-         return redirect()->route('admin.login')->withErrors(['You must log in first']);
+        return redirect()->route('admin.login')->withErrors(['You must log in first']);
     }
 
     public function logout()

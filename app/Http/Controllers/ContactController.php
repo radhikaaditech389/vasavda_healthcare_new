@@ -18,10 +18,7 @@ class ContactController extends Controller
 
         ContactMessage::create($request->all());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Message sent successfully!'
-        ]);
+        return redirect()->back()->with('success', 'Message sent successfully!');
     }
 
     public function index()
