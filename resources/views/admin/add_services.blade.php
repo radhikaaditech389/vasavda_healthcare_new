@@ -288,7 +288,7 @@
                                                         class="btn btn-primary btn-round edit-service"
                                                         data-id="{{ $service->id }}"
                                                         data-name="{{ $service->service_name }}"
-                                                        data-image="{{ $service->service_image }}"
+                                                        data-image="{{ asset($service->service_image) }}"
                                                         data-link="{{ $service->service_link }}">Edit</button>
                                                     <a href="#" class="btn btn-danger btn-round delete-service"
                                                         data-id="{{ $service->id }}">Delete</a>
@@ -323,6 +323,8 @@
                     "targets": [1, 4]
                 }]
             });
+
+
         });
 
         $(document).ready(function() {
@@ -355,29 +357,18 @@
                 let link = $(this).data('link');
                 let image = $(this).data('image');
 
-                console.log('Edit data:', {
-                    id,
-                    name,
-                    link,
-                    image
-                }); // Debug
-
-                // Set form values
                 $('#service_id').val(id);
                 $('#service_name').val(name);
                 $('#service_link').val(link);
 
-                // Show current image if exists
                 if (image) {
-                    $('#preview_image').attr('src', '/' + image).show();
+                    $('#preview_image').attr('src', image).show();
                 } else {
                     $('#preview_image').hide();
                 }
 
-                // Change button text
                 $('button[type="submit"]').text('Update');
 
-                // Fetch patient services
                 $.ajax({
                     url: `/admin/services/${id}/patient-services`,
                     type: 'GET',
@@ -397,11 +388,11 @@
                                             <div class="input-group-append">
                                                 ${index === 0
                                         ? `<button type="button" class="btn btn-success add-service">
-                                                                                                                                <i class="zmdi zmdi-plus"></i>
-                                                                                                                               </button>`
+                                                                                                                                                                    <i class="zmdi zmdi-plus"></i>
+                                                                                                                                                                   </button>`
                                         : `<button type="button" class="btn btn-danger remove-service">
-                                                                                                                                <i class="zmdi zmdi-minus"></i>
-                                                                                                                               </button>`
+                                                                                                                                                                    <i class="zmdi zmdi-minus"></i>
+                                                                                                                                                                   </button>`
                                     }
                                             </div>
                                         </div>
@@ -473,9 +464,11 @@
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
-                                window.location.href =
-                                    "{{ route('admin.add_services') }}";
+                                resetForm();
                             });
+
+                            const servicesTable = $('#servicesTable').DataTable();
+                            handleTableUpdate(servicesTable, response);
                         }
                     },
                     error: function(xhr, status, error) {
@@ -497,13 +490,41 @@
                 });
             });
 
+            function handleTableUpdate(servicesTable, response) {
+                const service = response.service;
+
+                const rowData = [
+                    `<td><span class="list-name">${service.id}</span></td>`,
+                    `<td>
+            ${service.service_image ? `<img src="${service.service_image}" alt="${service.service_name}" width="100">` : ''}
+        </td>`,
+                    `<td>${service.service_name}</td>`,
+                    `<td>${service.service_link}</td>`,
+                    `<td>
+            <button type="button" class="btn btn-primary btn-round edit-service" 
+                data-id="${service.id}" data-name="${service.service_name}" 
+                data-image="${service.service_image}" data-link="${service.service_link}">Edit</button>
+            <a href="#" class="btn btn-danger btn-round delete-service" data-id="${service.id}">Delete</a>
+        </td>`
+                ];
+
+                const rowNode = servicesTable.rows(function(idx, data, node) {
+                    return $(node).find('.list-name').text().trim() === String(service.id);
+                }).nodes()[0];
+
+                if (rowNode) {
+                    servicesTable.row(rowNode).data(rowData).invalidate().draw(false);
+                } else {
+                    servicesTable.row.add(rowData).draw(false);
+                }
+            }
+
             // Remove service handler
             $(document).on('click', '.remove-service', function() {
                 const serviceRow = $(this).closest('.service-row');
                 const patientServiceId = serviceRow.data('patient-service-id');
 
                 if (patientServiceId) {
-                    // Only add to deletedServices if it's an existing service (has an ID)
                     deletedServices.push(patientServiceId);
                     console.log('Service marked for deletion:', patientServiceId);
                     console.log('Current deletedServices:', deletedServices);
@@ -524,7 +545,6 @@
                 addEmptyServiceRow();
                 $('button[type="submit"]').text('Submit');
 
-                // Clear any error states or messages
                 $('.is-invalid').removeClass('is-invalid');
                 $('.invalid-feedback').remove();
             }
@@ -576,8 +596,14 @@
                                         icon: 'success',
                                         confirmButtonText: 'OK'
                                     }).then(() => {
-                                        window.location.href =
-                                            "{{ route('admin.add_services') }}";
+                                        const servicesTable = $(
+                                            '#servicesTable').DataTable();
+
+                                        const rowToRemove = $(
+                                            'a.delete-service[data-id="' +
+                                            serviceId + '"]').closest('tr');
+                                        servicesTable.row(rowToRemove).remove()
+                                            .draw();
                                     });
                                 } else {
                                     Swal.fire({
