@@ -17,6 +17,7 @@ use App\Models\Director;
 use App\Models\DirectorDetails;
 use App\Models\Facility;
 use App\Models\ServiceDetails;
+use App\Models\Sonography;
 
 class HomeController extends Controller
 {
@@ -158,7 +159,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.3d_4d_sonography', compact('footer', 'menus'));
+         $sonography_data = Sonography::first();
+        return view('patient.service.3d_4d_sonography', compact('footer', 'menus','sonography_data'));
     }
 
     public function cancer_care()

@@ -8,6 +8,7 @@ use App\Models\AboutUs;
 use App\Models\DirectorDetails;
 use App\Models\Sonography;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SonographyController extends Controller
 {
@@ -17,106 +18,80 @@ class SonographyController extends Controller
         return view('admin.3d_4d_sonography', compact('sonography_data'));
     }
 
-   public function update(Request $request, $id)
+ public function update(Request $request, $id)
 {
+    $sonography = Sonography::findOrFail($id);
+
+    // 1. Validate inputs
     $request->validate([
-        'name'              => 'required|string|max:255',
-        'qualification'     => 'nullable|string|max:255',
-        'specialization'    => 'nullable|string|max:255',
-        'skills'            => 'nullable|string',
-        'media_presence'    => 'nullable|string',
-        'community_charity_work' => 'nullable|string',
-        'languages'         => 'nullable|string|max:255',
-        'bio'               => 'nullable|string',
-
-        // images
-        'image'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'campaign_image'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'training_image'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'award_image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'charity_image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'membership_image'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-
-        // arrays
-        'campaigns'         => 'nullable|array',
-        'trainings'         => 'nullable|array',
-        'conferences'       => 'nullable|array',
-        'awards'            => 'nullable|array',
-        'memberships'       => 'nullable|array',
-        'publications_talks'=> 'nullable|array',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+        'sonography_image1' => 'nullable|image',
+        'sonography_image2' => 'nullable|image',
+        'sonography_image3' => 'nullable|image',
     ]);
 
-    try {
-        DB::beginTransaction();
+    // 2. Update basic fields
+    $sonography->title = $request->input('title');
+     $sonography->book_contact_no = $request->input('book_contact_no');
+    $sonography->description = $request->input('description');
 
-        $director = DirectorDetails::findOrFail($id);
+    // 3. JSON fields
+    $sonography->sonography_detail = json_encode($request->input('sonography'));
+    $sonography->benifits = json_encode($request->input('benifits'));
 
-        // ✅ Handle Multiple Images
-        $uploadPath = 'uploads/directors/';
-        $fullPath   = public_path($uploadPath);
-
-        if (!file_exists($fullPath)) {
-            mkdir($fullPath, 0777, true);
-        }
-
-        // function for reusability
-        $handleImageUpload = function ($fieldName, $oldPath = null) use ($request, $uploadPath, $fullPath) {
-            if ($request->hasFile($fieldName)) {
-                $file = $request->file($fieldName);
-                $newPath = $uploadPath . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move($fullPath, $newPath);
-
-                // delete old image if exists
-                if ($oldPath && file_exists(public_path($oldPath))) {
-                    unlink(public_path($oldPath));
-                }
-                return $newPath;
-            }
-            return $oldPath;
-        };
-
-        // ✅ Process each image
-        $image             = $handleImageUpload('image', $director->image);
-        $campaignImage     = $handleImageUpload('campaign_image', $director->campaign_image);
-        $trainingImage     = $handleImageUpload('training_image', $director->training_image);
-        $awardImage        = $handleImageUpload('award_image', $director->award_image);
-        $charityImage      = $handleImageUpload('charity_image', $director->charity_image);
-        $membershipImage   = $handleImageUpload('membership_image', $director->membership_image);
-
-        // ✅ Update Director
-        $director->update([
-            'name'              => $request->name,
-            'qualification'     => $request->qualification,
-            'specialization'    => $request->specialization,
-            'skills'            => $request->skills,
-            'languages'         => $request->languages,
-            'bio'               => $request->bio,
-            'media_presence'    => $request->media_presence,
-            'community_charity_work' => $request->community_charity_work,
-
-            'image'             => $image,
-            'campaign_image'    => $campaignImage,
-            'training_image'    => $trainingImage,
-            'award_image'       => $awardImage,
-            'charity_image'     => $charityImage,
-            'membership_image'  => $membershipImage,
-
-            // JSON fields
-            'campaigns'         => $request->campaigns ? json_encode($request->campaigns) : null,
-            'trainings'         => $request->trainings ? json_encode($request->trainings) : null,
-            'conferences'       => $request->conferences ? json_encode($request->conferences) : null,
-            'awards'            => $request->awards ? json_encode($request->awards) : null,
-            'memberships'       => $request->memberships ? json_encode($request->memberships) : null,
-            'publications_talks'=> $request->publications_talks ? json_encode($request->publications_talks) : null,
-        ]);
-
-        DB::commit();
-
-        return redirect()->back()->with('success', 'Director updated successfully!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+    // Ensure the upload folder exists
+    $uploadPath = public_path('uploads/sonography');
+    if (!File::exists($uploadPath)) {
+        File::makeDirectory($uploadPath, 0755, true);
     }
+
+    // 4. Handle image uploads (all saved in public/uploads/sonography)
+    if ($request->hasFile('image')) {
+        if (File::exists(public_path($sonography->image))) {
+            File::delete(public_path($sonography->image));
+        }
+        $file = $request->file('image');
+        $filename = 'main_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $file->move($uploadPath, $filename);
+        $sonography->image = 'uploads/sonography/' . $filename;
+    }
+
+    if ($request->hasFile('sonography_image1')) {
+        if (File::exists(public_path($sonography->sonography_image1))) {
+            File::delete(public_path($sonography->sonography_image1));
+        }
+        $file = $request->file('sonography_image1');
+        $filename = 'img1_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $file->move($uploadPath, $filename);
+        $sonography->sonography_image1 = 'uploads/sonography/' . $filename;
+    }
+
+    if ($request->hasFile('sonography_image2')) {
+        if (File::exists(public_path($sonography->sonography_image2))) {
+            File::delete(public_path($sonography->sonography_image2));
+        }
+        $file = $request->file('sonography_image2');
+        $filename = 'img2_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $file->move($uploadPath, $filename);
+        $sonography->sonography_image2 = 'uploads/sonography/' . $filename;
+    }
+
+    if ($request->hasFile('sonography_image3')) {
+        if (File::exists(public_path($sonography->sonography_image3))) {
+            File::delete(public_path($sonography->sonography_image3));
+        }
+        $file = $request->file('sonography_image3');
+        $filename = 'img3_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $file->move($uploadPath, $filename);
+        $sonography->sonography_image3 = 'uploads/sonography/' . $filename;
+    }
+
+    // 5. Save the model
+    $sonography->save();
+
+    return redirect()->back()->with('success', 'Sonography updated successfully!');
 }
 
 

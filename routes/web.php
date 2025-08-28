@@ -134,7 +134,7 @@ Route::post('/admin/service_details/update/{id}', [ServiceDetailsController::cla
 
 Route::delete('/admin/service_details/{id}', [ServiceDetailsController::class, 'destroy'])->name('admin.service_details.destroy');
 
-Route::get('/admin/sonography_details', [SonographyController::class, 'index'])->name('admin.sonography_details');
+Route::get('/admin/sonography_details', [SonographyController::class, 'index'])->name('admin.sonography_details.index');
 Route::post('/admin/sonography_details', [SonographyController::class, 'store'])->name('admin.sonography_details.store');
 Route::post('/admin/sonography_details/{id}', [SonographyController::class, 'update'])->name('admin.sonography_details.update');
 Route::delete('/admin/sonography_details/{id}', [SonographyController::class, 'destroy'])->name('admin.sonography_details.delete');
