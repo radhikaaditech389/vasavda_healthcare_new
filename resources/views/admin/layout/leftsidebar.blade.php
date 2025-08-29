@@ -120,6 +120,10 @@
                         Vasavada</span>
                 </a>
             </li>
+            <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
+                    href="{{ route('admin.clinics') }}"><i
+                        class="zmdi zmdi-hospital"></i><span>Special Clinics</span></a>
+            </li>
 
         {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
             class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
