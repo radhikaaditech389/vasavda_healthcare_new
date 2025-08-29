@@ -124,6 +124,10 @@
                     href="{{ route('admin.clinics') }}"><i
                         class="zmdi zmdi-hospital"></i><span>Special Clinics</span></a>
             </li>
+            <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
+                    href="{{ route('admin.home_care_page') }}"><i
+                        class="zmdi zmdi-hospital"></i><span>Home Care Service</span></a>
+            </li>
 
         {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
             class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
