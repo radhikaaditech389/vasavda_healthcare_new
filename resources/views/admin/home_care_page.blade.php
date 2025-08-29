@@ -199,13 +199,30 @@
                                     value="{{ $homeCare->id ?? '' }}">
 
                                 <div class="row clearfix">
-                                    <div class="col-sm-4">
+                                    {{-- <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="service_id"><strong>Select Service</strong></label>
+                                            <select name="service_id" id="service_id" class="form-control">
+                                                <option value="">-- Select Service --</option>
+                                                @foreach ($services as $service)
+                                                    <option value="{{ $service->id }}"
+                                                        {{ !empty($homeCare->service_id) && $homeCare->service_id == $service->id ? 'selected' : '' }}>
+                                                        {{ $service->service_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div> --}}
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="service_id"><strong>Page Title</strong></label>
                                             <input type="text" class="form-control" name="page_title" id="page_title"
                                                 placeholder="Enter page title"
                                                 value="{{ $homeCare->page_title ?? '' }}">
                                         </div>
                                     </div>
+
                                     {{-- <div class="col-sm-4">
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="meta_title" id="meta_title"
@@ -225,7 +242,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Banner Image</label>
+                                            <label><strong>Banner Image</strong></label>
                                             <div class="modern-upload-wrapper" id="modern-upload-area1">
                                                 <label class="modern-upload-label" for="banner_image">
                                                     <i class="zmdi zmdi-cloud-upload"></i>
@@ -253,7 +270,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Conclusion</label>
+                                            <label><strong>Conclusion</strong></label>
                                             <textarea class="form-control summernote" name="conclusion_html" id="conclusion_html" placeholder="Enter conclusion">{{ $homeCare->conclusion_html ?? '' }}</textarea>
                                         </div>
                                     </div>

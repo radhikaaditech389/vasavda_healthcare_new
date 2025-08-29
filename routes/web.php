@@ -243,4 +243,12 @@ Route::delete('/admin/clinics/{id}', [ClinicController::class, 'destroy'])->name
 
 // Home Care routes
 Route::get('/admin/home_care_page', [HomeCareController::class, 'index'])->name('admin.home_care_page');
+// Route::post('/admin/home_care_page', [HomeCareController::class, 'store'])->name('admin.home_care_page.store');
 Route::put('/admin/home_care_page', [HomeCareController::class, 'update'])->name('admin.home_care_page.update');
+// Route::delete('/admin/home_care_page/{id}', [HomeCareController::class, 'destroy'])->name('admin.home_care_page.destroy');
+
+// Home Care Services details routes
+Route::get('/admin/home_care_service/details', [HomeCareController::class, 'homeCareService'])->name('admin.home_care_service.details');
+Route::post('/admin/home_care_service/details', [HomeCareController::class, 'storehomeCareDetails'])->name('admin.home_care_service.details.store');
+Route::put('/admin/home_care_service/details/{id}', [HomeCareController::class, 'updatehomeCareDetails'])->name('admin.home_care_service.details.update');
+Route::delete('/admin/home_care_service/details/{id}', [HomeCareController::class, 'destroyhomeCareDetails'])->name('admin.home_care_service.details.destroy');
