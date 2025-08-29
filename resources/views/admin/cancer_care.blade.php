@@ -208,10 +208,8 @@
                         </div>
                         <div class="body">
 
-                            <form action="{{ route('admin.sonography_details.update', $sonography_data->id) }}"
-                                method="POST" enctype="multipart/form-data">
-                                @csrf
-                                @method('POST')
+                            <form 
+                                enctype="multipart/form-data">
 
                                 <div class="row clearfix">
 
@@ -219,7 +217,7 @@
                                         <div class="form-group">
                                             <label>title</label>
                                             <input type="text" class="form-control" name="title"
-                                                value="{{ $sonography_data->title }}">
+                                                value="{{ $cancer_care_data->title }}">
                                         </div>
                                     </div>
                                 </div>
@@ -228,7 +226,7 @@
                                         <div class="form-group">
                                             <label>Description</label>
                                             <textarea class="form-control summernote"
-                                                name="description">{{ $sonography_data->description }}</textarea>
+                                                name="description">{{ $cancer_care_data->description }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -238,7 +236,7 @@
                                         <div class="form-group">
                                             <label>Book Contact No</label>
                                             <input type="text" class="form-control" name="book_contact_no"
-                                                value="{{ $sonography_data->book_contact_no }}" maxlength="10"
+                                                value="{{ $cancer_care_data->book_contact_no }}" maxlength="10"
                                                 pattern="\d*"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
                                                 placeholder="Enter 10-digit Contact Number">
@@ -260,136 +258,131 @@
                                     <span class="modern-upload-info"></span>
                                     <span class="text-danger" id="image1-error"></span>
                                     <div class="modern-upload-preview" id="current_image1"
-                                        style="display: {{ !empty($sonography_data->image) ? 'block' : 'none' }};">
-                                        @if (!empty($sonography_data->image))
-                                        <img src="{{ asset($sonography_data->image) }}" alt="Image 1"
+                                        style="display: {{ !empty($cancer_care_data->image) ? 'block' : 'none' }};">
+                                        @if (!empty($cancer_care_data->image))
+                                        <img src="{{ asset($cancer_care_data->image) }}" alt="Image 1"
                                             style="max-width: 120px; max-height: 120px;">
                                         @endif
                                     </div>
                                 </div>
 
 
-                                {{-- Campaigns --}}
-                                <h4>Sonography Details</h4>
+                                {{-- Symptoms --}}
+                                <h4>Symptoms</h4>
                                 <div id="sonography-wrapper">
-                                    @if($sonography_data->sonography_detail)
-                                    @foreach(json_decode($sonography_data->sonography_detail, true) as $index =>
-                                    $sonography)
-                                    <div class="sonography-item mb-3 d-flex">
-                                        <input type="text" name="sonography[{{ $index }}][title]"
-                                            class="form-control mb-2 text-content" placeholder="Sonography Title"
-                                            value="{{ $sonography['title'] ?? '' }}">
-                                        <textarea name="sonography[{{ $index }}][desc]"
+                                    @if($cancer_care_data->symptoms)
+                                    @foreach(json_decode($cancer_care_data->symptoms, true) as $index =>
+                                    $cancer_care)
+                                    <div class="cancer_care-item mb-3 d-flex">
+                                        <input type="text" name="cancer_care[{{ $index }}][title]"
+                                            class="form-control mb-2 text-content" placeholder="cancer_care Title"
+                                            value="{{ $cancer_care['title'] ?? '' }}">
+                                        <textarea name="cancer_care[{{ $index }}][desc]"
                                             class="form-control form-content"
-                                            placeholder="Sonography Description">{{ $sonography['desc'] ?? '' }}</textarea>
+                                            placeholder="cancer_care Description">{{ $cancer_care['desc'] ?? '' }}</textarea>
                                         <button type="button"
-                                            class="btn btn-danger btn-sm remove-sonography">Remove</button>
+                                            class="btn btn-danger btn-sm remove-cancer-care">Remove</button>
                                     </div>
                                     @endforeach
                                     @endif
                                 </div>
-                                <button type="button" class="btn btn-sm btn-success sonography-btn">+ Add
-                                    Sonography Detail</button>
+                                <button type="button" class="btn btn-sm btn-success cancer-care-btn">+ Add
+                                    Cancer Care Detail</button>
                                 <hr>
 
-                                <div class="modern-upload-wrapper" id="modern-upload-area1">
-                                    <label class="modern-upload-label" for="image1">
-                                        <i class="zmdi zmdi-cloud-upload"></i>
-                                        sonography Image1
-                                    </label>
-                                    <input type="file" class="modern-upload-input" name="sonography_image1" id="image2"
-                                        accept="image/*">
-                                    <button type="button" class="modern-upload-btn"
-                                        onclick="document.getElementById('image2').click();">
-                                        Choose File
-                                    </button>
-                                    <span class="modern-upload-info"></span>
-                                    <span class="text-danger" id="image1-error"></span>
-                                    <div class="modern-upload-preview" id="current_image2"
-                                        style="display: {{ !empty($sonography_data->sonography_image1) ? 'block' : 'none' }};">
-                                        @if (!empty($sonography_data->sonography_image1))
-                                        <img src="{{ asset($sonography_data->sonography_image1) }}" alt="Image 1"
-                                            style="max-width: 120px; max-height: 120px;">
-                                        @endif
-                                    </div>
-                                </div>
-
-
-                                <div class="modern-upload-wrapper" id="modern-upload-area1">
-                                    <label class="modern-upload-label" for="image1">
-                                        <i class="zmdi zmdi-cloud-upload"></i>
-                                        Sonography image2
-                                    </label>
-                                    <input type="file" class="modern-upload-input" name="sonography_image2" id="image4"
-                                        accept="image/*">
-                                    <button type="button" class="modern-upload-btn"
-                                        onclick="document.getElementById('image4').click();">
-                                        Choose File
-                                    </button>
-                                    <span class="modern-upload-info"></span>
-                                    <span class="text-danger" id="image1-error"></span>
-                                    <div class="modern-upload-preview" id="current_image4"
-                                        style="display: {{ !empty($sonography_data->sonography_image2) ? 'block' : 'none' }};">
-                                        @if (!empty($sonography_data->sonography_image2))
-                                        <img src="{{ asset($sonography_data->sonography_image2) }}" alt="Image 1"
-                                            style="max-width: 120px; max-height: 120px;">
-                                        @endif
-                                    </div>
-                                </div>
-
-
-
-
-                                <div class="modern-upload-wrapper" id="modern-upload-area1">
-                                    <label class="modern-upload-label" for="image1">
-                                        <i class="zmdi zmdi-cloud-upload"></i>
-                                        Sonography image3
-                                    </label>
-                                    <input type="file" class="modern-upload-input" name="sonography_image3" id="image3"
-                                        accept="image/*">
-                                    <button type="button" class="modern-upload-btn"
-                                        onclick="document.getElementById('image3').click();">
-                                        Choose File
-                                    </button>
-                                    <span class="modern-upload-info"></span>
-                                    <span class="text-danger" id="image1-error"></span>
-                                    <div class="modern-upload-preview" id="current_image3"
-                                        style="display: {{ !empty($sonography_data->sonography_image3) ? 'block' : 'none' }};">
-                                        @if (!empty($sonography_data->sonography_image3))
-                                        <img src="{{ asset($sonography_data->sonography_image3) }}" alt="Image 1"
-                                            style="max-width: 120px; max-height: 120px;">
-                                        @endif
-                                    </div>
-                                </div>
-
-                                {{-- Benifits --}}
-                                <h4>Benifits</h4>
+                                {{-- Diagnosis --}}
+                                <h4>Diagnosis</h4>
                                 <div id="benifits-wrapper">
-                                    @if($sonography_data->benifits)
-                                    @foreach(json_decode($sonography_data->benifits, true) as $index => $benifit)
+                                    @if($cancer_care_data->diagnosis)
+                                    @foreach(json_decode($cancer_care_data->diagnosis, true) as $index => $diagnosisd)
                                     <div class="benifit-item mb-3 p-3 border rounded">
-                                        <input type="text" name="benifits[{{ $index }}][title]"
+                                        <input type="text" name="diagnosisd[{{ $index }}][title]"
                                             class="form-control mb-2" placeholder="Title"
-                                            value="{{ $benifit['title'] ?? '' }}">
+                                            value="{{ $diagnosisd['title'] ?? '' }}">
 
-                                        <input type="text" name="benifits[{{ $index }}][sub_title]"
-                                            class="form-control mb-2" placeholder="Sub Title"
-                                            value="{{ $benifit['sub_title'] ?? '' }}">
-
-                                        <textarea name="benifits[{{ $index }}][desc]" class="form-control mb-2"
-                                            placeholder="Description">{{ $benifit['desc'] ?? '' }}</textarea>
+                                        <textarea name="diagnosisd[{{ $index }}][desc]" class="form-control mb-2"
+                                            placeholder="Description">{{ $diagnosisd['desc'] ?? '' }}</textarea>
 
                                         <button type="button"
-                                            class="btn btn-danger btn-sm remove-benifit">Remove</button>
+                                            class="btn btn-danger btn-sm remove-diagnosisd">Remove</button>
                                     </div>
                                     @endforeach
                                     @endif
                                 </div>
 
-                                <button type="button" class="btn btn-sm btn-success" onclick="addBenifits()">+ Add
-                                    Benifit</button>
+                                <button type="button" class="btn btn-sm btn-success" onclick="addDiagnosisd()">+ Add
+                                    Diagnosis</button>
                                 <hr>
 
+                                 {{-- Risk factors --}}
+                                <h4>Risk factors</h4>
+                                <div id="risk_factor-wrapper">
+                                    @if($cancer_care_data->risk_factors)
+                                    @foreach(json_decode($cancer_care_data->risk_factors, true) as $index => $risk_factor)
+                                    <div class="risk_factor-item mb-3 p-3 border rounded">
+                                        <input type="text" name="risk_factor[{{ $index }}][title]"
+                                            class="form-control mb-2" placeholder="Title"
+                                            value="{{ $risk_factor['title'] ?? '' }}">
+
+                                        <textarea name="risk_factor[{{ $index }}][desc]" class="form-control mb-2"
+                                            placeholder="Description">{{ $risk_factor['desc'] ?? '' }}</textarea>
+
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm remove-risk-factor">Remove</button>
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-success" onclick="addRiskFactors()">+ Add
+                                    Risk Factors</button>
+                                <hr>
+
+                                 {{-- Treatment --}}
+                                <h4>Treatment</h4>
+                                <div id="benifits-wrapper">
+                                    @if($cancer_care_data->treatment)
+                                    @foreach(json_decode($cancer_care_data->treatment, true) as $index => $diagnosisd)
+                                    <div class="benifit-item mb-3 p-3 border rounded">
+                                        <input type="text" name="diagnosisd[{{ $index }}][title]"
+                                            class="form-control mb-2" placeholder="Title"
+                                            value="{{ $diagnosisd['title'] ?? '' }}">
+
+                                        <textarea name="diagnosisd[{{ $index }}][desc]" class="form-control mb-2"
+                                            placeholder="Description">{{ $diagnosisd['desc'] ?? '' }}</textarea>
+
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm remove-diagnosisd">Remove</button>
+                                    </div>
+                                    @endforeach
+                                    @endif
+                                </div>
+                                
+                                <button type="button" class="btn btn-sm btn-success" onclick="addDiagnosisd()">+ Add
+                                    treatment</button>
+                                    <hr>
+                                    
+                                    <div class="modern-upload-wrapper" id="modern-upload-area1">
+                                       <label class="modern-upload-label" for="image1">
+                                           <i class="zmdi zmdi-cloud-upload"></i>
+                                           care Image2
+                                       </label>
+                                       <input type="file" class="modern-upload-input" name="image2" id="image2"
+                                           accept="image/*">
+                                       <button type="button" class="modern-upload-btn"
+                                           onclick="document.getElementById('image2').click();">
+                                           Choose File
+                                       </button>
+                                       <span class="modern-upload-info"></span>
+                                       <span class="text-danger" id="image1-error"></span>
+                                       <div class="modern-upload-preview" id="current_image2"
+                                           style="display: {{ !empty($cancer_care_data->image2) ? 'block' : 'none' }};">
+                                           @if (!empty($cancer_care_data->image2))
+                                           <img src="{{ asset($cancer_care_data->image2) }}" alt="Image 1"
+                                               style="max-width: 120px; max-height: 120px;">
+                                           @endif
+                                       </div>
+                                   </div>
 
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
@@ -538,23 +531,24 @@
     });
     @endif
 
-     let sonographyIndex = {{ isset($sonography_data->sonography_detail) ? count(json_decode($sonography_data->sonography_detail, true)) : 0 }};
-    let benifitIndex = {{ isset($sonography_data->benifits) ? count(json_decode($sonography_data->benifits, true)) : 0 }};
+     let sonographyIndex = {{ isset($cancer_care_data->sonography_detail) ? count(json_decode($cancer_care_data->sonography_detail, true)) : 0 }};
+    let benifitIndex = {{ isset($cancer_care_data->benifits) ? count(json_decode($cancer_care_data->benifits, true)) : 0 }};
+      let riskFactorIndex = {{ isset($cancer_care_data->risk_factor) ? count(json_decode($cancer_care_data->risk_factor, true)) : 0 }};
 
-    $(".sonography-btn").click(function() {
+    $(".cancer-care-btn").click(function() {
         let wrapper = document.getElementById('sonography-wrapper');
         wrapper.insertAdjacentHTML('beforeend', `
             <div class="sonography-item mb-3 d-flex">
                 <input type="text" name="sonographies[${sonographyIndex}][title]" class="form-control mb-2 text-content" placeholder="Sonography Title">
                 <textarea name="sonographies[${sonographyIndex}][desc]" class="form-control form-content" placeholder="Sonography Description"></textarea>
-                <button type="button" class="btn btn-danger btn-sm remove-sonography">Remove</button>
+                <button type="button" class="btn btn-danger btn-sm remove-cancer-care">Remove</button>
             </div>
         `);
         sonographyIndex++;
     });
 
 
-    $(document).on('click', '.remove-sonography', function() {
+    $(document).on('click', '.remove-cancer-care', function() {
         $(this).closest('.sonography-item').remove();
     });
 
@@ -588,21 +582,39 @@
         $(this).closest('.conference-item').remove();
     });
 
-    function addBenifits() {
+    function addDiagnosisd() {
         let wrapper = document.getElementById('benifits-wrapper');
         wrapper.insertAdjacentHTML('beforeend', `
         <div class="benifit-item mb-3 d-flex gap-2 align-items-start">
             <input type="text" name="benifits[${benifitIndex}][title]" class="form-control mb-2 text-content" placeholder="Benefit Title" style="flex:1;">
             <input type="text" name="benifits[${benifitIndex}][sub_title]" class="form-control mb-2 text-content" placeholder="Benefit Sub Title" style="flex:1;">
             <textarea name="benifits[${benifitIndex}][desc]" class="form-control form-content" placeholder="Benefit Description" style="flex:2;"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-benifit">Remove</button> 
+            <button type="button" class="btn btn-danger btn-sm remove-diagnosisd">Remove</button> 
         </div>
     `);
         benifitIndex++;
     }
 
     // Remove button handler with jQuery (keep as is)
-    $(document).on('click', '.remove-benifit', function() {
+    $(document).on('click', '.remove-diagnosisd', function() {
+        $(this).closest('.benifit-item').remove();
+    });
+
+     function addRiskFactors() {
+        let wrapper = document.getElementById('risk_factor-wrapper');
+        wrapper.insertAdjacentHTML('beforeend', `
+        <div class="risk_factor-item mb-3 d-flex gap-2 align-items-start">
+            <input type="text" name="risk_factor[${riskFactorIndex}][title]" class="form-control mb-2 text-content" placeholder="Benefit Title" style="flex:1;">
+            <input type="text" name="risk_factor[${riskFactorIndex}][sub_title]" class="form-control mb-2 text-content" placeholder="Benefit Sub Title" style="flex:1;">
+            <textarea name="risk_factor[${riskFactorIndex}][desc]" class="form-control form-content" placeholder="Benefit Description" style="flex:2;"></textarea>
+            <button type="button" class="btn btn-danger btn-sm remove-risk-factor">Remove</button> 
+        </div>
+    `);
+        riskFactorIndex++;
+    }
+
+    // Remove button handler with jQuery (keep as is)
+    $(document).on('click', '.remove-risk-factor', function() {
         $(this).closest('.benifit-item').remove();
     });
 

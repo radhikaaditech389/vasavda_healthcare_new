@@ -9,9 +9,9 @@
 
     <style>
     .service-form-control {
-        gap:5px;
+        gap: 5px;
         display: flex;
-        width: 100%;       
+        width: 100%;
         padding: .375rem .75rem;
         font-size: 1rem;
         font-weight: 400;
@@ -271,7 +271,7 @@
                                         <div class="form-group">
                                             <label for="service_id">Select Service</label>
                                             <select name="service_id" id="service_id" class="service-form-control"
-                                               style="height: 50px;margin-top: 4px;border-radius: 15px;">
+                                                style="height: 50px;margin-top: 4px;border-radius: 15px;">
                                                 <option value="">-- Choose Service --</option>
 
                                                 @foreach($services as $service)
@@ -508,73 +508,34 @@
             return txt.value;
         }
         // Edit service handler
+        // Use event delegation - bind to document or a parent static element
         $(document).on('click', '.edit-service', function() {
-            console.log('Edit button clicked');
+            const $btn = $(this);
 
-            const id = $(this).data('id');
-
-            alert("dfd12")
-            console.log("dfd", id)
-            const service_id = $(this).data('service_id');
-            const title = $(this).data('title');
-
-            const shortDesc = $(this).data('short_desc');
-            const fullDesc = $(this).data('full_desc');
-            const bookContactNo = $(this).data('book_contact_no');
-            const image = $(this).data('image');
-            const faq = $(this).data('faq') || [];
-            let benifits = $(this).data('benifits') || [];
-
-            $('#service_details_id').val(id);
-            $('#service_id').val(service_id);
-            $('#title').val(title);
-            $('#short_desc').val(shortDesc);
-            const fullDescDecoded = decodeHtmlEntities(fullDesc);
+            let benifits = $btn.data('benifits') || [];
+            $('#service_details_id').val($btn.data('id'));
+            $('#service_id').val($btn.data('service_id')).trigger('change');
+            $('#title').val($btn.data('title'));
+            $('#short_desc').val($btn.data('short_desc'));
+            const fullDescDecoded = decodeHtmlEntities($btn.data('full_desc'));
 
             $('#full_desc').summernote('code', fullDescDecoded);
 
             // Set the HTML content
+            $('#book_contact_no').val($btn.data('book_contact_no'));
 
-            // $('#full_desc').summernote({
-            //     height: 200, // or whatever you prefer
-            //     placeholder: 'Enter full description...',
-            //     toolbar: [
-            //         // customize toolbar as needed
-            //         ['style', ['bold', 'italic', 'underline', 'clear']],
-            //         ['para', ['ul', 'ol', 'paragraph']],
-            //         ['insert', ['link', 'picture']],
-            //         ['view', ['codeview']]
-            //     ]
-            // });
-            $('#book_contact_no').val(bookContactNo);
-
+            // Set image preview
+            const image = $btn.data('image');
             if (image) {
-                $('#preview_image').attr('src', image).show();
-            } else {
-                $('#preview_image').hide();
+                $('#preview_image').show().attr('src', image);
             }
 
-            $('#faqs-wrapper').empty();
-            if (Array.isArray(faq)) {
-                faq.forEach(f => {
-                    $('#faqs-wrapper').append(`
-                <div class="faq-group mb-3">
-                    <div class="input-group mb-2">
-                        <input type="text" name="faq_title[]" class="form-control" placeholder="FAQ Title" value="${f.title || ''}">
-                    </div>
-                    <div class="input-group">
-                        <textarea name="faq_desc[]" class="form-control summernote" placeholder="FAQ Description">${f.desc || f.description || ''}</textarea>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-faq">Remove</button>
-                </div>
-            `);
-                });
-            }
-
+            // Set Benefits
             $('#benifits-wrapper').empty();
             if (typeof benifits === 'string') {
                 try {
-                    benifits = JSON.parse(benifits);
+                    const parsedString = JSON.parse(benifits);
+                    benifits = parsedString.split(',').map(b => b.trim());
                 } catch (e) {
                     benifits = [];
                 }
@@ -593,9 +554,33 @@
                 });
             }
 
-            reinitSummernote();
+            // Set FAQs
+            let faqs = $btn.data('faq');
+            if (typeof faqs === 'string') {
+                try {
+                    faqs = JSON.parse(faqs);
+                } catch (e) {
+                    faqs = [];
+                }
+            }
+
+            if (Array.isArray(faqs)) {
+                let faqsHtml = '';
+                faqs.forEach(f => {
+                    faqsHtml += `
+                <div class="faq-group mb-2">
+                    <input type="text" name="faq_title[]" class="form-control mb-1" placeholder="FAQ Title" value="${f.title || ''}">
+                    <textarea name="faq_desc[]" class="form-control summernote" placeholder="FAQ Description">${f.description || f.desc || ''}</textarea>
+                </div>`;
+                });
+                $('#faqs-wrapper').html(faqsHtml);
+                $('.summernote').summernote(); // re-initialize summernote
+            }
             $('button[type="submit"]').text('Update');
+
         });
+
+
 
         const table = $('#serviceTable').DataTable();
 
@@ -717,7 +702,7 @@
                             data-image="${imagePath}"
                             data-book_contact_no="${escapeHtml(service.book_contact_no)}"
                             data-faq='${JSON.stringify(service.faq || [])}'
-                            data-benefits='${JSON.stringify(service.benifits || [])}'>
+                                data-benifits='${JSON.stringify(benefitsText || [])}'>
                             Edit
                     </button>
                     <button type="button" class="btn btn-danger btn-round remove-service"
@@ -747,6 +732,7 @@
                             '');
                         existingRow.find('td:eq(6)').html(faqsHtml);
                         existingRow.find('td:eq(7)').text(benefitsText);
+                        existingRow.find('td:eq(8)').html(actionHtml);
                     } else {
 
                         const rowData = [
