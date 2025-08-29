@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use App\Models\Director;
 use App\Models\DirectorDetails;
 use App\Models\Facility;
+use App\Models\HomeCarePageSettings;
+use App\Models\HomeCareService;
 use App\Models\ServiceDetails;
 
 class HomeController extends Controller
@@ -76,7 +78,13 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.home_care', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.home_care', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function about_us()
@@ -90,9 +98,9 @@ class HomeController extends Controller
         $about_us_detail = AboutUs::first();
         $director_detail = Director::get();
         $facilities = Facility::get();
-         $director_data = DirectorDetails::get();
+        $director_data = DirectorDetails::get();
         // dd($director_detail);
-        return view('patient.about_us', compact('footer', 'menus','about_us_detail','director_detail','facilities','director_data'));
+        return view('patient.about_us', compact('footer', 'menus', 'about_us_detail', 'director_detail', 'facilities', 'director_data'));
     }
 
     public function doctors()
@@ -146,8 +154,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-         $services = Services::get();
-        return view('patient.service.service', compact('footer', 'menus','services'));
+        $services = Services::get();
+        return view('patient.service.service', compact('footer', 'menus', 'services'));
     }
 
 
@@ -216,7 +224,13 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.home_care', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.home_care', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function interfertility()
@@ -238,8 +252,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-          $service_detail = ServiceDetails::where('service_id', 2)->get();  
-        return view('patient.service.laproscopy', compact('footer', 'menus','service_detail'));
+        $service_detail = ServiceDetails::where('service_id', 2)->get();
+        return view('patient.service.laproscopy', compact('footer', 'menus', 'service_detail'));
     }
 
     public function mental_health()
@@ -277,10 +291,10 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-         $service_detail = ServiceDetails::where('service_id', 1)->get();        
-        return view('patient.service.pragnancy_care', compact('footer', 'menus','service_detail'));
+        $service_detail = ServiceDetails::where('service_id', 1)->get();
+        return view('patient.service.pragnancy_care', compact('footer', 'menus', 'service_detail'));
     }
-   
+
 
     public function preventive_oncocgynocology()
     {
@@ -312,9 +326,9 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        $service_detail = ServiceDetails::where('service_id', 4)->get();  
+        $service_detail = ServiceDetails::where('service_id', 4)->get();
         // dd($service_detail);
-        return view('patient.service.urogynocology', compact('footer', 'menus','service_detail'));
+        return view('patient.service.urogynocology', compact('footer', 'menus', 'service_detail'));
     }
 
     public function vacination()
@@ -330,8 +344,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        $director_data = DirectorDetails::first();       
-        return view('patient.director_detail', compact('footer', 'menus','director_data'));
+        $director_data = DirectorDetails::first();
+        return view('patient.director_detail', compact('footer', 'menus', 'director_data'));
     }
 
     public function clinic_inner_page()
