@@ -17,6 +17,7 @@ use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\DirectorDetailsController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\HomeCareController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WhyVasavadasController;
 use App\Http\Controllers\ServiceDetailsController;
@@ -231,3 +232,7 @@ Route::get('/admin/clinics', [ClinicController::class, 'index'])->name('admin.cl
 Route::post('/admin/clinics', [ClinicController::class, 'store'])->name('admin.clinics.store');
 Route::put('/admin/clinics/{id}', [ClinicController::class, 'update'])->name('admin.clinics.update');
 Route::delete('/admin/clinics/{id}', [ClinicController::class, 'destroy'])->name('admin.clinics.destroy');
+
+// Home Care routes
+Route::get('/admin/home_care_page', [HomeCareController::class, 'index'])->name('admin.home_care_page');
+Route::put('/admin/home_care_page', [HomeCareController::class, 'update'])->name('admin.home_care_page.update');
