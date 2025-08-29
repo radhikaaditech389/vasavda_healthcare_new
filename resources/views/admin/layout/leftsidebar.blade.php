@@ -91,7 +91,7 @@
 
             <li class="{{ request()->routeIs('admin.facilities') ? 'active open' : '' }}"><a
                     href="{{ route('admin.facilities') }}"><i
-                        class="zmdi zmdi-hospital"></i><span>Facilities</span></a>
+                        class="zmdi zmdi-labels"></i><span>Facilities</span></a>
             </li>
 
         {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
