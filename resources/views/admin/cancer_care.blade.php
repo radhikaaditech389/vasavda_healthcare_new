@@ -5,6 +5,7 @@
     @include('admin.layout.headerlink')
     <!-- Summernote CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
     <style>
     /* Modern file upload styling */
@@ -204,29 +205,30 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Edit cancer care Details</strong></h2>
+                            <h2><strong>cancer care Details</strong></h2>
                         </div>
                         <div class="body">
 
-                            <form 
-                                enctype="multipart/form-data">
-
+                            <form action="{{ route('admin.cancer_care.store') }}" method="POST"
+                                enctype="multipart/form-data" id="add-cancer-care-details-form" class="form-wrap3 mb-30"
+                                data-bg-color="#f3f6f7">
+                                <input type="hidden" name="cancer_care_id" id="cancer_care_id" value="">
                                 <div class="row clearfix">
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>title</label>
-                                            <input type="text" class="form-control" name="title"
-                                                value="{{ $cancer_care_data->title }}">
+                                            <input type="text" name="title" id="title" class="form-control"
+                                                placeholder="Title">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix mb-3">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label>Description</label>
-                                            <textarea class="form-control summernote"
-                                                name="description">{{ $cancer_care_data->description }}</textarea>
+                                            <label for="description">Description</label>
+                                            <textarea name="description" id="description"
+                                                class="form-control summernote" placeholder="Description"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -235,9 +237,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Book Contact No</label>
-                                            <input type="text" class="form-control" name="book_contact_no"
-                                                value="{{ $cancer_care_data->book_contact_no }}" maxlength="10"
-                                                pattern="\d*"
+                                            <input type="text" name="book_contact_no" id="book_contact_no"
+                                                class="form-control" maxlength="10" pattern="\d*"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
                                                 placeholder="Enter 10-digit Contact Number">
                                         </div>
@@ -249,145 +250,92 @@
                                         <i class="zmdi zmdi-cloud-upload"></i>
                                         Upload Image
                                     </label>
-                                    <input type="file" class="modern-upload-input" name="image" id="image"
+                                    <input type="file" class="modern-upload-input" name="image1" id="image1"
                                         accept="image/*">
                                     <button type="button" class="modern-upload-btn"
-                                        onclick="document.getElementById('image').click();">
+                                        onclick="document.getElementById('image1').click();">
                                         Choose File
                                     </button>
                                     <span class="modern-upload-info"></span>
-                                    <span class="text-danger" id="image1-error"></span>
-                                    <div class="modern-upload-preview" id="current_image1"
-                                        style="display: {{ !empty($cancer_care_data->image) ? 'block' : 'none' }};">
-                                        @if (!empty($cancer_care_data->image))
-                                        <img src="{{ asset($cancer_care_data->image) }}" alt="Image 1"
-                                            style="max-width: 120px; max-height: 120px;">
-                                        @endif
+                                    <span class="text-danger" id="media-error"></span>
+                                    <div id="current_media" class="modern-upload-preview">
+                                        <img id="current_image1" src="#" alt="Preview" style="display: none;">
                                     </div>
                                 </div>
 
 
                                 {{-- Symptoms --}}
-                                <h4>Symptoms</h4>
-                                <div id="sonography-wrapper">
-                                    @if($cancer_care_data->symptoms)
-                                    @foreach(json_decode($cancer_care_data->symptoms, true) as $index =>
-                                    $cancer_care)
-                                    <div class="cancer_care-item mb-3 d-flex">
-                                        <input type="text" name="cancer_care[{{ $index }}][title]"
-                                            class="form-control mb-2 text-content" placeholder="cancer_care Title"
-                                            value="{{ $cancer_care['title'] ?? '' }}">
-                                        <textarea name="cancer_care[{{ $index }}][desc]"
-                                            class="form-control form-content"
-                                            placeholder="cancer_care Description">{{ $cancer_care['desc'] ?? '' }}</textarea>
-                                        <button type="button"
-                                            class="btn btn-danger btn-sm remove-cancer-care">Remove</button>
+                                <div class="row clearfix mb-3">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">symptoms</label>
+                                            <textarea name="symptoms" id="symptoms" class="form-control summernote"
+                                                placeholder="symptoms"></textarea>
+                                        </div>
                                     </div>
-                                    @endforeach
-                                    @endif
                                 </div>
-                                <button type="button" class="btn btn-sm btn-success cancer-care-btn">+ Add
-                                    Cancer Care Detail</button>
-                                <hr>
 
                                 {{-- Diagnosis --}}
-                                <h4>Diagnosis</h4>
-                                <div id="benifits-wrapper">
-                                    @if($cancer_care_data->diagnosis)
-                                    @foreach(json_decode($cancer_care_data->diagnosis, true) as $index => $diagnosisd)
-                                    <div class="benifit-item mb-3 p-3 border rounded">
-                                        <input type="text" name="diagnosisd[{{ $index }}][title]"
-                                            class="form-control mb-2" placeholder="Title"
-                                            value="{{ $diagnosisd['title'] ?? '' }}">
-
-                                        <textarea name="diagnosisd[{{ $index }}][desc]" class="form-control mb-2"
-                                            placeholder="Description">{{ $diagnosisd['desc'] ?? '' }}</textarea>
-
-                                        <button type="button"
-                                            class="btn btn-danger btn-sm remove-diagnosisd">Remove</button>
+                                <div class="row clearfix mb-3">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">Diagnosis</label>
+                                            <textarea name="diagnosis" id="diagnosis" class="form-control summernote"
+                                                placeholder="diagnosis"></textarea>
+                                        </div>
                                     </div>
-                                    @endforeach
-                                    @endif
                                 </div>
 
-                                <button type="button" class="btn btn-sm btn-success" onclick="addDiagnosisd()">+ Add
-                                    Diagnosis</button>
-                                <hr>
 
-                                 {{-- Risk factors --}}
-                                <h4>Risk factors</h4>
-                                <div id="risk_factor-wrapper">
-                                    @if($cancer_care_data->risk_factors)
-                                    @foreach(json_decode($cancer_care_data->risk_factors, true) as $index => $risk_factor)
-                                    <div class="risk_factor-item mb-3 p-3 border rounded">
-                                        <input type="text" name="risk_factor[{{ $index }}][title]"
-                                            class="form-control mb-2" placeholder="Title"
-                                            value="{{ $risk_factor['title'] ?? '' }}">
 
-                                        <textarea name="risk_factor[{{ $index }}][desc]" class="form-control mb-2"
-                                            placeholder="Description">{{ $risk_factor['desc'] ?? '' }}</textarea>
-
-                                        <button type="button"
-                                            class="btn btn-danger btn-sm remove-risk-factor">Remove</button>
+                                {{-- Risk factors --}}
+                                <div class="row clearfix mb-3">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">Risk Factors</label>
+                                            <textarea name="risk_factors" id="risk_factors"
+                                                class="form-control summernote" placeholder="risk_factors"></textarea>
+                                        </div>
                                     </div>
-                                    @endforeach
-                                    @endif
                                 </div>
 
-                                <button type="button" class="btn btn-sm btn-success" onclick="addRiskFactors()">+ Add
-                                    Risk Factors</button>
-                                <hr>
-
-                                 {{-- Treatment --}}
-                                <h4>Treatment</h4>
-                                <div id="benifits-wrapper">
-                                    @if($cancer_care_data->treatment)
-                                    @foreach(json_decode($cancer_care_data->treatment, true) as $index => $diagnosisd)
-                                    <div class="benifit-item mb-3 p-3 border rounded">
-                                        <input type="text" name="diagnosisd[{{ $index }}][title]"
-                                            class="form-control mb-2" placeholder="Title"
-                                            value="{{ $diagnosisd['title'] ?? '' }}">
-
-                                        <textarea name="diagnosisd[{{ $index }}][desc]" class="form-control mb-2"
-                                            placeholder="Description">{{ $diagnosisd['desc'] ?? '' }}</textarea>
-
-                                        <button type="button"
-                                            class="btn btn-danger btn-sm remove-diagnosisd">Remove</button>
+                                {{-- Treatment --}}
+                                <div class="row clearfix mb-3">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">Treatment</label>
+                                            <textarea name="treatment" id="treatment" class="form-control summernote"
+                                                placeholder="treatment"></textarea>
+                                        </div>
                                     </div>
-                                    @endforeach
-                                    @endif
                                 </div>
-                                
-                                <button type="button" class="btn btn-sm btn-success" onclick="addDiagnosisd()">+ Add
-                                    treatment</button>
-                                    <hr>
-                                    
-                                    <div class="modern-upload-wrapper" id="modern-upload-area1">
-                                       <label class="modern-upload-label" for="image1">
-                                           <i class="zmdi zmdi-cloud-upload"></i>
-                                           care Image2
-                                       </label>
-                                       <input type="file" class="modern-upload-input" name="image2" id="image2"
-                                           accept="image/*">
-                                       <button type="button" class="modern-upload-btn"
-                                           onclick="document.getElementById('image2').click();">
-                                           Choose File
-                                       </button>
-                                       <span class="modern-upload-info"></span>
-                                       <span class="text-danger" id="image1-error"></span>
-                                       <div class="modern-upload-preview" id="current_image2"
-                                           style="display: {{ !empty($cancer_care_data->image2) ? 'block' : 'none' }};">
-                                           @if (!empty($cancer_care_data->image2))
-                                           <img src="{{ asset($cancer_care_data->image2) }}" alt="Image 1"
-                                               style="max-width: 120px; max-height: 120px;">
-                                           @endif
-                                       </div>
-                                   </div>
+
+
+                                <div class="modern-upload-wrapper" id="modern-upload-area1">
+                                    <label class="modern-upload-label" for="image1">
+                                        <i class="zmdi zmdi-cloud-upload"></i>
+                                        care Image2
+                                    </label>
+                                    <input type="file" class="modern-upload-input" name="image2" id="image2"
+                                        accept="image/*">
+                                    <button type="button" class="modern-upload-btn"
+                                        onclick="document.getElementById('image2').click();">
+                                        Choose File
+                                    </button>
+                                    <span class="modern-upload-info"></span>
+                                    <span class="text-danger" id="media-error"></span>
+                                    <div id="current_media" class="modern-upload-preview">
+                                        <img id="current_image2" src="#" alt="Preview" style="display: none;">
+                                    </div>
+                                </div>
 
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary btn-round">Update
-                                            Sonography</button>
+                                        <!-- <button type="submit" class="btn btn-primary btn-round">Update
+                                            Sonography</button> -->
+                                        <button type="submit" id="submitButton" class="btn btn-primary btn-round">
+                                            Submit
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -398,15 +346,99 @@
         </div>
 
     </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="card patients-list">
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table m-b-0 table-hover" id="cancerCareTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Image1</th>
+                                            <th>Image2</th>
+                                            <th>Book Contact No</th>
+                                            <th>Symptoms</th>
+                                            <th>Diagnosis</th>
+                                            <th>Risk Factors</th>
+                                            <th>Treatment</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($cancer_care_data as $item)
+                                        <tr id="row_{{ $item->id }}">
+                                            <td>{{ str_pad($item->id, 3, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $item->title }}</td>
+                                            <td>{{ $item->description }}</td>
+                                            <td>
+                                                @if ($item->image1)
+                                                <img src="{{ asset($item->image1) }}" alt="Image1"
+                                                    style="max-width: 100px;">
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($item->image2)
+                                                <img src="{{ asset($item->image2) }}" alt="Image2"
+                                                    style="max-width: 100px;">
+                                                @endif
+                                            </td>
+                                            <td>{{ $item->book_contact_no }}</td>
+                                            <td>{{ $item->symptoms }}</td>
+                                            <td>{{ $item->diagnosis }}</td>
+                                            <td>{{ $item->risk_factors }}</td>
+                                            <td>{{ $item->treatment }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm edit-btn"
+                                                    data-id="{{ $item->id }}" data-title="{{ e($item->title) }}"
+                                                    data-description="{{ e($item->description) }}"
+                                                    data-book_contact_no="{{ e($item->book_contact_no) }}"
+                                                    data-image1="{{ $item->image1 ? asset($item->image1) : '' }}"
+                                                    data-image2="{{ $item->image2 ? asset($item->image2) : '' }}"
+                                                    data-symptoms='@json(json_decode($item->symptoms, true))'
+                                                    data-diagnosis='@json(json_decode($item->diagnosis, true))'
+                                                    data-risk_factors='@json(json_decode($item->risk_factors, true))'
+                                                    data-treatment='@json(json_decode($item->treatment, true))'>Edit</button>
 
+                                                <!-- <form action="{{ route('admin.cancer_care.destroy', $item->id) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Are you sure?')">Delete</button>
+                                                </form> -->
+                                                <button type="button" class="btn btn-danger btn-round delete-btn"
+                                                    data-id="{{ $item->id }}">Delete</button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
     <!-- Summernote JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
+    let cancerCareTable;
     $(document).ready(function() {
+        cancerCareTable = $('#cancerCareTable').DataTable({
+            processing: true,
+            serverSide: false, // ← temporarily disable to see raw data
+        });
         $('.summernote').summernote({
             height: 200,
             toolbar: [
@@ -417,35 +449,44 @@
         });
 
         // Image 1 preview
-        $('#image').on('change', function(e) {
-            let file = e.target.files[0];
+        $('#image1').on('change', function(e) {
+            const file = e.target.files[0];
+
             if (file) {
-                let reader = new FileReader();
+                const reader = new FileReader();
+
                 reader.onload = function(evt) {
-                    $('#current_image1').html('<img src="' + evt.target.result +
-                        '" alt="Image 1" width="100px">');
-                    $('#current_image1').css('display', 'flex');
+                    $('#current_image1')
+                        .attr('src', evt.target.result)
+                        .css('display', 'block');
                 };
+
                 reader.readAsDataURL(file);
             } else {
-                $('#current_image1').html('');
-                $('#current_image1').css('display', 'none');
+                $('#current_image1')
+                    .attr('src', '#')
+                    .css('display', 'none');
             }
         });
+
         // Image 2 preview
         $('#image2').on('change', function(e) {
-            let file = e.target.files[0];
+            const file = e.target.files[0];
+
             if (file) {
-                let reader = new FileReader();
+                const reader = new FileReader();
+
                 reader.onload = function(evt) {
-                    $('#current_image2').html('<img src="' + evt.target.result +
-                        '" alt="Image 2">');
-                    $('#current_image2').css('display', 'flex');
+                    $('#current_image2')
+                        .attr('src', evt.target.result)
+                        .css('display', 'block');
                 };
+
                 reader.readAsDataURL(file);
             } else {
-                $('#current_image2').html('');
-                $('#current_image2').css('display', 'none');
+                $('#current_image2')
+                    .attr('src', '#')
+                    .css('display', 'none');
             }
         });
         $('#image3').on('change', function(e) {
@@ -510,6 +551,278 @@
         });
     });
 
+    $('#add-cancer-care-details-form').on('submit', function(e) {
+        e.preventDefault();
+
+        let form = this;
+        let formData = new FormData(form);
+        console.log({
+            formData
+        })
+
+        const cancerCareId = $('#cancer_care_id').val();
+        // Change URL based on add/edit
+        let url = cancerCareId ?
+            `/admin/cancer_care/update/${cancerCareId}` // your update route
+            :
+            $(form).attr('action'); // store route
+
+        // Disable submit button
+        // $(form).find('button[type="submit"]').attr('disabled', true);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+                const data = response.data;
+
+                // Construct the image HTML
+                const imagePath = window.location.origin + '/' + data.image1;
+                const image1Html = data.image1 ?
+                    `<img src="/uploads/cancer_care/${data.image1}" width="100">` :
+                    '';
+                const image2Html = data.image2 ?
+                    `<img src="/uploads/cancer_care/${data.image2}" width="100">` :
+                    '';
+
+                // Construct action buttons (Edit/Delete)
+                const actionHtml = `
+        <button type="button" class="btn btn-primary btn-sm edit-btn" data-id="${data.id}">Edit</button>
+        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${data.id}">Delete</button>
+    `;
+
+
+                // Prepare row data array for DataTable
+                const rowData = [
+                    data.id,
+                    data.title,
+                    data.description,
+                    data.image1 ?
+                    `<img src="${window.location.origin}/${data.image1}" width="100">` : '',
+                    data.image2 ?
+                    `<img src="${window.location.origin}/${data.image2}" width="100">` :
+                    '', // ✅ Added
+                    data.book_contact_no,
+                    data.symptoms,
+                    data.diagnosis,
+                    data.risk_factors,
+                    data.treatment,
+                    actionHtml
+                ];
+
+                let row = $(`#cancerCareTable tbody tr[data-id="${data.id}"]`);
+
+                if ($('#cancer_care_id').val()) {
+                    row.children().eq(1).text(data.title);
+                    row.children().eq(2).text(data.description);
+                    row.children().eq(4).html(image1Html);
+                    row.children().eq(9).html(image2Html);
+                    row.children().eq(3).text(data.book_contact_no);
+                    row.children().eq(5).text(data.symptoms);
+                    row.children().eq(6).text(data.diagnosis);
+                    row.children().eq(7).text(data.risk_factors);
+                    row.children().eq(8).text(data.treatment);
+                    row.children().eq(10).html(actionHtml);
+                    // Editing existing row
+
+                    // Find row index by ID (search in first column)
+                    const rowIndex = cancerCareTable.rows().eq(0).filter(function(index) {
+                        return cancerCareTable.cell(index, 0).data() == data.id;
+                    });
+
+                    if (rowIndex.length) {
+                        cancerCareTable.row(rowIndex[0]).data(rowData).draw(false);
+                    }
+                } else {
+                    const newRow = `
+        <tr data-id="${data.id}">
+            <td>${data.id}</td>
+            <td>${data.title}</td>
+            <td>${data.description}</td>
+            <td>${data.book_contact_no}</td>
+            <td>${image1Html}</td>
+            <td>${data.symptoms}</td>
+            <td>${data.diagnosis}</td>
+            <td>${data.risk_factor}</td>
+            <td>${data.treatment}</td>
+            <td>${image2Html}</td>
+            <td>${actionHtml}</td>
+        </tr>
+    `;
+                    $('#cancerCareTable tbody').append(newRow);
+                    // Adding new row
+                    cancerCareTable.row.add(rowData).draw(false);
+                }
+
+                // Show success alert
+                Swal.fire({
+                    icon: 'success',
+                    title: $('#cancer_care_id').val() ? 'Updated!' : 'Added!',
+                    text: response.message || 'Cancer care details saved successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Reset form and editor
+                $('#add-cancer-care-details-form')[0].reset();
+                $('.summernote').each(function() {
+                    $(this).summernote('reset');
+                });
+                $('.modern-upload-preview').hide().find('img').attr('src', '#');
+                $('#cancer_care_id').val('');
+                $('#submitButton').text('Submit');
+
+                // Optionally update your table or UI here with new/updated data
+            },
+            error: function(xhr) {
+                let msg = 'An error occurred.';
+                if (xhr.status === 422) {
+                    const errors = xhr.responseJSON.errors;
+                    msg = '';
+                    for (const key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            msg += errors[key].join(' ') + '\n';
+                        }
+                    }
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: msg,
+                    confirmButtonText: 'OK'
+                });
+
+                // $(form).find('button[type="submit"]').attr('disabled', false);
+            }
+        });
+    });
+
+    $('#cancerCareTable tbody').on('click', '.edit-btn', function() {
+        const id = $(this).data('id');
+
+        // You might want to fetch details from the server for this ID,
+        // or use cached data if available.
+
+        // Example: AJAX call to get cancer care details
+        $.ajax({
+            url: `/admin/cancer_care/${id}`, // Adjust route as needed
+            type: 'GET',
+            success: function(response) {
+                const data = response.data;
+
+                $('#cancer_care_id').val(data.id);
+                $('#title').val(data.title);
+                $('#description').summernote('code', data.description);
+                $('#book_contact_no').val(data.book_contact_no);
+                $('#symptoms').summernote('code', data.symptoms);
+                $('#diagnosis').summernote('code', data.diagnosis);
+                $('#risk_factors').summernote('code', data.risk_factors);
+                $('#treatment').summernote('code', data.treatment);
+
+                if (data.image1) {
+                    $('#current_image1')
+                        .attr('src', window.location.origin + '/' + data.image1)
+                        .css('display', 'block');
+
+                } else {
+                    $('#current_image1')
+                        .attr('src', '#')
+                        .css('display', 'none');
+                }
+                if (data.image2) {
+                    $('#current_image2')
+                        .attr('src', window.location.origin + '/' + data.image2)
+                        .css('display', 'block');
+                } else {
+                    $('#current_image2')
+                        .attr('src', '#')
+                        .css('display', 'none');
+                }
+                $('#submitButton').text('Update');
+                // Scroll to form or open modal if needed
+                $('html, body').animate({
+                    scrollTop: $('#add-cancer-care-details-form').offset().top
+                }, 500);
+            },
+            error: function() {
+                Swal.fire('Error', 'Unable to fetch data for editing', 'error');
+            }
+        });
+    });
+
+
+    $('#cancerCareTable tbody').on('click', '.delete-btn', function() {
+        const id = $(this).data('id');
+        const row = $(this).closest('tr');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/admin/cancer_care/${id}`,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: response.message ||
+                                    'The service detail has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+
+                            // Optionally remove the row from the table
+                            row.fadeOut(300, function() {
+                                $(this).remove();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message ||
+                                    'Something went wrong.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Failed to delete service.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        console.error('Delete failed:', error);
+                    }
+                });
+            }
+        });
+    });
+
+
+
     @if(session('success'))
     Swal.fire({
         didOpen: () => {
@@ -530,131 +843,6 @@
         text: "{{ session('error') }}",
     });
     @endif
-
-     let sonographyIndex = {{ isset($cancer_care_data->sonography_detail) ? count(json_decode($cancer_care_data->sonography_detail, true)) : 0 }};
-    let benifitIndex = {{ isset($cancer_care_data->benifits) ? count(json_decode($cancer_care_data->benifits, true)) : 0 }};
-      let riskFactorIndex = {{ isset($cancer_care_data->risk_factor) ? count(json_decode($cancer_care_data->risk_factor, true)) : 0 }};
-
-    $(".cancer-care-btn").click(function() {
-        let wrapper = document.getElementById('sonography-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-            <div class="sonography-item mb-3 d-flex">
-                <input type="text" name="sonographies[${sonographyIndex}][title]" class="form-control mb-2 text-content" placeholder="Sonography Title">
-                <textarea name="sonographies[${sonographyIndex}][desc]" class="form-control form-content" placeholder="Sonography Description"></textarea>
-                <button type="button" class="btn btn-danger btn-sm remove-cancer-care">Remove</button>
-            </div>
-        `);
-        sonographyIndex++;
-    });
-
-
-    $(document).on('click', '.remove-cancer-care', function() {
-        $(this).closest('.sonography-item').remove();
-    });
-
-    function addTraining() {
-        let wrapper = document.getElementById('trainings-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="training-item mb-3 d-flex">
-            <input type="text" name="trainings[${trainingIndex}][title]" class="form-control mb-2 text-content" placeholder="Training Title">
-            <textarea name="trainings[${trainingIndex}][desc]" class="form-control form-content" placeholder="Training Description"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-training">Remove</button> 
-        </div>
-    `);
-        trainingIndex++;
-    }
-    $(document).on('click', '.remove-training', function() {
-        $(this).closest('.training-item').remove();
-    });
-
-    function addConferences() {
-        let wrapper = document.getElementById('conferences-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="conference-item mb-3 d-flex">
-            <input type="text" name="conferences[${conferenceIndex}][title]" class="form-control mb-2 text-content" placeholder="conference Title">
-            <textarea name="conferences[${conferenceIndex}][desc]" class="form-control form-content" placeholder="conference Description"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-conference">Remove</button> 
-        </div>
-    `);
-        conferenceIndex++;
-    }
-    $(document).on('click', '.remove-conference', function() {
-        $(this).closest('.conference-item').remove();
-    });
-
-    function addDiagnosisd() {
-        let wrapper = document.getElementById('benifits-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="benifit-item mb-3 d-flex gap-2 align-items-start">
-            <input type="text" name="benifits[${benifitIndex}][title]" class="form-control mb-2 text-content" placeholder="Benefit Title" style="flex:1;">
-            <input type="text" name="benifits[${benifitIndex}][sub_title]" class="form-control mb-2 text-content" placeholder="Benefit Sub Title" style="flex:1;">
-            <textarea name="benifits[${benifitIndex}][desc]" class="form-control form-content" placeholder="Benefit Description" style="flex:2;"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-diagnosisd">Remove</button> 
-        </div>
-    `);
-        benifitIndex++;
-    }
-
-    // Remove button handler with jQuery (keep as is)
-    $(document).on('click', '.remove-diagnosisd', function() {
-        $(this).closest('.benifit-item').remove();
-    });
-
-     function addRiskFactors() {
-        let wrapper = document.getElementById('risk_factor-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="risk_factor-item mb-3 d-flex gap-2 align-items-start">
-            <input type="text" name="risk_factor[${riskFactorIndex}][title]" class="form-control mb-2 text-content" placeholder="Benefit Title" style="flex:1;">
-            <input type="text" name="risk_factor[${riskFactorIndex}][sub_title]" class="form-control mb-2 text-content" placeholder="Benefit Sub Title" style="flex:1;">
-            <textarea name="risk_factor[${riskFactorIndex}][desc]" class="form-control form-content" placeholder="Benefit Description" style="flex:2;"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-risk-factor">Remove</button> 
-        </div>
-    `);
-        riskFactorIndex++;
-    }
-
-    // Remove button handler with jQuery (keep as is)
-    $(document).on('click', '.remove-risk-factor', function() {
-        $(this).closest('.benifit-item').remove();
-    });
-
-    function addMemberships() {
-        let wrapper = document.getElementById('memberships-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="membership-item mb-3 d-flex">
-            <input type="text" name="memberships[${membershipIndex}][title]" class="form-control mb-2 text-content" placeholder="membership Title">
-            <textarea name="memberships[${membershipIndex}][desc]" class="form-control form-content" placeholder="membership Description"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-membership">Remove</button> 
-        </div>
-    `);
-        membershipIndex++;
-    }
-    $(document).on('click', '.remove-membership', function() {
-        $(this).closest('.membership-item').remove();
-    });
-
-    function addpublicationsTalks() {
-        let wrapper = document.getElementById('publications_talks-wrapper');
-        wrapper.insertAdjacentHTML('beforeend', `
-        <div class="publications_talk-item mb-3 d-flex">
-            <input type="text" name="publications_talks[${publicationsTalkIndex}][title]" class="form-control mb-2 text-content" placeholder="membership Title">
-            <textarea name="publications_talks[${publicationsTalkIndex}][desc]" class="form-control form-content" placeholder="membership Description"></textarea>
-            <button type="button" class="btn btn-danger btn-sm remove-publications_talk">Remove</button> 
-        </div>
-    `);
-        publicationsTalkIndex++;
-    }
-    $(document).on('click', '.remove-publications_talk', function() {
-        $(this).closest('.publications_talk-item').remove();
-    });
-    $('.summernote').summernote({
-        height: 200,
-        toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['fontsize', 'color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-        ]
-    });
     </script>
 </body>
 

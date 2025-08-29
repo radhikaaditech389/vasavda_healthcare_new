@@ -15,7 +15,7 @@ class CancerCare extends Model
         'image2',
         'book_contact_no',
         'symptoms',
-        'Diagnosis',
+        'diagnosis',
         'risk_factors',
         'treatment'
  ];

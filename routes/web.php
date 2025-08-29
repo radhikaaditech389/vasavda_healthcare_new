@@ -142,10 +142,12 @@ Route::post('/admin/sonography_details', [SonographyController::class, 'store'])
 Route::post('/admin/sonography_details/{id}', [SonographyController::class, 'update'])->name('admin.sonography_details.update');
 Route::delete('/admin/sonography_details/{id}', [SonographyController::class, 'destroy'])->name('admin.sonography_details.delete');
 
-Route::get('/admin/cancer_care', [CancerCareController::class, 'index'])->name('admin.cancer_care.index');
-Route::post('/admin/cancer_care', [CancerCareController::class, 'store'])->name('admin.cancer_care.store');
-Route::post('/admin/cancer_care/{id}', [CancerCareController::class, 'update'])->name('admin.cancer_care.update');
-Route::delete('/admin/cancer_care/{id}', [CancerCareController::class, 'destroy'])->name('admin.cancer_care.delete');
+
+ Route::get('/admin/cancer_care', [CancerCareController::class, 'index'])->name('admin.cancer_care.index');;
+   Route::post('/admin/cancer_care/store', [CancerCareController::class, 'store'])->name('admin.cancer_care.store');
+   Route::post('/admin/cancer_care/update/{id}', [CancerCareController::class, 'update']);
+    Route::get('/admin/cancer_care/{id}', [CancerCareController::class, 'show'])->name('admin.cancer_care.show');
+    Route::delete('/admin/cancer_care/{id}', [CancerCareController::class, 'destroy'])->name('admin.cancer_care.destroy');
 
 
 //director service

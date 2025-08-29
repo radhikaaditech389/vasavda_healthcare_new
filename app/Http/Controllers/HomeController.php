@@ -19,6 +19,7 @@ use App\Models\DirectorDetails;
 use App\Models\Facility;
 use App\Models\ServiceDetails;
 use App\Models\Sonography;
+use App\Models\CancerCare;
 
 class HomeController extends Controller
 {
@@ -172,7 +173,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.cancer_care', compact('footer', 'menus'));
+         $cancer_care_details = CancerCare::get();
+        return view('patient.service.cancer_care', compact('footer', 'menus','cancer_care_details'));
     }
 
     public function clinic()

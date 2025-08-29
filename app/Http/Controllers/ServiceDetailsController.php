@@ -13,7 +13,7 @@ class ServiceDetailsController extends Controller
 {
     public function index()
     {
-        $service_details = ServiceDetails::orderBy('created_at', 'desc')->get();;  
+        $service_details = ServiceDetails::orderBy('created_at', 'desc')->get();
           $services = Services::all();
           
         return view('admin.service_details', compact('service_details', 'services'));
