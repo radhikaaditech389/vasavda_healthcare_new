@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutSection;
 use App\Models\AboutUs;
+use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Faq;
 use App\Models\Footer;
@@ -182,7 +183,9 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.clinic', compact('footer', 'menus'));
+
+        $clinics = Clinic::all();
+        return view('patient.service.clinic', compact('footer', 'menus', 'clinics'));
     }
 
     public function cosmetic_gynecology()

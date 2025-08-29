@@ -89,9 +89,10 @@
         </ul>
         </li> --}}
 
-        <li class="{{ request()->routeIs('admin.facilities') ? 'active open' : '' }}"><a
-                href="{{ route('admin.facilities') }}"><i class="zmdi zmdi-hospital"></i><span>Facilities</span></a>
-        </li>
+            <li class="{{ request()->routeIs('admin.facilities') ? 'active open' : '' }}"><a
+                    href="{{ route('admin.facilities') }}"><i
+                        class="zmdi zmdi-hospital"></i><span>Facilities</span></a>
+            </li>
 
         {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
         {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
@@ -114,11 +115,11 @@
             </ul>
         </li>
 
-        <li class="{{ request()->routeIs('admin.why_vasavada') ? 'active open' : '' }}">
-            <a href="{{ route('admin.why_vasavada') }}" class=""><i class="zmdi zmdi-flower"></i><span>Why
-                    Vasavada</span>
-            </a>
-        </li>
+            <li class="{{ request()->routeIs('admin.why_vasavada') ? 'active open' : '' }}">
+                <a href="{{ route('admin.why_vasavada') }}" class=""><i class="zmdi zmdi-flower"></i><span>Why
+                        Vasavada</span>
+                </a>
+            </li>
 
         {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
             class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
