@@ -57,7 +57,7 @@ Route::get('/special_clinics', [HomeController::class, 'clinic'])->name('service
 Route::get('/cosmetic_gynecology', [HomeController::class, 'cosmetic_gynecology'])->name('service.cosmetic_gynecology');
 Route::get('/dietitian', [HomeController::class, 'dietitian'])->name('service.dietitian');
 Route::get('/home_care', [HomeController::class, 'service_home_care'])->name('service.home_care');
-Route::get('/infertility', [HomeController::class, 'interfertility'])->name('service.interfertility');
+Route::get('/infertility', [HomeController::class, 'Infertility'])->name('service.interfertility');
 Route::get('/laparoscopy_and_hysteroscopy', [HomeController::class, 'laproscopy'])->name('service.laproscopy');
 Route::get('/mental_health', [HomeController::class, 'mental_health'])->name('service.mental_health');
 Route::get('/pediatric', [HomeController::class, 'pediatric'])->name('service.pediatric');
@@ -244,7 +244,7 @@ Route::delete('/admin/clinics/{id}', [ClinicController::class, 'destroy'])->name
 // Home Care routes
 Route::get('/admin/home_care_page', [HomeCareController::class, 'index'])->name('admin.home_care_page');
 // Route::post('/admin/home_care_page', [HomeCareController::class, 'store'])->name('admin.home_care_page.store');
-Route::put('/admin/home_care_page', [HomeCareController::class, 'update'])->name('admin.home_care_page.update');
+Route::put('/admin/home_care_page/{id}', [HomeCareController::class, 'update'])->name('admin.home_care_page.update');
 // Route::delete('/admin/home_care_page/{id}', [HomeCareController::class, 'destroy'])->name('admin.home_care_page.destroy');
 
 // Home Care Services details routes

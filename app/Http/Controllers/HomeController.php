@@ -81,8 +81,9 @@ class HomeController extends Controller
 
         $footer = Footer::first();
 
-        $settings = HomeCarePageSettings::first();
+        $settings = HomeCarePageSettings::where('service_name', 'Home Care')->first();
         $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Home Care')
             ->orderBy('display_order')
             ->get();
 
@@ -169,8 +170,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-         $sonography_data = Sonography::first();
-        return view('patient.service.3d_4d_sonography', compact('footer', 'menus','sonography_data'));
+        $sonography_data = Sonography::first();
+        return view('patient.service.3d_4d_sonography', compact('footer', 'menus', 'sonography_data'));
     }
 
     public function cancer_care()
@@ -181,8 +182,8 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-         $cancer_care_details = CancerCare::get();
-        return view('patient.service.cancer_care', compact('footer', 'menus','cancer_care_details'));
+        $cancer_care_details = CancerCare::get();
+        return view('patient.service.cancer_care', compact('footer', 'menus', 'cancer_care_details'));
     }
 
     public function clinic()
@@ -206,7 +207,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.cosmetic_gynecology', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Cosmetic Gynecology')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Cosmetic Gynecology')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.cosmetic_gynecology', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function dietitian()
@@ -217,7 +225,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.dietitian', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Dietitian')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Dietitian')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.dietitian', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function service_home_care()
@@ -229,15 +244,16 @@ class HomeController extends Controller
 
         $footer = Footer::first();
 
-        $settings = HomeCarePageSettings::first();
+        $settings = HomeCarePageSettings::where('service_name', 'Home Care')->first();
         $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Home Care')
             ->orderBy('display_order')
             ->get();
 
         return view('patient.service.home_care', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
-    public function interfertility()
+    public function Infertility()
     {
         $menus = Menu::where('is_displayed', 1)
             ->orderBy('sequence')
@@ -245,7 +261,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.interfertility', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Infertility')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Infertility')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.interfertility', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function laproscopy()
@@ -268,7 +291,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.mental_health', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Mental Health')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Mental Health')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.mental_health', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function pediatric()
@@ -284,7 +314,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.physiotherpy', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Physiotherapy and Antenatal (ANC) Classes')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Physiotherapy and Antenatal (ANC) Classes')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.physiotherpy', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function pragnancy_care()
@@ -319,7 +356,14 @@ class HomeController extends Controller
             ->get();
 
         $footer = Footer::first();
-        return view('patient.service.sexual_health', compact('footer', 'menus'));
+
+        $settings = HomeCarePageSettings::where('service_name', 'Sexual Health')->first();
+        $facilities = HomeCareService::where('is_active', true)
+            ->where('service_name', 'Sexual Health')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('patient.service.sexual_health', compact('footer', 'menus', 'settings', 'facilities'));
     }
 
     public function urogynocology()
@@ -331,7 +375,7 @@ class HomeController extends Controller
 
         $footer = Footer::first();
         $service_detail = ServiceDetails::where('service_id', 4)->get();
-        // dd($service_detail);
+
         return view('patient.service.urogynocology', compact('footer', 'menus', 'service_detail'));
     }
 

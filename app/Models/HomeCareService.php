@@ -13,6 +13,7 @@ class HomeCareService extends Model
         'title',
         'slug',
         'image',
+        'service_name',
         'display_order',
         'is_active',
         'purpose_html',

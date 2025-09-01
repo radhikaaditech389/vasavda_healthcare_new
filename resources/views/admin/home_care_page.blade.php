@@ -6,6 +6,9 @@
     <!-- Summernote CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
         /* Modern file upload styling */
         .modern-upload-wrapper {
@@ -179,7 +182,7 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Home Care Service</h2>
+                    <h2>Service Inner Page</h2>
                 </div>
             </div>
         </div>
@@ -188,15 +191,13 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Home Care Service</strong></h2>
+                            <h2><strong>Service Inner Page</strong></h2>
                         </div>
                         <div class="body">
-                            <form action="{{ route('admin.home_care_page.update') }}" method="POST"
-                                enctype="multipart/form-data">
+                            <form id="homeCareForm" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="homeCare_id" id="homeCare_id"
-                                    value="{{ $homeCare->id ?? '' }}">
+                                <input type="hidden" name="homeCare_id" id="homeCare_id">
 
                                 <div class="row clearfix">
                                     {{-- <div class="col-sm-6">
@@ -216,10 +217,17 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="service_id"><strong>Service Name</strong></label>
+                                            <input type="text" class="form-control" name="service_name"
+                                                id="service_name" placeholder="Enter service name" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
                                             <label for="service_id"><strong>Page Title</strong></label>
                                             <input type="text" class="form-control" name="page_title" id="page_title"
-                                                placeholder="Enter page title"
-                                                value="{{ $homeCare->page_title ?? '' }}">
+                                                placeholder="Enter page title">
                                         </div>
                                     </div>
 
@@ -256,14 +264,7 @@
                                                 </button>
                                                 <span class="modern-upload-info"></span>
                                                 <span class="text-danger" id="banner_image-error"></span>
-                                                <div class="modern-upload-preview" id="current_banner_image"
-                                                    style="display: {{ !empty($homeCare->banner_image) ? 'block' : 'none' }};">
-                                                    @if (!empty($homeCare->banner_image))
-                                                        <img src="{{ asset($homeCare->banner_image) }}"
-                                                            alt="banner_image"
-                                                            style="max-width: 120px; max-height: 120px;">
-                                                    @endif
-                                                </div>
+                                                <div class="modern-upload-preview" id="current_banner_image"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -271,7 +272,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label><strong>Conclusion</strong></label>
-                                            <textarea class="form-control summernote" name="conclusion_html" id="conclusion_html" placeholder="Enter conclusion">{{ $homeCare->conclusion_html ?? '' }}</textarea>
+                                            <textarea class="form-control summernote" name="conclusion_html" id="conclusion_html" placeholder="Enter conclusion"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -299,13 +300,85 @@
         </div>
     </section>
 
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="card patients-list">
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="homeCareTable" class="table m-b-0 table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Service Name</th>
+                                            <th>Page Title</th>
+                                            <th>Banner Image</th>
+                                            <th>Conclusion</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($homeCare as $homeCare)
+                                            <tr>
+                                                <td>{{ $homeCare->id }}</td>
+                                                <td>{{ $homeCare->service_name }}</td>
+                                                <td>{{ $homeCare->page_title }}</td>
+                                                <td>
+                                                    @if (!empty($homeCare->banner_image) && file_exists(public_path($homeCare->banner_image)))
+                                                        <img src="{{ asset($homeCare->banner_image) }}"
+                                                            alt="Service Image"
+                                                            style="max-width: 100px; max-height: 100px; border-radius: 8px;">
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>{!! Str::limit(strip_tags($homeCare->conclusion_html), 50) !!}</td>
+
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary edit-homecare"
+                                                        data-id="{{ $homeCare->id }}"
+                                                        data-service_name="{{ $homeCare->service_name }}"
+                                                        data-page-title="{{ $homeCare->page_title }}"
+                                                        data-conclution_html="{{ $homeCare->conclusion_html }}"
+                                                        data-banner_image_url="{{ !empty($homeCare->banner_image) ? asset($homeCare->banner_image) : '' }}">
+                                                        Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
     <!-- Summernote JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
+        $(document).ready(function() {
+            $('#homeCareTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "searching": true,
+                "lengthChange": true,
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [3, 5]
+                }]
+            });
+        });
+
         $(document).ready(function() {
             $('.summernote').summernote({
                 height: 200,
@@ -332,6 +405,37 @@
                     $('#current_banner_image').css('display', 'none');
                 }
             });
+        });
+
+        $(document).on('click', '.edit-homecare', function() {
+            const id = $(this).data('id');
+            const service_name = $(this).data('service_name');
+            const page_title = $(this).data('page-title');
+            const conclusionHtml = $(this).data('conclution_html');
+            const imageUrl = $(this).data('banner_image_url');
+
+            $('#homecare_id').val(id);
+
+            $('#service_name').val(service_name);
+            $('#page_title').val(page_title);
+
+            if ($('#conclusion_html').hasClass('summernote')) {
+                $('#conclusion_html').summernote('code', conclusionHtml);
+            } else if (typeof tinymce !== "undefined" && tinymce.get("conclusion_html")) {
+                tinymce.get("conclusion_html").setContent(conclusionHtml);
+            } else {
+                $('#conclusion_html').val(conclusionHtml);
+            }
+
+            if (imageUrl) {
+                $('#current_banner_image').html(
+                    `<img src="${imageUrl}" style="max-width:120px;max-height:120px;border-radius:8px;">`
+                );
+            } else {
+                $('#current_banner_image').html('');
+            }
+
+            $('#homeCareForm').attr('action', '/admin/home_care_page/' + id);
         });
 
         @if (session('success'))
