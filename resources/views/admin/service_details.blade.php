@@ -310,7 +310,7 @@
 
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary btn-round">Submit</button>
+                                        <button type="submit" id="submitButton" class="btn btn-primary btn-round">Submit</button>
                                         <button type="reset" class="btn btn-default btn-round btn-simple"
                                             id="cancel-btn">Cancel</button>
                                     </div>
@@ -576,7 +576,8 @@
                 $('#faqs-wrapper').html(faqsHtml);
                 $('.summernote').summernote(); // re-initialize summernote
             }
-            $('button[type="submit"]').text('Update');
+            // $('button[type="submit"]').text('Update');
+              $('#submitButton').text('Update');
 
         });
 
@@ -785,6 +786,8 @@
                     $('#add-service-details-form')[0].reset();
                     $('.summernote').summernote('reset');
                     $('#preview_image').hide().attr('src', '#');
+                     $('#service_details_id').val('');
+                     $('#submitButton').text('Submit');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',

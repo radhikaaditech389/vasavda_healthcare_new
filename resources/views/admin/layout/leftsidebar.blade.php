@@ -63,6 +63,8 @@
                             href="{{ route('admin.service_details.index') }}">Service Details</a></li>
                     <li class="{{ request()->routeIs('admin.sonography_details.index') ? 'active open' : '' }}"><a
                             href="{{ route('admin.sonography_details.index') }}">Sonography Details</a></li>
+                            <li class="{{ request()->routeIs('admin.cancer_care.index') ? 'active open' : '' }}"><a
+                            href="{{ route('admin.cancer_care.index') }}">Cancer care Details</a></li>
                 </ul>
             </li>
             <li class="{{ request()->routeIs('admin.about_us') ? 'active open' : '' }}"><a

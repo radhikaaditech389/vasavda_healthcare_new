@@ -262,8 +262,6 @@
                                         <img id="current_image1" src="#" alt="Preview" style="display: none;">
                                     </div>
                                 </div>
-
-
                                 {{-- Symptoms --}}
                                 <div class="row clearfix mb-3">
                                     <div class="col-sm-12">
@@ -374,7 +372,7 @@
                                         <tr id="row_{{ $item->id }}">
                                             <td>{{ str_pad($item->id, 3, '0', STR_PAD_LEFT) }}</td>
                                             <td>{{ $item->title }}</td>
-                                            <td>{{ $item->description }}</td>
+                                            <td>{!! $item->description !!}</td>
                                             <td>
                                                 @if ($item->image1)
                                                 <img src="{{ asset($item->image1) }}" alt="Image1"
@@ -388,17 +386,17 @@
                                                 @endif
                                             </td>
                                             <td>{{ $item->book_contact_no }}</td>
-                                            <td>{{ $item->symptoms }}</td>
-                                            <td>{{ $item->diagnosis }}</td>
-                                            <td>{{ $item->risk_factors }}</td>
-                                            <td>{{ $item->treatment }}</td>
+                                            <td>{!! $item->symptoms !!}</td>
+                                            <td>{!! $item->diagnosis !!}</td>
+                                            <td>{!! $item->risk_factors !!}</td>
+                                            <td>{!! $item->treatment !!}</td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm edit-btn"
                                                     data-id="{{ $item->id }}" data-title="{{ e($item->title) }}"
                                                     data-description="{{ e($item->description) }}"
                                                     data-book_contact_no="{{ e($item->book_contact_no) }}"
-                                                    data-image1="{{ $item->image1 ? asset($item->image1) : '' }}"
-                                                    data-image2="{{ $item->image2 ? asset($item->image2) : '' }}"
+                                                    data-image1="{{asset($item->image1)}}"
+                                                    data-image2="{{asset($item->image2)}}"
                                                     data-symptoms='@json(json_decode($item->symptoms, true))'
                                                     data-diagnosis='@json(json_decode($item->diagnosis, true))'
                                                     data-risk_factors='@json(json_decode($item->risk_factors, true))'
@@ -433,6 +431,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
+   
     let cancerCareTable;
     $(document).ready(function() {
         cancerCareTable = $('#cancerCareTable').DataTable({
@@ -447,6 +446,8 @@
                 ['para', ['ul', 'ol', 'paragraph']],
             ]
         });
+
+
 
         // Image 1 preview
         $('#image1').on('change', function(e) {
@@ -556,9 +557,7 @@
 
         let form = this;
         let formData = new FormData(form);
-        console.log({
-            formData
-        })
+
 
         const cancerCareId = $('#cancer_care_id').val();
         // Change URL based on add/edit
@@ -584,7 +583,8 @@
                 const data = response.data;
 
                 // Construct the image HTML
-                const imagePath = window.location.origin + '/' + data.image1;
+                const imagePath1 = window.location.origin + '/' + data.image1;
+                const imagePath2 = window.location.origin + '/' + data.image2
                 const image1Html = data.image1 ?
                     `<img src="/uploads/cancer_care/${data.image1}" width="100">` :
                     '';
@@ -604,11 +604,11 @@
                     data.id,
                     data.title,
                     data.description,
-                    data.image1 ?
-                    `<img src="${window.location.origin}/${data.image1}" width="100">` : '',
-                    data.image2 ?
-                    `<img src="${window.location.origin}/${data.image2}" width="100">` :
-                    '', // ✅ Added
+                    data.image1 ? `<img src="${imagePath1}" width="100" />` :
+                    '',
+                    data.image2 ? `<img src="${imagePath2}" width="100" />` :
+                    '',
+                    // ✅ Added
                     data.book_contact_no,
                     data.symptoms,
                     data.diagnosis,
@@ -622,8 +622,10 @@
                 if ($('#cancer_care_id').val()) {
                     row.children().eq(1).text(data.title);
                     row.children().eq(2).text(data.description);
-                    row.children().eq(4).html(image1Html);
-                    row.children().eq(9).html(image2Html);
+                    row.children().eq(4).html(data.image1 ?
+                        `<img src="${imagePath1}" width="100" />` : '');
+                    row.children().eq(9).html(data.image2 ?
+                        `<img src="${imagePath2}" width="100" />` : '');
                     row.children().eq(3).text(data.book_contact_no);
                     row.children().eq(5).text(data.symptoms);
                     row.children().eq(6).text(data.diagnosis);
@@ -675,7 +677,8 @@
                 $('.summernote').each(function() {
                     $(this).summernote('reset');
                 });
-                $('.modern-upload-preview').hide().find('img').attr('src', '#');
+                // $('.modern-upload-preview').hide().find('img').attr('src', '#');
+                  $('#current_image1').hide().attr('src', '#');
                 $('#cancer_care_id').val('');
                 $('#submitButton').text('Submit');
 
@@ -728,17 +731,14 @@
                 $('#diagnosis').summernote('code', data.diagnosis);
                 $('#risk_factors').summernote('code', data.risk_factors);
                 $('#treatment').summernote('code', data.treatment);
-
-                if (data.image1) {
+                  if (data.image1) {
                     $('#current_image1')
                         .attr('src', window.location.origin + '/' + data.image1)
-                        .css('display', 'block');
-
+                        .show();
                 } else {
-                    $('#current_image1')
-                        .attr('src', '#')
-                        .css('display', 'none');
+                    $('#current_image1').attr('src', '#').hide();
                 }
+
                 if (data.image2) {
                     $('#current_image2')
                         .attr('src', window.location.origin + '/' + data.image2)
@@ -830,7 +830,7 @@
         },
         icon: 'success',
         title: 'Success',
-        text: "About section updated successfully!",
+        text: "Cancer Care updated successfully!",
         timer: 5000,
         showConfirmButton: true,
     });
