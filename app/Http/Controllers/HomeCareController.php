@@ -12,14 +12,14 @@ class HomeCareController extends Controller
     public function index()
     {
         $services = Services::all();
-        $homeCare = HomeCarePageSettings::first();
+        $homeCare = HomeCarePageSettings::all();
         return view('admin.home_care_page', compact('homeCare', 'services'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
-            $homeCare = HomeCarePageSettings::firstOrFail();
+            $homeCare = HomeCarePageSettings::findOrFail($id);
 
             $request->validate([
                 'page_title' => 'required|string|max:255',
@@ -90,6 +90,7 @@ class HomeCareController extends Controller
             $homeCareService = HomeCareService::create([
                 'title' => $request->title,
                 'slug' => \Str::slug($request->title),
+                'service_name' => $request->service_name,
                 'image' => $imagePath,
                 'display_order' => $request->display_order,
                 'is_active' => $request->has('is_active') ? 1 : 0,
@@ -141,6 +142,7 @@ class HomeCareController extends Controller
                 $homeCareService->image = 'uploads/home_care_images/' . $fileName;
             }
 
+            $homeCareService->service_name = $request->service_name;
             $homeCareService->title = $request->title;
             $homeCareService->slug = \Str::slug($request->title);
             $homeCareService->display_order = $request->display_order;

@@ -115,7 +115,7 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Home Care Services</h2>
+                    <h2>Service Inner Page Details</h2>
                 </div>
             </div>
         </div>
@@ -124,7 +124,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Home Care Services</strong></h2>
+                            <h2><strong>Service Inner Page Details</strong></h2>
                         </div>
                         <div class="body">
                             <form action="{{ route('admin.home_care_service.details.store') }}" method="POST"
@@ -134,6 +134,38 @@
                                 <input type="hidden" name="homeCare_id" id="homeCare_id"
                                     value="{{ $homeCare->id ?? '' }}">
                                 <input type="hidden" name="slug" id="slug" value="{{ $homeCare->slug ?? '' }}">
+
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label><strong>Service Name</strong></label>
+                                            <select class="form-control" name="service_name" id="service_name">
+                                                <option value="">-- Select Service --</option>
+                                                <option value="Home Care"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Home Care' ? 'selected' : '' }}>
+                                                    Home Care</option>
+                                                <option value="Physiotherapy and Antenatal (ANC) Classes"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Physiotherapy and Antenatal (ANC) Classes' ? 'selected' : '' }}>
+                                                    Physiotherapy and Antenatal (ANC) Classes</option>
+                                                <option value="Dietitian"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Dietitian' ? 'selected' : '' }}>
+                                                    Dietitian</option>
+                                                <option value="Mental Health"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Mental Health' ? 'selected' : '' }}>
+                                                    Mental Health</option>
+                                                <option value="Cosmetic Gynecology"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Cosmetic Gynecology' ? 'selected' : '' }}>
+                                                    Cosmetic Gynecology</option>
+                                                <option value="Infertility"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Infertility' ? 'selected' : '' }}>
+                                                    Infertility</option>
+                                                <option value="Sexual Health"
+                                                    {{ isset($homeCare) && $homeCare->title == 'Sexual Health' ? 'selected' : '' }}>
+                                                    Sexual Health</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row clearfix">
                                     <!-- Title -->
@@ -287,6 +319,7 @@
                                                         data-id="{{ $service->id }}"
                                                         data-slug="{{ $service->slug }}"
                                                         data-title="{{ $service->title }}"
+                                                        data-service_name="{{ $service->service_name }}"
                                                         data-display_order="{{ $service->display_order }}"
                                                         data-is_active="{{ $service->is_active }}"
                                                         data-purpose_html="{{ $service->purpose_html }}"
@@ -410,6 +443,7 @@
                 const id = $(this).data('id');
                 const slug = $(this).data('slug');
                 $('#homeCare_id').val(id);
+                const service_name = $(this).data('service_name');
                 const title = $(this).data('title');
                 const displayOrder = $(this).data('display_order');
                 const isActive = $(this).data('is_active');
@@ -430,6 +464,7 @@
                 $('#title').val(title);
                 $('#display_order').val(displayOrder);
                 $('#is_active').prop('checked', isActive == 1);
+                $('#service_name').val(service_name);
                 $('#purpose_html').summernote('code', purposeHtml);
                 $('#services_html').summernote('code', servicesHtml);
                 $('#benefits_html').summernote('code', benefitsHtml);

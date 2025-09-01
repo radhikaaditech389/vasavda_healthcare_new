@@ -53,6 +53,7 @@
                             href="{{ route('admin.about_section') }}">About Section</a></li>
                 </ul>
             </li>
+
             <li
                 class="{{ request()->routeIs('admin.add_services') || request()->routeIs('admin.service_details.index')|| request()->routeIs('admin.cancer_care.index') || request()->routeIs('admin.sonography_details.index')|| request()->routeIs('admin.onco_gynecology.index')  ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-toggle"><i
@@ -70,6 +71,25 @@
                             href="{{ route('admin.onco_gynecology.index') }}">Onco gynecology Details</a></li>
                 </ul>
             </li>
+
+            <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
+                    href="{{ route('admin.clinics') }}"><i class="zmdi zmdi-hospital"></i><span>Special
+                        Clinics</span></a>
+            </li>
+
+            <li
+                class="{{ request()->routeIs('admin.home_care_page') || request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-layers"></i><span>Services Inner
+                        Page</span>
+                </a>
+                <ul class="ml-menu">
+                    <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
+                            href="{{ route('admin.home_care_page') }}">Service Page</a></li>
+                    <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
+                            href="{{ route('admin.home_care_service.details') }}">Service Page Details</a></li>
+                </ul>
+            </li>
+
             <li class="{{ request()->routeIs('admin.about_us') ? 'active open' : '' }}"><a
                     href="{{ route('admin.about_us') }}"><i class="zmdi zmdi-shield-check"></i><span>About
                         Us</span></a>
@@ -98,8 +118,8 @@
                 href="{{ route('admin.facilities') }}"><i class="zmdi zmdi-labels"></i><span>Facilities</span></a>
         </li>
 
-        {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
-        {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
+            {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
+            {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
                         Section</span>
                 </a>
                 <ul class="ml-menu">
