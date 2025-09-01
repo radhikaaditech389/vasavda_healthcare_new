@@ -627,6 +627,9 @@
                 $('#faqs-wrapper').html(faqsHtml);
                 $('.summernote').summernote(); // re-initialize summernote
             }
+             $('html, body').animate({
+                    scrollTop: $('#add-service-details-form').offset().top
+                }, 500);
             // $('button[type="submit"]').text('Update');
             $('#submitButton').text('Update');
 
