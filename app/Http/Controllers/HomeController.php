@@ -22,6 +22,7 @@ use App\Models\HomeCareService;
 use App\Models\ServiceDetails;
 use App\Models\Sonography;
 use App\Models\CancerCare;
+use App\Models\OncoGynecology;
 
 class HomeController extends Controller
 {
@@ -306,9 +307,9 @@ class HomeController extends Controller
             ->orderBy('sequence')
             ->with('submenus')
             ->get();
-
-        $footer = Footer::first();
-        return view('patient.service.preventive_oncogynocology', compact('footer', 'menus'));
+            $footer = Footer::first();
+            $uro_gynec = OncoGynecology::get();
+        return view('patient.service.preventive_oncogynocology', compact('footer', 'menus','uro_gynec'));
     }
 
     public function sexual_health()

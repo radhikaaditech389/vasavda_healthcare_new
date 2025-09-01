@@ -291,6 +291,24 @@
                                                 placeholder="Enter extra details"></textarea>
                                         </div>
 
+                                        <div class="modern-upload-wrapper" id="modern-upload-area">
+                                            <label class="modern-upload-label" for="image">
+                                                <i class="zmdi zmdi-cloud-upload"></i>
+                                                Upload Image
+                                            </label>
+                                            <input type="file" class="modern-upload-input" name="image1" id="image1"
+                                                accept="image/*">
+                                            <button type="button" class="modern-upload-btn"
+                                                onclick="document.getElementById('image1').click();">
+                                                Choose File
+                                            </button>
+                                            <span class="modern-upload-info"></span>
+                                            <span class="text-danger" id="media-error"></span>
+                                            <div id="current_media" class="modern-upload-preview">
+                                                <img id="current_image1" src="#" alt="Preview" style="display: none;">
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <textarea class="form-control" name="short_desc" id="short_desc"
                                                 placeholder="Enter Short Desc"
@@ -310,7 +328,8 @@
 
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
-                                        <button type="submit" id="submitButton" class="btn btn-primary btn-round">Submit</button>
+                                        <button type="submit" id="submitButton"
+                                            class="btn btn-primary btn-round">Submit</button>
                                         <button type="reset" class="btn btn-default btn-round btn-simple"
                                             id="cancel-btn">Cancel</button>
                                     </div>
@@ -338,6 +357,7 @@
                                             <th>Service Name</th>
                                             <th>Service Title</th>
                                             <th>Service Full Description</th>
+                                             <th>Image1</th>
                                             <th>Service Book Contact No</th>
                                             <th>Faq</th>
                                             <th>Benifits</th>
@@ -361,6 +381,12 @@
                                             <td>{{ $service_detail->service_id }}</td>
                                             <td>{{ $service_detail->title }}</td>
                                             <td>{!! $service_detail->full_desc !!}</td>
+                                             <td>
+                                                @if ($service_detail->image1)
+                                                <img src="{{ asset($service_detail->image1) }}" alt="Service Image1"
+                                                    width="100">
+                                                @endif
+                                            </td>
                                             <td>{{ $service_detail->book_contact_no }}</td>
 
                                             {{-- ✅ Display Faq --}}
@@ -395,6 +421,7 @@
                                                     data-short_desc="{{ e($service_detail->short_desc) }}"
                                                     data-full_desc="{{ htmlentities($service_detail->full_desc) }}"
                                                     data-image="{{ asset($service_detail->image) }}"
+                                                    data-image1="{{ asset($service_detail->image1) }}"
                                                     data-book_contact_no="{{ e($service_detail->book_contact_no) }}"
                                                     data-faq='@json($service_detail->faq)'
                                                     data-benifits='@json($benefits)'>
@@ -469,6 +496,26 @@
     }
     reinitSummernote()
 
+      $('#image1').on('change', function(e) {
+            const file = e.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(evt) {
+                    $('#current_image1')
+                        .attr('src', evt.target.result)
+                        .css('display', 'block');
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                $('#current_image1')
+                    .attr('src', '#')
+                    .css('display', 'none');
+            }
+        });
+
     $(document).ready(function() {
         $('#serviceTable').DataTable({
             order: [
@@ -529,6 +576,10 @@
             if (image) {
                 $('#preview_image').show().attr('src', image);
             }
+            const image1 = $btn.data('image1');
+            if (image1) {
+                $('#current_image1').show().attr('src', image1);
+            }
 
             // Set Benefits
             $('#benifits-wrapper').empty();
@@ -577,7 +628,7 @@
                 $('.summernote').summernote(); // re-initialize summernote
             }
             // $('button[type="submit"]').text('Update');
-              $('#submitButton').text('Update');
+            $('#submitButton').text('Update');
 
         });
 
@@ -657,6 +708,7 @@
                     })
 
                     const imagePath = window.location.origin + '/' + service.image;
+                    const imagePath1 = window.location.origin + '/' + service.image1;
                     // Render FAQ
                     const faqsHtml = Array.isArray(service.faq) ?
                         service.faq.map(f =>
@@ -701,6 +753,7 @@
                             data-short_desc="${escapeHtml(service.short_desc)}"
                             data-full_desc="${escapeHtml(service.full_desc)}"
                             data-image="${imagePath}"
+                            data-image1="${imagePath1}"
                             data-book_contact_no="${escapeHtml(service.book_contact_no)}"
                             data-faq='${JSON.stringify(service.faq || [])}'
                                 data-benifits='${JSON.stringify(benefitsText || [])}'>
@@ -729,11 +782,13 @@
                         existingRow.find('td:eq(2)').text(service.service_id || '');
                         existingRow.find('td:eq(3)').text(service.title || '');
                         existingRow.find('td:eq(4)').html(service.full_desc || '');
-                        existingRow.find('td:eq(5)').text(service.book_contact_no ||
+                        existingRow.find('td:eq(5)').html(service.image1 ?
+                            `<img src="${imagePath1}" width="100" />` : '');
+                        existingRow.find('td:eq(6)').text(service.book_contact_no ||
                             '');
-                        existingRow.find('td:eq(6)').html(faqsHtml);
-                        existingRow.find('td:eq(7)').text(benefitsText);
-                        existingRow.find('td:eq(8)').html(actionHtml);
+                        existingRow.find('td:eq(7)').html(faqsHtml);
+                        existingRow.find('td:eq(8)').text(benefitsText);
+                        existingRow.find('td:eq(9)').html(actionHtml);
                     } else {
 
                         const rowData = [
@@ -743,6 +798,8 @@
                             service.service_id || '',
                             service.title || '',
                             service.full_desc || '',
+                            service.image1 ? `<img src="${imagePath1}" width="100" />` :
+                            '',
                             service.book_contact_no || '',
                             faqsHtml,
                             benefitsText,
@@ -786,8 +843,9 @@
                     $('#add-service-details-form')[0].reset();
                     $('.summernote').summernote('reset');
                     $('#preview_image').hide().attr('src', '#');
-                     $('#service_details_id').val('');
-                     $('#submitButton').text('Submit');
+                     $('#current_image1').hide().attr('src', '#');
+                    $('#service_details_id').val('');
+                    $('#submitButton').text('Submit');
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',

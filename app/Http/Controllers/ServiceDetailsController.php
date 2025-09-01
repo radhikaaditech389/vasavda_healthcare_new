@@ -41,6 +41,17 @@ class ServiceDetailsController extends Controller
                 $imagePath = $uploadPath . $fileName;
             }
 
+            $imagePath1 = null;
+
+            if ($request->hasFile('image1')) {
+                $uploadPath = 'uploads/service_details/';
+                $file = $request->file('image1');
+                $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+                $file->move(public_path($uploadPath), $fileName);
+                $imagePath1 = $uploadPath . $fileName;
+            }
+
            
             $faqJson = $request->faq;
 
@@ -55,6 +66,7 @@ class ServiceDetailsController extends Controller
            $serviceDetail = ServiceDetails::create([
             'service_id'      =>  $request->service_id,
             'image'           =>  $imagePath,
+             'image1'           =>  $imagePath1,
             'title'           =>  $request->title,
             'full_desc'       =>  $request->full_desc,
             'short_desc'      =>  $request->short_desc,
@@ -236,12 +248,17 @@ class ServiceDetailsController extends Controller
             $file->move(public_path($uploadPath), $fileName);
             $imagePath = $uploadPath . $fileName;
 
-            // Optionally delete old image here if needed
-            // if (file_exists(public_path($service->image))) {
-            //     unlink(public_path($service->image));
-            // }
-
             $service->image = $imagePath;
+        }
+
+        if ($request->hasFile('image1')) {
+            $uploadPath = 'uploads/service_details/';
+            $file = $request->file('image1');
+            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path($uploadPath), $fileName);
+            $imagePath = $uploadPath . $fileName;
+
+            $service->image1 = $imagePath;
         }
 
         // Convert FAQ JSON (just like in store method)
@@ -312,6 +329,13 @@ class ServiceDetailsController extends Controller
 
         if ($service_details->image) {
             $imagePath = public_path($service_details->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        if ($service_details->image1) {
+            $imagePath = public_path($service_details->image1);
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }

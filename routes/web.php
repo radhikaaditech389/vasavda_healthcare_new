@@ -23,6 +23,7 @@ use App\Http\Controllers\WhyVasavadasController;
 use App\Http\Controllers\ServiceDetailsController;
 use App\Http\Controllers\SonographyController;
 use App\Http\Controllers\CancerCareController;
+use App\Http\Controllers\OncoGynecologyController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -148,6 +149,12 @@ Route::delete('/admin/sonography_details/{id}', [SonographyController::class, 'd
    Route::post('/admin/cancer_care/update/{id}', [CancerCareController::class, 'update']);
     Route::get('/admin/cancer_care/{id}', [CancerCareController::class, 'show'])->name('admin.cancer_care.show');
     Route::delete('/admin/cancer_care/{id}', [CancerCareController::class, 'destroy'])->name('admin.cancer_care.destroy');
+
+    Route::get('/admin/onco_gynecology', [OncoGynecologyController::class, 'index'])->name('admin.onco_gynecology.index');
+   Route::post('/admin/onco_gynecology/store', [OncoGynecologyController::class, 'store'])->name('admin.onco_gynecology.store');
+   Route::post('/admin/onco_gynecology/update/{id}', [OncoGynecologyController::class, 'update']);
+    Route::get('/admin/onco_gynecology/{id}', [OncoGynecologyController::class, 'show'])->name('admin.onco_gynecology.show');
+    Route::delete('/admin/onco_gynecology/{id}', [OncoGynecologyController::class, 'destroy'])->name('admin.onco_gynecology.destroy');
 
 
 //director service

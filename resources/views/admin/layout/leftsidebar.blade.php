@@ -15,7 +15,8 @@
             </li>
             <!-- <li class="header">MAIN</li> -->
             <li class="{{ request()->routeIs('admin.index') ? 'active open' : '' }}"><a
-                    href="{{ route('admin.index') }}"><i class="zmdi zmdi-view-dashboard"></i><span>Dashboard</span></a></li>
+                    href="{{ route('admin.index') }}"><i class="zmdi zmdi-view-dashboard"></i><span>Dashboard</span></a>
+            </li>
             <li
                 class="{{ request()->routeIs('admin.patients.list') || request()->routeIs('admin.contact.list') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-toggle"><i
@@ -53,7 +54,7 @@
                 </ul>
             </li>
             <li
-                class="{{ request()->routeIs('admin.add_services') || request()->routeIs('admin.service_details.index') || request()->routeIs('admin.sonography_details.index')  ? 'active open' : '' }}">
+                class="{{ request()->routeIs('admin.add_services') || request()->routeIs('admin.service_details.index')|| request()->routeIs('admin.cancer_care.index') || request()->routeIs('admin.sonography_details.index')|| request()->routeIs('admin.onco_gynecology.index')  ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-toggle"><i
                         class="zmdi zmdi-badge-check"></i><span>Services</span> </a>
                 <ul class="ml-menu">
@@ -63,8 +64,10 @@
                             href="{{ route('admin.service_details.index') }}">Service Details</a></li>
                     <li class="{{ request()->routeIs('admin.sonography_details.index') ? 'active open' : '' }}"><a
                             href="{{ route('admin.sonography_details.index') }}">Sonography Details</a></li>
-                            <li class="{{ request()->routeIs('admin.cancer_care.index') ? 'active open' : '' }}"><a
+                    <li class="{{ request()->routeIs('admin.cancer_care.index') ? 'active open' : '' }}"><a
                             href="{{ route('admin.cancer_care.index') }}">Cancer care Details</a></li>
+                    <li class="{{ request()->routeIs('admin.onco_gynecology.index') ? 'active open' : '' }}"><a
+                            href="{{ route('admin.onco_gynecology.index') }}">Onco gynecology Details</a></li>
                 </ul>
             </li>
             <li class="{{ request()->routeIs('admin.about_us') ? 'active open' : '' }}"><a
@@ -91,9 +94,9 @@
         </ul>
         </li> --}}
 
-            <li class="{{ request()->routeIs('admin.facilities') ? 'active open' : '' }}"><a
-                    href="{{ route('admin.facilities') }}"><i class="zmdi zmdi-labels"></i><span>Facilities</span></a>
-            </li>
+        <li class="{{ request()->routeIs('admin.facilities') ? 'active open' : '' }}"><a
+                href="{{ route('admin.facilities') }}"><i class="zmdi zmdi-labels"></i><span>Facilities</span></a>
+        </li>
 
         {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About --}}
         {{-- <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-box-phone"></i><span>About
@@ -104,69 +107,67 @@
         </ul>
         </li> --}}
 
-            <li
-                class="{{ request()->routeIs('admin.doctors') || request()->routeIs('admin.doctor.details') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-toggle"><i
-                        class="zmdi zmdi-accounts-alt"></i><span>Doctors</span>
-                </a>
-                <ul class="ml-menu">
-                    <li class="{{ request()->routeIs('admin.doctors') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.doctors') }}">All Doctor</a></li>
-                    <li class="{{ request()->routeIs('admin.doctor.details') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.doctor.details') }}">Doctor Details</a></li>
-                </ul>
-            </li>
+        <li
+            class="{{ request()->routeIs('admin.doctors') || request()->routeIs('admin.doctor.details') ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-accounts-alt"></i><span>Doctors</span>
+            </a>
+            <ul class="ml-menu">
+                <li class="{{ request()->routeIs('admin.doctors') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.doctors') }}">All Doctor</a></li>
+                <li class="{{ request()->routeIs('admin.doctor.details') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.doctor.details') }}">Doctor Details</a></li>
+            </ul>
+        </li>
 
-            <li class="{{ request()->routeIs('admin.why_vasavada') ? 'active open' : '' }}">
-                <a href="{{ route('admin.why_vasavada') }}" class=""><i class="zmdi zmdi-flower"></i><span>Why
-                        Vasavada</span>
-                </a>
-            </li>
-            <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
-                    href="{{ route('admin.clinics') }}"><i class="zmdi zmdi-hospital"></i><span>Special
-                        Clinics</span></a>
-            </li>
+        <li class="{{ request()->routeIs('admin.why_vasavada') ? 'active open' : '' }}">
+            <a href="{{ route('admin.why_vasavada') }}" class=""><i class="zmdi zmdi-flower"></i><span>Why
+                    Vasavada</span>
+            </a>
+        </li>
+        <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
+                href="{{ route('admin.clinics') }}"><i class="zmdi zmdi-hospital"></i><span>Special
+                    Clinics</span></a>
+        </li>
 
-            <li
-                class="{{ request()->routeIs('admin.home_care_page') || request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-toggle"><i
-                        class="zmdi zmdi-layers"></i><span>Home Care Service</span>
-                </a>
-                <ul class="ml-menu">
-                    <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.home_care_page') }}">Home Care Page</a></li>
-                    <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.home_care_service.details') }}">Home Care Details</a></li>
-                </ul>
-            </li>
+        <li
+            class="{{ request()->routeIs('admin.home_care_page') || request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-layers"></i><span>Home Care
+                    Service</span>
+            </a>
+            <ul class="ml-menu">
+                <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.home_care_page') }}">Home Care Page</a></li>
+                <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.home_care_service.details') }}">Home Care Details</a></li>
+            </ul>
+        </li>
 
-            {{-- <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
-                    href="{{ route('admin.home_care_page') }}"><i class="zmdi zmdi-hospital"></i><span>Home Care
-                        Service</span></a>
-            </li> --}}
+        {{-- <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
+            href="{{ route('admin.home_care_page') }}"><i class="zmdi zmdi-hospital"></i><span>Home Care
+                Service</span></a>
+        </li> --}}
 
-            {{-- <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
-                    href="{{ route('admin.home_care_service.details') }}"><i class="zmdi zmdi-hospital"></i><span>Home
-                        Care
-                        Service Detials</span></a>
-            </li> --}}
+        {{-- <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
+            href="{{ route('admin.home_care_service.details') }}"><i class="zmdi zmdi-hospital"></i><span>Home
+                Care
+                Service Detials</span></a>
+        </li> --}}
 
-            {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
-                        class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
-                </a>
-            </li> --}}
+        {{-- <li><a href="{{ route('admin.reviews') }}" class=""><i
+            class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
+        </a>
+        </li> --}}
 
-            <li
-                class="{{ request()->routeIs('admin.reviews') || request()->routeIs('admin.all.reviews') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-toggle"><i
-                        class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
-                </a>
-                <ul class="ml-menu">
-                    <li class="{{ request()->routeIs('admin.reviews') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.reviews') }}">Review Requests</a></li>
-                    <li class="{{ request()->routeIs('admin.all.reviews') ? 'active open' : '' }}"><a
-                            href="{{ route('admin.all.reviews') }}">All Reviews</a></li>
-                </ul>
-            </li>
+        <li
+            class="{{ request()->routeIs('admin.reviews') || request()->routeIs('admin.all.reviews') ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-puzzle-piece"></i><span>Reviews</span>
+            </a>
+            <ul class="ml-menu">
+                <li class="{{ request()->routeIs('admin.reviews') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.reviews') }}">Review Requests</a></li>
+                <li class="{{ request()->routeIs('admin.all.reviews') ? 'active open' : '' }}"><a
+                        href="{{ route('admin.all.reviews') }}">All Reviews</a></li>
+            </ul>
+        </li>
     </div>
 </aside>

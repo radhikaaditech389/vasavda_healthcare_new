@@ -13,6 +13,7 @@ class ServiceDetails extends Model
         'image',
         'title',
         'full_desc',
+         'image1',
         'short_desc',
         'book_contact_no',
         'benifits',

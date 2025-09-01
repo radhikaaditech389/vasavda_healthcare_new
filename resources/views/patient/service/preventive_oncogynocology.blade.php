@@ -57,114 +57,58 @@
                     <span class="sub-title8">Medical Services</span>
                     <h2>Preventive Onco-Gynecology & Health Checkup</h2>
                 </div>
-                <div class="row">
-                    <div class="col-lg-5 col-md-12 col-sm-12">
-                        <div class="service-tabs">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <!-- Main Option 1: Breast Cancer -->
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link main-option" id="breastcancer-tab" data-bs-toggle="tab" data-bs-target="#breastcancer" type="button" role="tab" aria-controls="breastcancer" aria-selected="false">
-                                        <i class="fa fa-plus"></i>Breast Cancer Screening
-                                    </button>
-                                </li>
-                                <!-- Sub-option under Breast Cancer -->
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link sub-option" id="mammography-tab" data-bs-toggle="tab" data-bs-target="#mammography" type="button" role="tab" aria-controls="mammography" aria-selected="true">
-                                        <i class="fa fa-plus"></i>Mammography
-                                    </button>
-                                </li>
+               <div class="row">
+    <div class="col-lg-5 col-md-12 col-sm-12">
+        <div class="service-tabs">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @foreach($uro_gynec as $index => $gynec_data)
+                    <li class="nav-item" role="presentation">
+                        <button
+                            class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                            id="tab-{{ $gynec_data->id }}-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tab-{{ $gynec_data->id }}"
+                            type="button"
+                            role="tab"
+                            aria-controls="tab-{{ $gynec_data->id }}"
+                            aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
+                        >
+                            <i class="fa fa-plus"></i> {{ $gynec_data->title }}
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
 
-                                <!-- Main Option 2: Cervical Cancer -->
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link main-option" id="cervicalcancer-tab" data-bs-toggle="tab" data-bs-target="#cervicalcancer" type="button" role="tab" aria-controls="cervicalcancer" aria-selected="false">
-                                        </i>Cervical Cancer
-                                    </button>
-                                </li>
-                                <!-- Sub-options under Cervical Cancer -->
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link sub-option" id="paptest-tab" data-bs-toggle="tab" data-bs-target="#paptest" type="button" role="tab" aria-controls="paptest" aria-selected="false">
-                                        <i class="fa fa-plus"></i>Pap Test
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link sub-option" id="hpvvaccination-tab" data-bs-toggle="tab" data-bs-target="#hpvvaccination" type="button" role="tab" aria-controls="hpvvaccination" aria-selected="false">
-                                        <i class="fa fa-plus"></i>HPV Vaccination
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link sub-option" id="colposcopy-tab" data-bs-toggle="tab" data-bs-target="#colposcopy" type="button" role="tab" aria-controls="colposcopy" aria-selected="false">
-                                        <i class="fa fa-plus"></i>Colposcopy
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-7 col-md-12 col-sm-12">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade" id="mammography" role="tabpanel" aria-labelledby="mammography-tab">
-                                <div class="service-tab-content">
-                                    <h4 class="title">Mammography</h4>
-                                    <p> Mammography is an X-ray imaging method used to detect early signs of breast cancer, often before physical symptoms develop. It’s particularly effective in identifying small tumors and abnormalities. </p>
+    <div class="col-lg-7 col-md-12 col-sm-12">
+        <div class="tab-content" id="myTabContent">
+            @foreach($uro_gynec as $index => $gynec_data)
+                <div
+                    class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}"
+                    id="tab-{{ $gynec_data->id }}"
+                    role="tabpanel"
+                    aria-labelledby="tab-{{ $gynec_data->id }}-tab"
+                >
+                    <div class="service-tab-content">
+                        <h4 class="title">{{ $gynec_data->title }}</h4>
+                        {!! $gynec_data->description !!}
 
-                                    <a href="#mammography-section" class="ser-btn-nine">Learn More</a>
-                                    <div class="ser-img-nine">
-                                        <img src="{{ asset('patient/img/service/mammography_960X792.jpg') }}" alt="">
-                                        <div class="icon-box"><img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt=""></div>
-                                    </div>
-                                </div>
+                        <a href="#section-{{ $gynec_data->id }}" class="ser-btn-nine">Learn More</a>
+
+                        <div class="ser-img-nine">
+                            <img src="{{ asset($gynec_data->image) }}" alt="{{ $gynec_data->title }}" style="width:426px!important; height:426px!important;max-width: 100%; height: auto;">
+                            <div class="icon-box">
+                                <img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt="">
                             </div>
-                            <div class="tab-pane fade" id="paptest" role="tabpanel" aria-labelledby="paptest-tab">
-                                <div class="service-tab-content">
-                                    <h4 class="title">Pap Test</h4>
-                                    <p>  The Pap test (or Pap smear) screens for cervical cancer by detecting precancerous or cancerous cells on the cervix. It’s a vital test that has greatly reduced cervical cancer incidence.</p>
-
-                                    <a href="#paptest-section" class="ser-btn-nine">Learn More</a>
-                                    <div class="ser-img-nine">
-                                        <img src="{{ asset('patient/img/service/pap_test_960X792.jpg') }}" alt="">
-                                        <div class="icon-box"><img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="hpvvaccination" role="tabpanel" aria-labelledby="hpvvaccination-tab">
-                                <div class="service-tab-content">
-                                    <h4 class="title">HPV Vaccination</h4>
-                                    <p> The HPV vaccine protects against the most common strains of the human papillomavirus, particularly those linked to cervical cancer and other cancers (e.g., throat, anal).</p>
-
-                                    <a href="#hpvvaccination-section" class="ser-btn-nine">Learn More</a>
-                                    <div class="ser-img-nine">
-                                        <img src="{{ asset('patient/img/service/hpv-vaccine_960X792.jpg') }}" alt="">
-                                        <div class="icon-box"><img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show active" id="breastcancer" role="tabpanel" aria-labelledby="breastcancer-tab">
-                                <div class="service-tab-content">
-                                    <h4 class="title">Breast Cancer Screening</h4>
-                                    <p> Breast cancer screening is essential for detecting cancer at an early stage when it’s most treatable. In addition to mammography, clinical breast exams and self-exams play a role in ongoing breast health monitoring. </p>
-
-                                    <a href="#breastcancer-section" class="ser-btn-nine">Learn More</a>
-                                    <div class="ser-img-nine">
-                                        <img src="{{ asset('patient/img/service/breast_cancer_960X792.jpg' )}}" alt="">
-                                        <div class="icon-box"><img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="colposcopy" role="tabpanel" aria-labelledby="colposcopy-tab">
-                                <div class="service-tab-content">
-                                    <h4 class="title">Colposcopy</h4>
-                                    <p>Colposcopy is a diagnostic procedure to closely examine the cervix, vagina, and vulva for signs of disease, often following an abnormal Pap test result.</p>
-
-                                    <a href="#colposcopy-section" class="ser-btn-nine">Learn More</a>
-                                    <div class="ser-img-nine">
-                                        <img src="{{ asset('patient/img/about/colposcopy.jpg') }}" alt="">
-                                        <div class="icon-box"><img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image" alt=""></div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
             </div>
         </div>
     </section>

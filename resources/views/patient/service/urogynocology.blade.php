@@ -211,7 +211,7 @@
                         {!! $service->full_desc !!}
                         <div class="about-contact-box-eight">
                             <div class="icon-box">
-                                <img src="{{ asset($service->image) }}" alt="{{ $service->title }}">
+                                <img src="{{ asset($service->image1) }}" alt="{{ $service->title }}">
                             </div>
                             <div class="content-box">
                                 <span>Book Appointment</span>
@@ -318,6 +318,9 @@
                     <div class="about-content">
                         <span class="h3 text-theme sec-subtitle mb-2 mb-md-0"></span>
                         <h2 class="h1">Risk Factors</h2>
+                        <p class="pe-xl-2 text-title">Factors contributing to UTIs include sexual activity, certain types of birth control,
+                             menopause, and urinary retention.
+                        </p>
                         @php
                         $slug = Str::slug($service->title);
                         $benefits = is_array($service->benifits) ? $service->benifits :
@@ -419,16 +422,15 @@
                     $faqs = is_array($service->faq) ? $service->faq : json_decode($service->faq, true);
                     @endphp
 
-                    @foreach($faqs as $faqIndex => $faq)
                     <div class="about-content">
                         <span class="h3 text-theme sec-subtitle mb-2 mb-md-0"></span>
                         <h1>Treatment Options</h1>
+                        @foreach($faqs as $faqIndex => $faq)
                         <h4>{{ $faq['title'] }}</h4>
                         <p class="pe-xl-2 text-title">{!! $faq['desc'] !!}
                         </p>
-
+                        @endforeach
                     </div>
-                    @endforeach
 
                     <!-- <div class="about-content">
                         <span class="h3 text-theme sec-subtitle mb-2 mb-md-0"></span>
@@ -619,7 +621,7 @@
         </div>
         </div>
     </section> -->
-    <section class="vs-accordion-wrapper space-top space-md-bottom">
+    <!-- <section class="vs-accordion-wrapper space-top space-md-bottom">
         <div class="container">
             <div class="row">
                 <div class="col-xl-6 mb-30 mb-xl-0">
@@ -676,7 +678,7 @@
 
             </div>
         </div>
-    </section>
+    </section> -->
     {{-- Urine infection Section ends --}}
 
     {{-- SUI (Stress Urinary Incontinence) Section start --}}

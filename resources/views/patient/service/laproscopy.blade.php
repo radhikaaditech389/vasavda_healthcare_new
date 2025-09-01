@@ -104,7 +104,7 @@
                                     <a href="#waterbirthing-section" class="ser-btn-nine">Learn More</a>
 
                                     <div class="ser-img-nine">
-                                        <img src="{{ asset($service->image) }}" alt="{{ $service->title }}">
+                                        <img src="{{ asset($service->image1) }}" alt="{{ $service->title }}">
                                         <div class="icon-box">
                                             <img src="{{ asset('patient/img/service/ser9-2.svg') }}" class="image"
                                                 alt="">
