@@ -144,12 +144,12 @@
                     Vasavada</span>
             </a>
         </li>
-        <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
+        {{-- <li class="{{ request()->routeIs('admin.clinics') ? 'active open' : '' }}"><a
                 href="{{ route('admin.clinics') }}"><i class="zmdi zmdi-hospital"></i><span>Special
                     Clinics</span></a>
-        </li>
+        </li> --}}
 
-        <li
+        {{-- <li
             class="{{ request()->routeIs('admin.home_care_page') || request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-layers"></i><span>Home Care
                     Service</span>
@@ -160,7 +160,7 @@
                 <li class="{{ request()->routeIs('admin.home_care_service.details') ? 'active open' : '' }}"><a
                         href="{{ route('admin.home_care_service.details') }}">Home Care Details</a></li>
             </ul>
-        </li>
+        </li> --}}
 
         {{-- <li class="{{ request()->routeIs('admin.home_care_page') ? 'active open' : '' }}"><a
             href="{{ route('admin.home_care_page') }}"><i class="zmdi zmdi-hospital"></i><span>Home Care
