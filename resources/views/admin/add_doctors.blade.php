@@ -173,7 +173,7 @@
                                 <div class="row mt-3">
                                     <div class="col-sm-12 text-end">
                                         <button type="submit" class="btn btn-primary btn-round">Submit</button>
-                                        <button type="reset" class="btn btn-secondary btn-round"
+                                        <button type="reset" class="btn btn-default btn-round btn-simple"
                                             id="cancel-btn">Cancel</button>
                                     </div>
                                 </div>
