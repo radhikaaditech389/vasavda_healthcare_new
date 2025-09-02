@@ -186,7 +186,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" id="edit-container" style="display: none;">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -414,6 +414,8 @@
         });
 
         function clearFields() {
+            $('#edit-container').hide();
+
             const bannerImageInput = document.getElementById('banner_image');
             if (bannerImageInput) {
                 bannerImageInput.value = '';
@@ -432,6 +434,8 @@
         }
 
         $(document).on('click', '.edit-homecare', function() {
+            $('#edit-container').show();
+
             const id = $(this).data('id');
             const service_name = $(this).data('service_name');
             const page_title = $(this).data('page-title');
