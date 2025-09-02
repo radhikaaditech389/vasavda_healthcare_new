@@ -334,6 +334,7 @@
             deletedServices = [];
 
             let id = $(this).data('id');
+            alert(id)
             let title = $(this).data('title');
             let description = $(this).data('description');
             let category = $(this).data('category');
@@ -379,189 +380,24 @@
             $('.invalid-feedback').remove();
         }
         // Form submission handler
-        // $('#add-director-form').on('submit', function(e) {
-        //     e.preventDefault();
 
-        //     const formData = new FormData(this);
-        //     const directorId = $('#director_id').val();
-
-        //     // Mark update mode
-        //     if (directorId) {
-        //         formData.append('is_update', '1');
-        //     }
-
-        //     // Handle image logic
-        //     const imageInput = document.getElementById('image');
-        //     if (!imageInput.files.length && directorId) {
-        //         formData.delete('image');
-        //         formData.append('keep_existing_image', '1');
-        //     }
-
-        //     // Add deleted services if needed
-        //     if (deletedServices.length > 0) {
-        //         formData.append('deleted_services', JSON.stringify(deletedServices));
-        //     }
-
-        //     // Collect director services
-        //     const directorServices = [];
-        //     $('.director-row input[name="director_services[]"]').each(function() {
-        //         const serviceName = $(this).val().trim();
-        //         if (serviceName !== '') {
-        //             directorServices.push({
-        //                 id: $(this).closest('.director-row').data(
-        //                     'director-service-id') || null,
-        //                 name: serviceName
-        //             });
-        //         }
-        //     });
-        //     formData.append('director_services_data', JSON.stringify(directorServices));
-
-        //     // Define route
-        //     const url = directorId ?
-        //         `/admin/add_directors/update/${directorId}` :
-        //         `/admin/add_directors/store`;
-
-        //     $.ajax({
-        //         url: url,
-        //         type: 'POST',
-        //         data: formData,
-        //         processData: false,
-        //         contentType: false,
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-        //             'Accept': 'application/json'
-        //         },
-        //         success: function(response) {
-        //             if (response.success) {
-        //                 Swal.fire({
-        //                     title: 'Success!',
-        //                     text: response.message ||
-        //                         'Director saved successfully.',
-        //                     icon: 'success',
-        //                     confirmButtonText: 'OK'
-        //                 });
-
-        //                 const director = response.data;
-        //                 const imagePath = base_url + '/' + director.image;
-
-        //                 // ✅ Update existing row
-        //                 if (directorId) {
-        //                     const row = $(`#director-detail tr[data-id="${directorId}"]`);
-        //                     row.find('td:eq(0)').text(director.id);
-        //                     row.find('td:eq(1) img').attr('src', imagePath);
-        //                     row.find('td:eq(2)').text(director.title);
-        //                     row.find('td:eq(3)').text(director.description);
-        //                     row.find('td:eq(4)').text(director.category);
-
-        //                     const actionHtml = `
-        //                 <button type="button" class="btn btn-primary btn-round edit-director"
-        //                     data-id="${director.id}"
-        //                     data-title="${director.title}"
-        //                     data-description="${director.description}"
-        //                     data-image="${director.image}"
-        //                     data-category="${director.category}">
-        //                     Edit
-        //                 </button>
-        //                 <a href="#" class="btn btn-danger btn-round delete-director"
-        //                     data-id="${director.id}">
-        //                     Delete
-        //                 </a>`;
-        //                     row.find('td:eq(5)').html(actionHtml);
-        //                 }
-        //                 // ✅ Add new row
-        //                 else {
-        //                     $('#director-detail').append(`
-        //                 <tr data-id="${director.id}">
-        //                     <td>${director.id}</td>
-        //                     <td><img src="${imagePath}" width="100"></td>
-        //                     <td>${director.title}</td>
-        //                     <td>${director.description}</td>
-        //                     <td>${director.category}</td>
-        //                     <td>
-        //                         <button type="button" class="btn btn-primary btn-round edit-director"
-        //                             data-id="${director.id}" data-title="${director.title}"
-        //                             data-description="${director.description}" data-image="${director.image}"
-        //                             data-category="${director.category}">
-        //                             Edit
-        //                         </button>
-        //                         <a href="#" class="btn btn-danger btn-round delete-director"
-        //                             data-id="${director.id}">
-        //                             Delete
-        //                         </a>
-        //                     </td>
-        //                 </tr>
-        //             `);
-        //                 }
-
-        //                 // ✅ Reset form
-        //                 $('#add-director-form')[0].reset();
-        //                 $('#preview_image').hide();
-        //                 $('#director_id').val('');
-        //                 $('#submitButton').text('Submit');
-        //                 // $('#add-director-form').slideUp(); // Optional: hide after submit
-        //             }
-        //         },
-        //         error: function(xhr) {
-        //             console.error('Error:', xhr);
-        //             let msg = 'An error occurred while processing your request.';
-        //             if (xhr.responseText) {
-        //                 try {
-        //                     const res = JSON.parse(xhr.responseText);
-        //                     if (res.message) msg = res.message;
-        //                 } catch (e) {}
-        //             }
-        //             Swal.fire({
-        //                 title: 'Error!',
-        //                 text: msg,
-        //                 icon: 'error',
-        //                 confirmButtonText: 'OK'
-        //             });
-        //         }
-        //     });
-        // });
-
-        const directorTable = $('#director-detail').DataTable();
-
-$('#add-director-form').on('submit', function (e) {
+        let directorTable = $('#director-detail').DataTable();
+        $('#add-director-form').on('submit', function (e) {
     e.preventDefault();
 
-    const formData = new FormData(this);
+    const form = this;
+    const formData = new FormData(form);
     const directorId = $('#director_id').val();
 
-    // Append is_update flag if in edit mode
-    if (directorId) {
-        formData.append('is_update', '1');
-    }
-
-    // Handle image: preserve if not re-uploaded
     const imageInput = document.getElementById('image');
     if (!imageInput.files.length && directorId) {
         formData.delete('image');
         formData.append('keep_existing_image', '1');
     }
 
-    // Append deleted services (if used)
-    if (typeof deletedServices !== 'undefined' && deletedServices.length > 0) {
-        formData.append('deleted_services', JSON.stringify(deletedServices));
-    }
-
-    // Append dynamic director services
-    const directorServices = [];
-    $('.director-row input[name="director_services[]"]').each(function () {
-        const name = $(this).val().trim();
-        if (name !== '') {
-            directorServices.push({
-                id: $(this).closest('.director-row').data('director-service-id') || null,
-                name
-            });
-        }
-    });
-    formData.append('director_services_data', JSON.stringify(directorServices));
-
-    // Set API endpoint
     const url = directorId
         ? `/admin/add_directors/update/${directorId}`
-        : `/admin/add_directors/store`;
+        : $(form).attr('action');
 
     $.ajax({
         url,
@@ -574,10 +410,10 @@ $('#add-director-form').on('submit', function (e) {
             'Accept': 'application/json'
         },
         success: function (response) {
-            if (!response.success) return;
-
+             
             const director = response.data;
-            const imagePath = window.location.origin + '/' + (director.image || '');
+            const directorIdPadded = String(director.id).padStart(2, '0');
+            const imagePath = `${window.location.origin}/${director.image}`;
 
             const actionHtml = `
                 <button type="button" class="btn btn-primary btn-round edit-director"
@@ -588,64 +424,80 @@ $('#add-director-form').on('submit', function (e) {
                     data-category="${director.category}">
                     Edit
                 </button>
-                <a href="#" class="btn btn-danger btn-round delete-director" data-id="${director.id}">Delete</a>
+                <a href="#" class="btn btn-danger btn-round delete-director"
+                    data-id="${director.id}">
+                    Delete
+                </a>
             `;
 
-            const rowData = [
-                director.id,
-                `<img src="${imagePath}" width="100" />`,
-                director.title,
-                director.description,
-                director.category,
-                actionHtml
-            ];
+            const rowId = `raw_${directorIdPadded}`;
+            const existingRow = $(`#${rowId}`);
 
-            const paddedId = String(director.id).padStart(2, '0');
-            const existingRow = $(`#raw_director_${paddedId}`);
+            if (directorId) {
+                            const row = $(`#director-detail tr[data-id="${directorId}"]`);
+                            row.find('td:eq(0)').text(director.id);
+                            row.find('td:eq(1) img').attr('src', imagePath);
+                            row.find('td:eq(2)').text(director.title);
+                            row.find('td:eq(3)').text(director.description);
+                            row.find('td:eq(4)').text(director.category);
 
-            if (existingRow.length > 0) {
-                // ✅ Update existing
-                directorTable.row(existingRow).data(rowData).draw(false);
-            } else {
-                // ✅ Append new
-                const newRow = directorTable.row.add(rowData).draw(false).node();
-                $(newRow).attr('id', `raw_director_${paddedId}`);
+                            const actionHtml = `
+                        <button type="button" class="btn btn-primary btn-round edit-director"
+                            data-id="${director.id}"
+                            data-title="${director.title}"
+                            data-description="${director.description}"
+                            data-image="${director.image}"
+                            data-category="${director.category}">
+                            Edit
+                        </button>
+                        <a href="#" class="btn btn-danger btn-round delete-director"
+                            data-id="${director.id}">
+                            Delete
+                        </a>`;
+                            row.find('td:eq(5)').html(actionHtml);
+                        }
+                        // ✅ Add new row
+                        else {
+                // ✅ Prepare new row data for DataTable
+                const rowData = [
+                    directorIdPadded,
+                    `<img src="${imagePath}" width="100" />`,
+                    director.title,
+                    director.description,
+                    director.category,
+                    actionHtml
+                ];
+
+              const newRowNode = directorTable.row.add(rowData).draw(false).node();
+                $(newRowNode).attr('id', rowId).attr('data-id', director.id);
             }
 
             // ✅ Reset form
             $('#add-director-form')[0].reset();
-            $('#director_id').val('');
             $('#preview_image').hide();
+            $('#director_id').val('');
             $('#submitButton').text('Submit');
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: response.message || 'Director saved successfully.',
-                timer: 2000,
-                showConfirmButton: false
-            });
+            Swal.fire('Success', response.message || 'Director saved successfully!', 'success');
         },
         error: function (xhr) {
             let msg = 'An error occurred.';
-            try {
-                const res = JSON.parse(xhr.responseText);
-                if (res.message) msg = res.message;
-            } catch (e) {
-                console.error('Error parsing response:', e);
+            if (xhr.status === 422 && xhr.responseJSON?.errors) {
+                msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+            } else if (xhr.responseJSON?.message) {
+                msg = xhr.responseJSON.message;
             }
 
             Swal.fire({
-                title: 'Error!',
-                text: msg,
                 icon: 'error',
-                confirmButtonText: 'OK'
+                title: 'Error!',
+                text: msg
             });
         }
     });
 });
 
-
+       
 
         // Remove service handler
         $(document).on('click', '.remove-service', function() {
