@@ -163,6 +163,8 @@
 
                 // Change form submit button text
                 $('button[type="submit"]').text('Update');
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
             });
 
             $('#add-submenu-form').on('submit', function(e) {

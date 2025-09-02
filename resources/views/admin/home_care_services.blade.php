@@ -279,6 +279,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Service Name</th>
+                                            <th>Facility Name</th>
                                             <th>Image</th>
                                             <th>Order</th>
                                             <th>Status</th>
@@ -293,6 +294,9 @@
                                         @foreach ($homeCareServices as $service)
                                             <tr>
                                                 <td>{{ $service->id }}</td>
+                                                <th
+                                                    style="text-align: center; vertical-align: middle; color:#e91e63 !important;">
+                                                    {{ $service->service_name }}</th>
                                                 <td>{{ $service->title }}</td>
                                                 <td>
                                                     @if (!empty($service->image) && file_exists(public_path($service->image)))
@@ -360,7 +364,7 @@
                 "lengthChange": true,
                 "columnDefs": [{
                     "orderable": false,
-                    "targets": [2, 9]
+                    "targets": [3, 10]
                 }]
             });
         });
@@ -471,6 +475,10 @@
                 $('#considerations_html').summernote('code', considerationsHtml);
 
                 $('button[type="submit"]').text('Update');
+
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
             });
 
             // Delete doctor
