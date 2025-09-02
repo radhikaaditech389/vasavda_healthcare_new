@@ -355,6 +355,10 @@
                 $('#extra_info').summernote('code', extraInfo);
 
                 $('button[type="submit"]').text('Update');
+
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
             });
 
             // Delete doctor
@@ -418,7 +422,9 @@
             $(document).on('click', 'button[type="reset"], .cancel-btn, #cancel-btn', function(e) {
                 e.preventDefault();
                 $('#doctorForm')[0].reset();
-                $('.summernote').summernote('code', '');
+                $('.summernote').each(function() {
+                    $(this).summernote('code', '');
+                });
                 $('button[type="submit"]').text('Submit');
             });
         });

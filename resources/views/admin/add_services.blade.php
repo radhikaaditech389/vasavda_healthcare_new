@@ -368,6 +368,8 @@
 
                 $('button[type="submit"]').text('Update');
 
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+
                 $.ajax({
                     url: `/admin/services/${id}/patient-services`,
                     type: 'GET',

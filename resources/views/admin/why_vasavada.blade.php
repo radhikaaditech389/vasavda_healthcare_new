@@ -317,8 +317,7 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <form
-                                action="{{ $section ? route('admin.why_vasavada.update', $section->id) : '#' }}"
+                            <form action="{{ $section ? route('admin.why_vasavada.update', $section->id) : '#' }}"
                                 method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @if ($section)
@@ -417,16 +416,14 @@
                                                     </div>
                                                     <div class="col-md-4 mb-2">
                                                         <label>Title</label>
-                                                        <input type="text"
-                                                            name="items[{{ $index }}][title]"
+                                                        <input type="text" name="items[{{ $index }}][title]"
                                                             class="form-control"
                                                             value="{{ old("items.$index.title", $item->title) }}"
                                                             required>
                                                     </div>
                                                     <div class="col-md-3 mb-2">
                                                         <label>Order</label>
-                                                        <input type="number"
-                                                            name="items[{{ $index }}][order]"
+                                                        <input type="number" name="items[{{ $index }}][order]"
                                                             class="form-control"
                                                             value="{{ old("items.$index.order", $item->order) }}">
                                                     </div>
@@ -445,7 +442,10 @@
                                         <i class="zmdi zmdi-plus-circle-o"></i>
                                         Add Item
                                     </button>
-                                    <button type="submit" class="btn btn-gradient-primary {{ !$section ? 'btn-disabled' : '' }}" {{ !$section ? 'disabled' : '' }} title="{{ !$section ? 'No record to update' : '' }}">
+                                    <button type="submit"
+                                        class="btn btn-gradient-primary {{ !$section ? 'btn-disabled' : '' }}"
+                                        {{ !$section ? 'disabled' : '' }}
+                                        title="{{ !$section ? 'No record to update' : '' }}">
                                         <i class="zmdi zmdi-check-circle"></i>
                                         Update Section
                                     </button>
@@ -499,7 +499,8 @@
                                                 <td>
                                                     <a href="{{ route('admin.why_vasavada.edit', $s->id) }}"
                                                         class="btn btn-sm btn-gradient-primary"
-                                                        style="min-width:auto;padding:6px 14px;">
+                                                        style="min-width:auto;padding:6px 14px;"
+                                                        onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
                                                         <i class="zmdi zmdi-edit"></i>
                                                     </a>
                                                     {{-- <form action="{{ route('admin.why_vasavada.delete', $s->id) }}"

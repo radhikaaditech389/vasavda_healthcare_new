@@ -345,6 +345,8 @@
                         `<video src="${video}" style="width: 50%; height: auto;" controls class="img-fluid"></video>`
                     );
                 }
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
             });
 
             // Cancel button handler
