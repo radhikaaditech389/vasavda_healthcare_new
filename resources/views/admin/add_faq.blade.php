@@ -173,6 +173,8 @@
                 $('#answer').summernote('code', answer);
 
                 $('button[type="submit"]').text('Update');
+
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
             });
 
             $('#faq_form').on('submit', function(e) {

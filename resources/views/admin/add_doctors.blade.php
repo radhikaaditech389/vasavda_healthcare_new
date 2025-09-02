@@ -380,6 +380,9 @@
 
                 $('button[type="submit"]').text('Update');
 
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
             });
 
             $(document).on('click', '.delete-doctor', function(e) {

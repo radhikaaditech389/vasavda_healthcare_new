@@ -475,6 +475,10 @@
                 $('#considerations_html').summernote('code', considerationsHtml);
 
                 $('button[type="submit"]').text('Update');
+
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'slow');
             });
 
             // Delete doctor

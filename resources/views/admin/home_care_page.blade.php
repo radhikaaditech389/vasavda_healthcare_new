@@ -290,6 +290,8 @@
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-primary btn-round"
                                             id="submitBtn">Update</button>
+                                        <button type="reset" class="btn btn-default btn-round btn-simple"
+                                            id="cancelBtn" onclick="clearFields()">Cancel</button>
                                     </div>
                                 </div>
                             </form>
@@ -407,6 +409,28 @@
             });
         });
 
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            document.querySelector('homeCareForm').reset();
+        });
+
+        function clearFields() {
+            const bannerImageInput = document.getElementById('banner_image');
+            if (bannerImageInput) {
+                bannerImageInput.value = '';
+                document.querySelector('.modern-upload-info').textContent = '';
+                document.getElementById('current_banner_image').innerHTML = '';
+            }
+
+            const conclusionHtml = document.getElementById('conclusion_html');
+            if (conclusionHtml) {
+                if ($(conclusionHtml).data('summernote')) {
+                    $(conclusionHtml).summernote('reset');
+                } else {
+                    conclusionHtml.value = '';
+                }
+            }
+        }
+
         $(document).on('click', '.edit-homecare', function() {
             const id = $(this).data('id');
             const service_name = $(this).data('service_name');
@@ -436,6 +460,10 @@
             }
 
             $('#homeCareForm').attr('action', '/admin/home_care_page/' + id);
+
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow');
         });
 
         @if (session('success'))
