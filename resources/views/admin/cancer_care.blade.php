@@ -312,7 +312,7 @@
                                 <div class="modern-upload-wrapper" id="modern-upload-area1">
                                     <label class="modern-upload-label" for="image1">
                                         <i class="zmdi zmdi-cloud-upload"></i>
-                                        care Image2
+                                        Upload Image
                                     </label>
                                     <input type="file" class="modern-upload-input" name="image2" id="image2"
                                         accept="image/*">
@@ -431,7 +431,6 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
-   
     let cancerCareTable;
     $(document).ready(function() {
         cancerCareTable = $('#cancerCareTable').DataTable({
@@ -663,14 +662,8 @@
                     cancerCareTable.row.add(rowData).draw(false);
                 }
 
-                // Show success alert
-                Swal.fire({
-                    icon: 'success',
-                    title: $('#cancer_care_id').val() ? 'Updated!' : 'Added!',
-                    text: response.message || 'Cancer care details saved successfully.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                // Show success alert               
+                Swal.fire('Success', response.message || 'Cancer care details saved!', 'success');
 
                 // Reset form and editor
                 $('#add-cancer-care-details-form')[0].reset();
@@ -678,7 +671,8 @@
                     $(this).summernote('reset');
                 });
                 // $('.modern-upload-preview').hide().find('img').attr('src', '#');
-                  $('#current_image1').hide().attr('src', '#');
+                $('#current_image1').hide().attr('src', '#');
+                $('#current_image2').hide().attr('src', '#');
                 $('#cancer_care_id').val('');
                 $('#submitButton').text('Submit');
 
@@ -731,7 +725,7 @@
                 $('#diagnosis').summernote('code', data.diagnosis);
                 $('#risk_factors').summernote('code', data.risk_factors);
                 $('#treatment').summernote('code', data.treatment);
-                  if (data.image1) {
+                if (data.image1) {
                     $('#current_image1')
                         .attr('src', window.location.origin + '/' + data.image1)
                         .show();

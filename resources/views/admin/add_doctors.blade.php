@@ -360,40 +360,6 @@
             });
         });
 
-
-
-        // $(document).on('click', '.edit-doctor', function() {
-        //     console.log('Edit button clicked');
-
-        //     let id = $(this).data('id');
-        //     let name = $(this).data('name');
-        //     let specialization = $(this).data('specialization');
-        //     let image = $(this).data('image');
-
-        //     console.log('Edit data:', {
-        //         id,
-        //         name,
-        //         specialization,
-        //         image
-        //     });
-
-        //     $('#doctor_id').val(id);
-        //     $('#name').val(name);
-        //     $('#specialization').val(specialization);
-
-        //     if (image) {
-        //         $('#preview_image').attr('src', '/' + image).show();
-        //     } else {
-        //         $('#preview_image').hide();
-        //     }
-
-        //     $('button[type="submit"]').text('Update');
-
-        //     $('html, body').animate({
-        //         scrollTop: 0
-        //     }, 'slow');
-        // });
-
         $(document).on('click', '.edit-doctor', function() {
             const row = $(this).closest('tr');
             const id = row.data('id');

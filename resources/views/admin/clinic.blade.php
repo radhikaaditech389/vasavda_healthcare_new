@@ -137,7 +137,7 @@
                                             <div class="modern-upload-wrapper text-center" id="modern-upload-area">
                                                 <label class="modern-upload-label" for="clinic_image">
                                                     <i class="zmdi zmdi-cloud-upload"></i>
-                                                    Upload Doctor Image
+                                                    Upload Clinic Image
                                                 </label>
                                                 <input type="file" class="modern-upload-input" name="clinic_image"
                                                     id="clinic_image" accept="image/*" onchange="previewImage(this);">

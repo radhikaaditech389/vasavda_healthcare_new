@@ -394,8 +394,9 @@
                                                     data-frequency='@json(json_decode($item->frequency, true))'
                                                     data-methods='@json(json_decode($item->methods, true))'
                                                     data-benefits='@json(json_decode($item->benefits, true))'
-                                                    data-image1="{{asset($item->image1)}}" data-procedures='@json(json_decode($item->procedures, true))'
-                                                     data-administration='@json(json_decode($item->administration, true))'>Edit</button>
+                                                    data-image1="{{asset($item->image1)}}"
+                                                    data-procedures='@json(json_decode($item->procedures, true))'
+                                                    data-administration='@json(json_decode($item->administration, true))'>Edit</button>
                                                 <button type="button" class="btn btn-danger btn-round delete-btn"
                                                     data-id="{{ $item->id }}">Delete</button>
                                             </td>
@@ -590,13 +591,9 @@
                 }
 
                 // Show success alert
-                Swal.fire({
-                    icon: 'success',
-                    title: $('#onco_gynecology_id').val() ? 'Updated!' : 'Added!',
-                    text: response.message || 'Onco Gynecology details saved successfully.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+
+                Swal.fire('Success', response.message ||
+                    'Onco Gynecology details saved successfully!', 'success');
 
                 // Reset form and editor
                 $('#add-onco-gynecology-details-form')[0].reset();
@@ -605,7 +602,7 @@
                 });
                 // $('.modern-upload-preview').hide().find('img').attr('src', '#');
                 $('#current_image1').hide().attr('src', '#');
-                  $('#current_image').hide().attr('src', '#');
+                $('#current_image').hide().attr('src', '#');
                 $('#onco_gynecology_id').val('');
                 $('#submitButton').text('Submit');
 
@@ -656,7 +653,7 @@
                 $('#methods').summernote('code', data.methods);
                 $('#benefits').summernote('code', data.benefits);
                 $('#procedures').summernote('code', data.procedures);
-                 $('#administration').summernote('code', data.administration);
+                $('#administration').summernote('code', data.administration);
                 if (data.image) {
                     $('#current_image')
                         .attr('src', window.location.origin + '/' + data.image)
@@ -674,7 +671,7 @@
                     $('#current_image1').attr('src', '#').hide();
                 }
 
-                
+
                 $('#submitButton').text('Update');
                 // Scroll to form or open modal if needed
                 $('html, body').animate({

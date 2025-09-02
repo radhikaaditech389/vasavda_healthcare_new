@@ -642,7 +642,6 @@
 
             // Validate required service ID
             const serviceDetailId = $('#service_details_id').val();
-            alert(serviceDetailId);
             const serviceId = $('#service_id').val();
             if (!serviceId) {
                 Swal.fire({
@@ -683,10 +682,7 @@
             });
             let url = serviceDetailId ?
                 `/admin/service_details/update/${serviceDetailId}` :
-                `/admin/service_details/store`;
-            console.log({
-                url
-            })
+                `/admin/service_details/store`;           
             // AJAX submit
             $.ajax({
                 url: url,
@@ -702,9 +698,6 @@
 
 
                     const service = response.data;
-                    console.log({
-                        service
-                    })
 
                     const imagePath = window.location.origin + '/' + service.image;
                     const imagePath1 = window.location.origin + '/' + service.image1;
@@ -743,7 +736,6 @@
 
                     // const imagePath = window.location.origin + '/' + service.image;
                     const serviceDetailId = $('#service_details_id').val();
-                    alert(serviceDetailId);
                     const actionHtml = `
                     <button type="button" class="btn btn-primary btn-round edit-service"
                             data-id="${service.id}"
@@ -845,15 +837,7 @@
                      $('#current_image1').hide().attr('src', '#');
                     $('#service_details_id').val('');
                     $('#submitButton').text('Submit');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message || 'Service saved successfully.',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-
-
+                     Swal.fire('Success', response.message || 'Service saved!', 'success');
                 },
 
                 error: function(xhr) {
@@ -881,7 +865,6 @@
         $(document).on('click', '.remove-service', function(e) {
             e.preventDefault();
             const serviceId = $(this).data('id');
-            alert(serviceId);
             const row = $(this).closest('tr');
 
             Swal.fire({
