@@ -175,7 +175,7 @@
                                 <div class="row mt-3">
                                     <div class="col-sm-12 text-end">
                                         <button type="submit" class="btn btn-primary btn-round">Submit</button>
-                                        <button type="reset" class="btn btn-default btn-round btn-simple"
+                                        <button type="reset" class="btn btn-default btn-round btn-simple cancel-btn"
                                             id="cancel-btn">Cancel</button>
                                     </div>
                                 </div>
@@ -440,19 +440,22 @@
                         });
                     }
                 });
-
-                $(document).on('click',
-                    'button[type="reset"], .cancel-btn, #cancel-btn, button:contains("Cancel")',
-                    function(e) {
-                        e.preventDefault();
-
-                        $('#doctorForm')[0].reset();
-                        $('#doctor_image').val('');
-                        $('#preview_image').attr('src', '').hide();
-                        $('button[type="submit"]').text('Submit');
-                    });
             });
         });
+
+        $('#cancel-btn').on('click', function() {
+            resetForm();
+        });
+
+        function resetForm() {
+            $('#doctorForm')[0].reset();
+            $('#doctor_image').val('');
+            $('#preview_image').attr('src', '#').hide();
+            $('button[type="submit"]').text('Submit');
+
+            $('.is-invalid').removeClass('is-invalid');
+            $('.invalid-feedback').remove();
+        }
     </script>
 </body>
 

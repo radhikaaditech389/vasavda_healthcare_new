@@ -282,6 +282,10 @@
         .note-statusbar {
             background: #f8fafc;
         }
+
+        .hidden-section {
+            display: none;
+        }
     </style>
 </head>
 
@@ -307,7 +311,8 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="row clearfix">
+            <div class="row clearfix {{ request()->routeIs('admin.why_vasavada.edit') ? '' : 'hidden-section' }}"
+                id="edit-section">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
@@ -461,7 +466,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row clearfix">
+            <div class="row clearfix {{ request()->routeIs('admin.why_vasavada.edit') ? 'hidden-section' : '' }}">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
