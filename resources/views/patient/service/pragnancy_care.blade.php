@@ -102,7 +102,7 @@
 
                                     @if (!empty($benefits))
                                     <ul class="ser-list-nine">
-                                        @foreach ($benefits as $item)
+                                         @foreach (array_slice($benefits, 0, 4) as $item)
                                         <li>{{ $item }}</li>
                                         @endforeach
                                     </ul>
@@ -242,15 +242,24 @@
                 <div class="col-lg-7 col-md-12 col-sm-12">
                     <div class="about-img-eight">
                         <img src="{{ asset($service->image ?? 'default.jpg') }}" alt="">
+                        @if ($service->title == "Water Birthing" || $service->title == "High-risk Pregnancy")
                         <div class="exp-box-eight">
                             <div class="icon-box">
                                 <img src="{{ asset('patient/img/about/abicon1-1.svg') }}" alt="">
                             </div>
+
                             <div class="exp-content">
                                 <h6 class="title">{{ $service->title }}</h6>
-                                <p>{{ $service->short_desc }}</p>
+                                <p> @if ($service->title == "Water Birthing")
+                                    A water birth is when a woman gives birth in a birthing pool or deep bath filled
+                                    with warm water.
+                                    @elseif ($service->title == "High-risk Pregnancy")
+                                    A high-risk pregnancy is a pregnancy where the mother or fetus has a higher chance
+                                    of experiencing complications than in a typical pregnancy.
+                                    @endif</p>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-12 col-sm-12">
@@ -279,18 +288,22 @@
                     <div class="about-content">
                         <p class="pe-xl-2 text-title">{{ $service->short_desc }}</p>
                         <div class="row pt-3">
+                            @php
+                            // Ensure $benefits is an array
+                            $benefits = is_array($service->benifits) ? $service->benifits :
+                            json_decode($service->benifits, true);
+                            @endphp
+
+                            @if (!empty($benefits) && count($benefits) > 0)
                             <div class="col-sm-12 col-lg-5 col-xl-12">
                                 <h4 class="h4">Benefits</h4>
-                                @php
-                                $benefits = is_array($service->benifits) ? $service->benifits :
-                                json_decode($service->benifits, true);
-                                @endphp
                                 <ul class="ser-list-nine">
                                     @foreach($benefits as $benefit)
                                     <li>{{ $benefit }}</li>
                                     @endforeach
                                 </ul>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

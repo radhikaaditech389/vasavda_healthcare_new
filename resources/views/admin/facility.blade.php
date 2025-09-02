@@ -2,6 +2,7 @@
 <html class="no-js " lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     @include('admin.layout.headerlink')
     <style>
     /* Modern file upload styling */
@@ -215,7 +216,7 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary btn-round">Submit</button>
+                                        <button type="submit" id="submitButton" class="btn btn-primary btn-round">Submit</button>
                                         <button type="reset" class="btn btn-default btn-round btn-simple"
                                             id="cancel-btn">Cancel</button>
                                     </div>
@@ -280,9 +281,18 @@
 
     <!-- Jquery Core Js -->
     @include('admin.layout.footerlink')
-
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
     $(document).ready(function() {
+
+        $('#facility-detail').DataTable({
+            order: [
+                [0, 'desc']
+            ], // Sort by ID descending
+            responsive: true,
+            pageLength: 10,
+            ordering: true,          
+        });
         let base_url = "{{ url('/') }}";
         let deletedFacilities = [];
 
@@ -328,13 +338,21 @@
 
             // Show current image if exists
             if (image) {
-                $('#preview_image').attr('src', '/' + image).show();
+                let imagePath = image;
+
+                // If it's not a full URL, prepend base URL
+                if (!image.startsWith('http')) {
+                    imagePath = window.location.origin + '/' + image.replace(/^\/+/, '');
+                }
+
+                $('#preview_image').attr('src', imagePath).show();
             } else {
                 $('#preview_image').hide();
             }
 
             // Change button text
-            $('button[type="submit"]').text('Update');
+            // $('button[type="submit"]').text('Update');
+             $('#submitButton').text('Update');
             // Fetch director services
 
             $.ajax({
@@ -367,6 +385,9 @@
                                     </div>
                                 `;
                             $('#facilities_container').append(row);
+                             $('html, body').animate({
+                    scrollTop: $('#add-facility-form').offset().top
+                }, 500);
                         });
                     }
                 },
@@ -377,44 +398,59 @@
             });
         });
 
-        // Form submission handler
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+        const table = $('#facility-detail').DataTable();
         $('#add-facility-form').on('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
             const facilityId = $('#facility_id').val();
+
             if (facilityId) {
                 formData.append('is_update', '1');
             }
 
+            // Handle image: keep old if not changed
             const imageInput = document.getElementById('image');
             if (!imageInput.files.length && facilityId) {
                 formData.delete('image');
                 formData.append('keep_existing_image', '1');
             }
 
-            if (deletedFacilities.length > 0) {
+            // Append deleted facilities (if any)
+            if (typeof deletedFacilities !== 'undefined' && deletedFacilities.length > 0) {
                 formData.append('deleted_facilities', JSON.stringify(deletedFacilities));
             }
 
+            // Append dynamic facilities input
             const facilities = [];
             $('.facility-row input[name="facilities[]"]').each(function() {
-                if ($(this).val().trim() !== '') {
+                const name = $(this).val().trim();
+                if (name !== '') {
                     facilities.push({
                         id: $(this).closest('.facility-row').data(
                             'facility-service-id') || null,
-                        name: $(this).val().trim()
+                        name
                     });
                 }
             });
             formData.append('facility_data', JSON.stringify(facilities));
 
-            let url = facilityId ?
+            // Set endpoint
+            const url = facilityId ?
                 `/admin/facilities/update/${facilityId}` :
                 `/admin/facilities/store`;
 
             $.ajax({
-                url: url,
+                url,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -424,65 +460,86 @@
                     'Accept': 'application/json'
                 },
                 success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: response.message ||
-                                'Director saved successfully.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
+                    if (!response.success) return;
 
-                        // Reset form
-                        $('#add-facility-form')[0].reset();
-                        $('#preview_image').hide();
+                    const facility = response.data;
+                    const imagePath = window.location.origin + '/' + (facility.image || '');
 
-                        // If you want to append new director row to a table/list
-                        if (response.data) {
-                            if (facilityId) {
-                                let imagePath = base_url + '/' + response.data.image;
-                                // ✅ EDIT MODE → update existing row
-                                let row = $(`#facility-detail tr[data-id="${facilityId}"]`);
-                                row.find('td:eq(0)').text(response.data.id);
-                                // row.find('td:eq(1)').html(`<img src="${response.data.image}" width="100">`);
-                                row.find('td:eq(1) img').attr('src', imagePath);
-                                // $('#preview_image').attr('src', '/' + image).show();
-                                row.find('td:eq(2)').text(response.data.title);
-                                row.find('td:eq(3)').text(response.data.description);
-                            } else {
-                                let imagePath = base_url + '/' + response.data.image;
-                                // ✅ ADD MODE → append new row
-                                $('#facility-detail').append(`
-                                        <tr data-id="${response.data.id}">
-                                          <td>${response.data.id}</td>
-                                            <td><img src="${imagePath}" width="100"></td>
-                                            <td>${response.data.title}</td>
-                                            <td>${response.data.description}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary btn-round edit-facility"
-                                                    data-id="${response.data.id}" data-title="${response.data.title}"
-                                                    data-description="${response.data.description}"
-                                                    data-image="${response.data.image}"
-                                                  >Edit</button>
-                                                <a href="#" class="btn btn-danger btn-round delete-facility"
-                                                    data-id="${response.data.id}">Delete</a>
-                                            </td>                                           
-                                        </tr>
-                                    `);
-                            }
+                    const actionHtml = `
+                <button type="button" class="btn btn-primary btn-round edit-facility"
+                    data-id="${facility.id}"
+                    data-title="${escapeHtml(facility.title)}"
+                    data-description="${escapeHtml(facility.description)}"
+                    data-image="${imagePath}">
+                    Edit
+                </button>
+                <a href="#" class="btn btn-danger btn-round delete-facility" data-id="${facility.id}">Delete</a>
+            `;
+
+                    const rowData = [
+                        facility.id,
+                        facility.image ? `<img src="${imagePath}" width="100">` : '',
+                        facility.title,
+                        facility.description,
+                        actionHtml
+                    ];
+
+                    // Handle table row (add or update)
+                    const paddedId = String(facility.id).padStart(2, '0');
+                    const existingRow = $(`#raw_${paddedId}`);
+
+                    if (typeof table !== 'undefined') {
+                        if (existingRow.length > 0) {
+                            // Update
+                            table.row(existingRow).data(rowData).draw(false);
+                        } else {
+                            // Add
+                            const newRow = table.row.add(rowData).draw(false).node();
+                            $(newRow).attr('id', `raw_${paddedId}`);
+                        }
+                    } else {
+                        // No DataTable — fallback append
+                        const newRowHtml = `
+                    <tr id="raw_${paddedId}" data-id="${facility.id}">
+                        <td>${facility.id}</td>
+                        <td><img src="${imagePath}" width="100" /></td>
+                        <td>${facility.title}</td>
+                        <td>${facility.description}</td>
+                        <td>${actionHtml}</td>
+                    </tr>
+                `;
+
+                        if (facilityId) {
+                            $(`#facility-detail tr[data-id="${facility.id}"]`).replaceWith(
+                                newRowHtml);
+                        } else {
+                            $('#facility-detail').append(newRowHtml);
                         }
                     }
 
+                    // Reset form and UI
+                    $('#add-facility-form')[0].reset();
+                    $('#facility_id').val('');
+                    $('#preview_image').hide();
+                    $('#submitButton').text('Submit');
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message || 'Facility saved successfully.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
                 },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                    let msg = 'An error occurred while processing your request.';
-                    if (xhr.responseText) {
-                        try {
-                            const res = JSON.parse(xhr.responseText);
-                            if (res.message) msg = res.message;
-                        } catch (e) {}
+                error: function(xhr) {
+                    let msg = 'An error occurred.';
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.message) msg = res.message;
+                    } catch (e) {
+                        console.error('JSON parse error:', e);
                     }
+
                     Swal.fire({
                         title: 'Error!',
                         text: msg,
@@ -492,6 +549,8 @@
                 }
             });
         });
+
+
 
         // Remove service handler
         $(document).on('click', '.remove-service', function() {
@@ -608,7 +667,6 @@
 
         const preview = document.getElementById('preview_image');
 
-        console.log("Sd", preview)
         if (input.files && input.files[0]) {
             const reader = new FileReader();
 

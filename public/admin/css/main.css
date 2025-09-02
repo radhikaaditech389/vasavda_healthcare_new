@@ -18772,9 +18772,9 @@ section.content {
     -moz-box-shadow: none;
     -ms-box-shadow: none;
     box-shadow: none;
-    border: none;
+    border: 1px solid #ddd;
     font-size: 12px;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
 }
 .dataTables_wrapper input[type="search"]:focus,
 .dataTables_wrapper input[type="search"]:active {

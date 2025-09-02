@@ -12,7 +12,7 @@ class DirectorController extends Controller
 {
     public function index()
     {
-        $directors = Director::all();
+        $directors = Director::orderBy('created_at', 'desc')->get();
         return view('admin.add_director', compact('directors'));
     }
 

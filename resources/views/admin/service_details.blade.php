@@ -524,10 +524,6 @@
             responsive: true,
             pageLength: 10,
             ordering: true,
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search services..."
-            }
         });
         let deletedServices = [];
 
